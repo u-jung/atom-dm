@@ -1,0 +1,65 @@
+{
+		"ADEL": ["Baron", "Freifrau",
+			"Freiherr", "Freiherrn", "Ritters", "Edlen",
+			"Fürst", "Graf", "King", "König", "Ritter", "Herzog", "Gräfin", "Herzogin", "Königin", "Baronesse", "Compte", "Edler", "Landgraf", "Pfalzgraf", "Markgraf", "Landgräfin", "Pfalzgräfin", "Großherzog", "Erzherzog"
+		]
+	,
+	
+		"BEAMTER": ["Herr","Adjunkt", "Assessor", "Assessors", "Assistent", "Baurat", "Baurats", "Baureferent", "Baureferenten", "Bau-Referent",
+			"Bergassessor", "Bergassessors", "Bezirksamtmann", "Bezirksamtmanns", "Bezirksamtmannes", "Bezirksamtsekretär", "Bezirksamtsekretärs", "Distriktamtsekretär", "Distriktamtsekretär",
+			"Bezirkschef", "Bezirkschefs", "Bezirkshauptmann", "Bezirksleiter", "Bezirksrichter", "Bürovorsteher", "Distriktchef", "Distriktchefs",
+			"Direktionsrat", "Dr", "Dr.", "Eisenbahnreferent", "Eisenbahn-Referent", "Expeditionsleiter", "Finanzdirektor", "Forstassessor", "Geheimrat",
+			"Geheimrath", "Kassenvorstand", "Kassenvorsteher", "Kassenverwalter", "Forstassessor",
+			"Forstrat", "Gerichtsassessor",
+			"Gerichtsvollzieher",
+			"Gouvernementstierarzt",
+			"Gouvernements-Sekretär", "Gouvernementssekretär", "Gouvernementssekretärs",
+			"Gouverneur", "Intendanturrat", "Gouverneurs",
+			"Kalkulator", "Kommunalsekretär", "Landeshauptmann", "Landrentmeister",
+			"Landvermesser", "Medizinalrat",
+			"Oberrichter", "Oberveterinär", "Postdirektor", "Prof",
+			"Prof.", "Rechungsrat",
+			"Referent", "Regierungsassessor",
+			"Regierungsbaumeister",
+			"Regierungs-Baumeister",
+			"Regierungsrat",
+			"Regierungsrath",
+			"Reichskommissar", "Resident", "Schulinspektor",
+			"Schulleiter", "Regierungslehrer", "Regierungslehrerin", "Lehrer", "Lehrerin",
+			"Sekretär", "Staatssekretär", "Stationsleiter", "Vorsteher", "Krankenschwester", "Registrator", "Konsul", "Intendant", "Richter", "Richters"
+		]
+,
+		"MILITAER": ["Herr","Admiral", "Fähnrich", "Feldwebel", "Generalleutnant", "Admirals", "Fähnrichs", "Feldwebels", "Generalleutnants",
+			"Generalmajor", "Hauptmann", "Kapitän", "Kompanieführer", "Konteradmiral", "Major", "Oberleutnant", "Oberst", "Offizier", "Polizeimeister", "Postenchef",
+			"Generalmajors", "Hauptmanns", "Kapitäns", "Kompanieführers", "Konteradmirals", "Majors", "Oberleutnants", "Oberst", "Offiziers", "Polizeimeisters", "Postenchefs",
+			"Postenführer", "Premierleutnant", "Postenführers", "Premierleutnants",
+			"Premierlieutenant", "Resident", "Residenten", "Sekondeleutnant", "Premier-Lieutenant", "Premier-Leutnant", "Leutnant", "Lieutenant", "Rittmeister", "Expeditionsmeister", "Leutnants", "Lieutenants",
+			"Sergeant", "Stationsleiter", "Unteroffizier", "Expeditionsmeisters", "Sergeanten", "Stationsleiters", "Unteroffiziers",
+			"Vizefeldwebel", "Zahlmeister", "Büchsenmacher", "Unterzahlmeister", "Oberzahlmeister", "Feuerwerker", "Offiziere", "Hauptleute", "Vizefeldwebels", "Zahlmeisters", "Büchsenmachers"
+		]
+,
+		"MISSIONAR": ["Herr","Frau","Bischof", "Missionar", "Erzbischof", "Missionare", "Missionsinspektor", "Pater", "Paters", "Pastor", "Pastors",
+			"Präfekt", "Lehrer", "Lehrerin", "Bruder", "Brüder", "Schwester", "Schwestern", "Missionars", "Bruders", "Missionsbruder", "Missionsschwester", "Missionsschwestern", "Missionsbrüder"
+		]
+,
+		"ANGESTELLTER": ["Herr","Arbeiteranwerber", "Assistent", "Hafenmeister", "Hilfsarbeiter", "Polizeisergeant", "Kommis", "Kaufmann",
+			"Hülfsarbeiter", "Ingenieur", "Kapitän", "Lazarettgehilfe", "Oberstleutnant", "Pflanzungleiter", "Pflanzungsaufseher",
+			"Plantagenaufseher", "Polizeimeister", "Stationsleiter", "Wegebauer", "Heizer", "Lokomotivführer", "Gärtner", "Maurer", "Kesselschmied", "Kupferschmied", "Techniker",
+			"Schlosser", "Tischler", "Zimmermann"
+		]
+,
+		"UNTERNEHMER": ["Herr","Kommerzienrat",
+			"Kommerzienrath", "Pflanzungleiter", "Kaufmann"
+		]
+,
+		"MEDIZINER": ["Herr","Oberarzt", "Dr", "Medizinalrath", "Doktor", "Professors", "Professor",
+			"Medizinalreferent",
+			"Medizinal-Referent", "Oberstabsarzt", "Prof", "Regierungsarzt",
+			"Prof.", "Stabsarzt", "Tropenmediziner"
+		]
+,
+		"WISSENSCHAFTLER": ["Herr","Frau","Dr", "Prof", "Prof.", "Kartograph", "Kartograf", "Forschungsreisender", "Forschungsreisende", "Botaniker", "Geologe", "Sprachforscher", "Völkerkundler", "Experte", "Schverständiger",
+			"Sachverständige", "Doktor", "Professors", "Professor"
+		]
+	}
+
