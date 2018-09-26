@@ -34,8 +34,13 @@ WD_MILITARY="Q45295908"
 WD_SETTLEMENT="Q486972"
 WD_EVENT="Q15815670"
 WD_COLONY="Q133156"
+WD_GEOGRAFICAL="Q618123"
+WD_SUBJECT="Q82550"
+WD_RELIGION=""
+WD_ASSOCIATION=""
+WD_SCIENCE=""
 
-WD_MIN_EXPORT_LIST_LEN=100 
+
 
 
 
@@ -43,14 +48,31 @@ WD_MIN_EXPORT_LIST_LEN=100
 # To check your entity_type_ids, use SQL = 
 # SELECT entity_type_id, name  FROM actor a JOIN term_i18n ti on a.entity_type_id=ti.id WHERE culture="de" GROUP BY entity_type_id ;
 
-A_ENTITY_TYPE_HUMAN=132
-A_ENTITY_TYPE_ORGANISATION=131
-A_ENTITY_TYPE_BUSINESS=150495
-A_ENTITY_TYPE_AUTHORITY=150496
-A_ENTITY_TYPE_ASSOCIATION=150497
-A_ENTITY_TYPE_MILITARY=150498
-A_ENTITY_TYPE_SCIENCE=150499
-A_ENTITY_TYPE_RELIGION=150558
+A_ENTITY_TYPES={
+"HUMAN":132,
+"ORGANISATION":131,
+"BUSINESS":150495,
+"AUTHORITY":150496,
+"ASSOCIATION":150497,
+"MILITARY":150498,
+"SCIENCE":150499,
+"RELIGION":150558,
+"SOCIAL_GROUP":930069}
+
+ENTITY_TYPES={
+"HUMAN":(132,"Q5"),
+"ORGANISATION":(131,("Q43229")),
+"BUSINESS":(150495,("Q4830453")),
+"AUTHORITY":(150496,("Q327333")),
+"ASSOCIATION":(150497,("Q48204")),
+"MILITARY":(150498,("Q45295908")),
+"SCIENCE":(150499,("Q2385804")),
+"RELIGION":(150558,("Q9174","Q20746389")),
+"SOCIAL_GROUP":(930069,("Q2472587")),
+"PLACE":("place",("Q618123","Q133156","Q486972")),
+"GENRE":("genre",("Q483394")),
+"SUBJECT":("subject",("Q82550","Q15815670"))
+}
 
 
 A_TYPE_OTHER_FORM_OF_NAME=149
@@ -63,8 +85,9 @@ A_RELATION_TYPE_CONVERSE_TERM=177
 A_RELATION_TYPE_IS_SUPERIOR_OF=189
 A_RELATION_TYPE_CONTROLS=191
 A_RELATION_TYPE_IS_CONTROLLED_BY=192
+A_LANGUAGE_NOTE_ID=174
 
-
+A_SOURCE_NOTE=121
 
 
 ACCESS_POINTS={
@@ -108,5 +131,34 @@ CULTURE="de"        # AtoM needs the ISO 639-1 value of a known language
 
 SATZZEICHEN=".,;:-)(/\?!_–{}„…“»«›‹"   # A string of non wanted characters in stemming
 
+MIN_EXPORT_LIST_LEN=100 #size of chunks for data imports from external sites.
+
 HELP_STRING="USAGE:  atom-dm [OPTION] ... [SOURCE] [DEST] \
 			\nMANDATORY ELEMENTS:"
+
+BASE_DIR="/home/kol/kol/atomdm/"
+
+
+SEARCH_TO='1945'
+SEARCH_FROM='1850'
+
+PREDEFINED_SEARCH_TERMS=[
+	"koloni",
+	"afri",
+	"schutztruppe",
+	"kamerun",
+	"deutsch-ostafrika",
+	"deutsch südwest-afrika",
+	"mahinland",
+	"witu",
+	"wituland",
+	"togo",
+	"neuguinea",
+	"samoa",
+	"karolinen",
+	"marianen",
+	"bismarck-archipel",
+	"tsingtau",
+	"kiautschou"
+	
+]

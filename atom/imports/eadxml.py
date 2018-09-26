@@ -21,6 +21,7 @@ from atom.main import data_manager, g
 from atom.helpers.helper import stringOps
 so=stringOps()
 
+
 class eadxml(object):
 	#data_directory='data/'
 	ns=""
@@ -127,6 +128,7 @@ class eadxml(object):
 				for head in child:
 					if head.tag==self.ns+"eadid":
 						self.meta["legacyId"]=head.text
+						self.meta['descriptionIdentifier']=head.text
 			if child.tag==self.ns+"archdesc":
 				for sub_child in child:
 					if sub_child.tag==self.ns+"bioghist":
@@ -141,10 +143,12 @@ class eadxml(object):
 								self.meta['title']=did.text
 							if did.tag==self.ns+"unitid":
 								if 'call number' in did.attrib:
-									self.meta['descriptionIdentifier']=did.text
-								if 'type' in did.attrib:
+									self.meta['identifier']=did.text
+								elif 'type' in did.attrib:
 									if did.attrib['type']=='call number':
-										self.meta['descriptionIdentifier']=did.text
+										self.meta['identifier']=did.text
+								else:
+									self.meta['identifier']=did.text
 							if did.tag==self.ns+"unitdate":
 								self.meta['eventDates']=did.text
 								self.meta['eventStartDates']= self.dm.build_eventDates(self.meta['eventDates'])[0]
@@ -233,12 +237,12 @@ class eadxml(object):
 						
 						if 'type' in did.attrib:
 							if did.attrib['type']=="call number":
-								d['descriptionIdentifier']=did.text
+								d['identifier']=did.text
 							if did.attrib['type']=='file reference' :
 								d['alternativeIdentifiers'] = did.text
 								d['alternativeIdentifierLabels']='Former call number'
 						else:
-							d['descriptionIdentifier']=did.text
+							d['identifier']=did.text
 					if did.tag==self.ns+'origination':
 						if 'eventActors' not in d:
 							d['eventActors']=did.text + "|"

@@ -47,7 +47,7 @@ import platform
 import logging
 import subprocess
 import pexpect
-import pprint	
+	
 import logging
 import pycurl
 import xmltodict 
@@ -59,12 +59,12 @@ import operator
 import glob
 
 from collections import Counter
-import shutil
+
 import xml.etree.ElementTree as ET
 from slugify import slugify
 
 from atom.main import g, data_manager
-from atom.helpers import ai, linguistic, location
+from atom.helpers import ai, linguistic, location,deepl
 
 
 def main(args):
@@ -76,7 +76,14 @@ def main(args):
 			if len(args)>2:
 				dm=data_manager.DataManager()				
 				if args[2]=="ddb":
-					dm.imports("DDB")
+					dm.imports("DDB","archival_description","","",True,"".join(args[3:4]))
+				if args[2] in ("fbn","FBN"):
+					predefined=[]
+					if len(args)>5:
+						if args[5].lower() in ("true", "predefined"):
+							predefined=g.PREDEFINED_SEARCH_TERMS
+					print(predefined)
+					dm.imports("FBN","archival_description","","",True,"","",args[3],args[4],predefined)
 				elif args[2]=="kal":
 					dm.imports("KAL")
 				elif args[2]=="eadxml":
@@ -99,6 +106,52 @@ def main(args):
 				if args[2] in ("join-tmp-csv","join_tmp_csv"):
 					dm=data_manager.DataManager()
 					dm.join_csv()
+				if args[2] in ("reduce-csv"):
+					dm=data_manager.DataManager()
+					dm.reduce_csv(True)	
+				if args[2] in ("merge-csv"):
+					dm=data_manager.DataManager()
+					dm.merge_csv(args[3],args[4])					
+				if args[2] in ("update-access-points-list"):
+					ap=data_manager.access_points()
+					ap.update_access_points_list()
+				if args[2] in ("normalize-name-access-points"):
+					ap=data_manager.access_points()
+					ap.normalize_name_access_points()	
+				if args[2] in ("normalize-other-access-points"):
+					ap=data_manager.access_points()
+					ap.normalize_other_access_points()		
+				if args[2] in ("find-name-access-points"):
+					ap=data_manager.access_points()
+					ap.find_name_access_points(True)
+				if args[2] in ("find-other-access-points"):#old
+					ap=data_manager.access_points()
+					ap.find_other_access_points(True)	
+				if args[2] in ("translate-information-objects"):
+					tr=deepl.deepl()
+					if args[3] in ("en","EN"):
+						tr.translate_information_objects("EN")
+					if args[3] in ("fr","FR"):
+						tr.translate_information_objects("FR")					
+									
+				if args[2] in ("find-access-points-in-atom"):
+					ap=data_manager.access_points()
+					if args[3] in ("Wikidata", "wd","WD"):
+						print("open Wikidata corpus")
+						dm=data_manager.DataManager()
+						ap.find_access_points_in_atom("wd",args[4] or "")	
+					else:
+						print ("open AtoM corpus")
+						ap.find_access_points_in_atom("atom",args[4] or "")
+						
+					ap.normalize_name_access_points()
+					ap.normalize_other_access_points()	
+					#ap.find_other_access_points(True)
+					ap.clean_lower_relations()
+					ap.rebuild_nested()
+				if args[2] in ("index-wd-keywords","index-wd-corpus"):
+					dm=data_manager.DataManager()
+					dm._index_keywords()									
 					
 		elif args[1] in ('--create_access_points', "-a"):
 			pass

@@ -1,3261 +1,4392 @@
 [
-    {
-        "culture_de": "Abong-Mbang",
-        "id": 505160,
-        "indicators": [
-            "Abongmbang",
-            "Abong Mbang"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Adel",
-        "id": 167505,
-        "indicators": [
-            "Durchlaucht"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Admiralitäts-Inseln",
-        "id": 505233,
-        "parent_id": 779862,
-        "type": 42
-    },
-    {
-        "culture_de": "Afrika",
-        "id": 117053,
-        "parent_id": 110,
-        "type": 42
-    },
-    {
-        "culture_de": "Ahmednagar",
-        "id": 150337,
-        "parent_id": 168389,
-        "type": 42
-    },
-    {
-        "culture_de": "Akoafim",
-        "id": 505181,
-        "indicators": [
-            "Akoa-fem",
-            "Akoafem",
-            "Akoa-fim"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Akonolinga",
-        "id": 505162,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Aktiengesellschaft",
-        "id": 150062,
-        "indicators": [
-            "AG"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Alben",
-        "exclusions": [],
-        "id": 379,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Alltag",
-        "id": 167378,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Anecho",
-        "id": 637514,
-        "parent_id": 150315,
-           "indicators": ["Anécho"],
-        "type": 42
-    },
-    {
-        "culture_de": "Angaur",
-        "id": 168417,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Anmerkungen zu Feldern",
-        "exclusions": [],
-        "id": 394,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Apia",
-        "id": 376308,
-        "indicators": [
-            "Apía"
-        ],
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Arbeit",
-        "id": 166101,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Architektur",
-        "exclusions": [],
-        "id": 380,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Architektur",
-        "id": 166025,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Aruscha",
-        "id": 150372,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Asien",
-        "id": 168392,
-        "parent_id": 110,
-        "type": 42
-    },
-    {
-        "culture_de": "Astrolabe Bai",
-        "id": 505229,
-        "indicators": [
-            "Astrolabe-Bai",
-            "Astrolabebucht",
-            "Astrolabe-Bucht"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Atakpame",
-        "id": 637512,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Aufnahmeprotokolle",
-        "exclusions": [],
-        "id": 417,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Aufstand",
-        "id": 150286,
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Aufstand der Herero und Nama",
-        "id": 154056,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Aufstand der Sokehs",
-        "id": 168421,
-        "indicators": [
-            "Ponape-Aufstand"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ausbildung",
-        "id": 164868,
-        "indicators": [
-            "Lehre"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Auslandsdeutsche",
-        "id": 150049,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Auswanderung",
-        "id": 119237,
-        "indicators": [
-            "Emmigration"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Auszeichnung",
-        "id": 120068,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ayoshöhe",
-        "id": 505171,
-        "indicators": [
-            "Ayos-Höhe",
-            "Ajoshöhe"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Bad Cannstatt",
-        "id": 118144,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Bafia",
-        "id": 505159,
-        "indicators": [
-            "Bapea"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Bagamoyo",
-        "id": 505202,
-        "indicators": [
-            "Bagamojo"
-        ],
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Bahn",
-        "id": 167366,
-        "indicators": [
-            "Eisenbahn.*",
-            "Bahn.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Banjo",
-        "id": 505153,
-        "indicators": [
-            "Banyo"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Bassari",
-        "id": 637517,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Batanga",
-        "id": 505189,
-        "indicators": [
-            "Gross-Batanga",
-            "Batanga-Küste"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Baturi",
-        "id": 505149,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Bauwesen",
-        "id": 60960,
-        "indicators": [
-            "Bauarbeiten"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Beri-Beri",
-        "id": 851933,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Berlin",
-        "id": 58911,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Berlinhafen",
-        "id": 505224,
-        "indicators": [
-            "Berlin-Hafen",
-            "Berlin-Reede"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Beruf",
-        "id": 166119,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bethanien",
-        "id": 505265,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Bevölkerung",
-        "id": 166076,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bikini",
-        "id": 505241,
-        "parent_id": 779858,
-        "type": 42
-    },
-    {
-        "culture_de": "Bildarchive",
-        "id": 57104,
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Bildung",
-        "id": 165766,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bildungswesen",
-        "id": 150364,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bismarckarchipel",
-        "id": 779862,
-        "indicators": [
-            "Bismarck-archipel"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Bismarckburg",
-        "id": 157285,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Bismarckburg",
-        "id": 637515,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Bochum",
-        "id": 58946,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Bonaberi",
-        "id": 505167,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Bougainville",
-        "id": 505235,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Boxeraufstand",
-        "id": 117858,
-        "indicators": [
-            "Boxer-Aufstand"
-        ],
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Brauchtum",
-        "id": 165058,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Breitseiten",
-        "exclusions": [],
-        "id": 383,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Buddhismus",
-        "id": 166353,
-        "indicators": [
-            "buddhis.*",
-            "Budhis.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bukoba",
-        "id": 157289,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Burenkrieg",
-        "id": 150443,
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Börse",
-        "id": 165583,
-        "indicators": [
-            "Aktienkurs.*",
-            "Aktien-Kurs.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Bücher",
-        "exclusions": [],
-        "id": 382,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Carnot",
-        "id": 505154,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "China",
-        "id": 150292,
-        "indicators": [
-            "Chines.*"
-        ],
-        "parent_id": 168392,
-        "type": 42
-    },
-    {
-        "culture_de": "Cholera",
-        "id": 851936,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Cocanada",
-        "id": 122572,
-        "parent_id": 168389,
-        "type": 42
-    },
-    {
-        "culture_de": "Daily-Telegraph-Affäre (1909)",
-        "id": 119164,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Daressalam",
-        "id": 150373,
-        "indicators": [
-            "Dar-es-salaam",
-            "Deresalam"
-        ],
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Dehane",
-        "id": 505188,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Denkmal",
-        "id": 166361,
-        "indicators": [
-            ".*statue.*",
-            ".*ehrenmal.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Deutsch-Französischer Krieg 1870/71",
-        "id": 120006,
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Deutsch-Neuguinea",
-        "id": 165918,
-        "indicators": [
-            "Neu-Guinea"
-        ],
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Deutsch-Ostafrika",
-        "id": 115988,
-        "indicators": [
-            "Deutsch-Ost-Afrika"
-        ],
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Deutsch-Südwestafrika",
-        "id": 115159,
-        "indicators": [
-            "Südwest-Afrika"
-        ],
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Deutsche Kolonial-Wander-Ausstellung",
-        "id": 119243,
-        "indicators": [
-            "Deutsche Kolonial-Wanderausstellung"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Deutsche Kolonialpolitik",
-        "id": 115369,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Deutsche Kolonien und Schutzgebiete",
-        "id": 153162,
-        "indicators": [
-            "Deutsche Kolonien"
-        ],
-        "parent_id": 110,
-        "type": 42
-    },
-    {
-        "culture_de": "Deutsches Kolonialblatt",
-        "id": 114686,
-        "indicators": [
-            "DKBL"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Deutschland",
-        "id": 165757,
-        "indicators": [
-            "Deutsch[esnm]{1,2} Reich[es]*"
-        ],
-        "parent_id": 168391,
-        "type": 42
-    },
-    {
-        "culture_de": "Dichtung",
-        "exclusions": [],
-        "id": 411,
-        "indicators": [
-            "Gedicht",
-            "Gedichte"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Diplomatische Beziehungen",
-        "id": 163386,
-        "indicators": [
-            ".*konsul.*",
-            ".*diplomat.*",
-            "Verbalnote."
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Diplomatischer Dienst",
-        "id": 150085,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Drucke",
-        "exclusions": [],
-        "id": 415,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Druckschrift",
-        "id": 150144,
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Duala",
-        "id": 123432,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Dume",
-        "id": 505161,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Dysenterie",
-        "id": 851935,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Ebolowa",
-        "id": 505179,
-        "indicators": [
-            "Ebolova"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Edea",
-        "id": 117258,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Eisenbahn",
-        "id": 168135,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Elato",
-        "id": 505249,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Eniwetok",
-        "id": 505238,
-        "parent_id": 779858,
-        "type": 42
-    },
-    {
-        "culture_de": "Entnazifizierung",
-        "id": 150459,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ephemera",
-        "exclusions": [],
-        "id": 391,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Erster Weltkrieg",
-        "id": 119090,
-        "indicators": [
-            "Erste[mnr] Weltkrieg."
-        ],
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Erziehung",
-        "id": 166092,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Erzählungen",
-        "exclusions": [],
-        "id": 404,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Eseka",
-        "id": 505190,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Essays",
-        "exclusions": [],
-        "id": 392,
-        "indicators": [
-            "Essay"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Ethnographie",
-        "exclusions": [],
-        "id": 393,
-        "indicators": [
-            "etnographi.*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Europa",
-        "id": 168391,
-        "parent_id": 110,
-        "type": 42
-    },
-    {
-        "culture_de": "Expedition",
-        "id": 150422,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Feindvermögen",
-        "id": 150059,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Filme",
-        "exclusions": [],
-        "id": 402,
-        "indicators": [
-            "Film",
-            "35 mm",
-            "16 mm"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Finanzen",
-        "id": 167566,
-        "indicators": [
-            "Budget",
-            "Haushaltstitel"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Finschhafen",
-        "id": 505225,
-        "indicators": [
-            "Finsch-Hafen"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Flugschriften",
-        "exclusions": [],
-        "id": 406,
-        "indicators": [
-            "Flugschrift",
-            "Propagandaschrift",
-            "Flugschriftensammlung",
-            "Flugbl[aä]tt.*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Flugwesen",
-        "id": 150555,
-        "indicators": [
-            ".*flugzeug.*",
-            ".*luftschiff.*",
-            ".*flieger.*",
-            "Luftfahr.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Flüchtlinge",
-        "id": 150051,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Forschung",
-        "id": 167622,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Forstschutzkommando",
-        "id": 124161,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Fotografien",
-        "exclusions": [],
-        "id": 409,
-        "indicators": [
-            "Photographie",
-            "Foto",
-            "Fotosammlun.*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Frankfurt (Main)",
-        "id": 124328,
-        "indicators": [
-            "Frankfurt/Main"
-        ],
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Frankreich",
-        "id": 119882,
-        "parent_id": 168391,
-        "type": 42
-    },
-    {
-        "culture_de": "Freizeit",
-        "id": 166106,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Friedensverhandlungen",
-        "id": 150165,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Friedrich-Wilhelmshafen",
-        "id": 505228,
-        "indicators": [
-            "Friedrich-Wilhelm-Hafen",
-            "Friedrich-Wilhelmhafen"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Gazelle-Halbinsel",
-        "id": 150113,
-        "indicators": [],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Gedenken",
-        "id": 150362,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gedenkstätte",
-        "id": 166363,
-        "indicators": [
-            "grab",
-            ".*gräber",
-            "friedhof",
-            "gedenkstein.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gelbfieber",
-        "id": 851939,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Gemälde",
-        "exclusions": [],
-        "id": 405,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Gesellschaft",
-        "id": 164798,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gesetz",
-        "id": 150293,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gesundheitspersonal",
-        "id": 165596,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gesundheitspersonal",
-        "id": 851940,
-        "parent_id": 164876,
-        "type": 35
-    },
-    {
-        "culture_de": "Gesundheitswesen",
-        "id": 164876,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Gewerbekammer",
-        "id": 122203,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ghana",
-        "id": 165680,
-        "indicators": [
-            "Goldküste",
-            "Gold Coast"
-        ],
-        "parent_id": 117053,
-        "type": 42
-    },
-    {
-        "culture_de": "Gobabis",
-        "id": 505276,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Gonsenheim",
-        "id": 124360,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Grootfontein",
-        "id": 505264,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Großbritannien",
-        "id": 168390,
-        "indicators": [
-            "england.*"
-        ],
-        "parent_id": 168391,
-        "type": 42
-    },
-    {
-        "culture_de": "Haager Konvention",
-        "id": 117361,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Hall-Inseln",
-        "id": 505243,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Halle",
-        "id": 150468,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Hamburg",
-        "id": 150351,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Handel",
-        "id": 165581,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Handelsregister",
-        "id": 122386,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Haushaltsfragen",
-        "id": 150538,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Herbertshöhe",
-        "id": 505231,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Hereroaufstand",
-        "id": 150120,
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Hochbau",
-        "id": 60954,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Idenau",
-        "id": 505187,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Illustrationen",
-        "exclusions": [],
-        "id": 395,
-        "indicators": [
-            "Zeichnung",
-            "Croquis",
-            "Kroquis",
-            "Skizze"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Indien",
-        "id": 168389,
-        "parent_id": 168392,
-        "type": 42
-    },
-    {
-        "culture_de": "Interviews",
-        "exclusions": [],
-        "id": 396,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Iringa",
-        "id": 156766,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Islam",
-        "id": 851807,
-        "parent_id": 851806,
-        "type": 35
-    },
-    {
-        "culture_de": "Italien",
-        "id": 122970,
-        "parent_id": 168391,
-        "type": 42
-    },
-    {
-        "culture_de": "Jabassi",
-        "id": 505172,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Jaluit",
-        "id": 505237,
-        "parent_id": 779858,
-        "type": 42
-    },
-    {
-        "culture_de": "Jap",
-        "id": 505244,
-        "indicators": [
-            "Yap"
-        ],
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Jaunde",
-        "id": 168638,
-        "indicators": [
-            "Yaunde"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Johann-Albrechtshöhe",
-        "id": 505173,
-        "indicators": [
-            "Johann-Albrecht[s]*-Höhe"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Joko",
-        "id": 505184,
-        "indicators": [
-            "Yoko"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Journalismus",
-        "id": 167402,
-        "indicators": [
-            "Journalist.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Jukaduma",
-        "id": 505182,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Justiz",
-        "id": 150431,
-        "indicators": [
-            ".*gericht[esn]*",
-            "Strafverhandlung.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kabakaul",
-        "id": 505230,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Kabylen",
-        "id": 150310,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kaiser-Wilhelmsland",
-        "id": 779861,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Kakao",
-        "id": 150333,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kamerun",
-        "id": 57382,
-        "indicators": [
-            "Cameroon.*"
-        ],
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Kanu",
-        "id": 164836,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kapitaï und Koba",
-        "id": 851812,
-        "indicators": [
-            "Kapitai und Koba"
-        ],
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Kapregiment",
-        "id": 150181,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Karema",
-        "id": 505198,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Karibib",
-        "id": 505275,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Karlsruhe",
-        "id": 116110,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Karneval",
-        "id": 166129,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Karolinen",
-        "id": 779859,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Karte",
-        "exclusions": [],
-        "id": 400,
-        "indicators": [
-            "Masstab",
-            "Maßstab",
-            "Karte"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Keetmanshoop",
-        "id": 505267,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Kentu",
-        "id": 505156,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Kiautschou",
-        "id": 116257,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Kigali",
-        "id": 505203,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kijunja",
-        "id": 168639,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kilimatinde",
-        "id": 168438,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kilwa",
-        "id": 156762,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kilwa-Kissiwani",
-        "id": 505216,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kilwa-Kiwindsche",
-        "id": 505199,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kiongue",
-        "id": 505285,
-        "parent_id": 156054,
-        "type": 42
-    },
-    {
-        "culture_de": "Kiëta",
-        "id": 505236,
-        "indicators": [
-            "Kieta"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Kolonialausstellung",
-        "id": 60265,
-        "indicators": [
-            "Kolonial-Ausstellung"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialbeamter",
-        "id": 150493,
-        "indicators": [
-            ".*kolonial[-]*beamte.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialdienst",
-        "id": 118154,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Koloniale Vereine",
-        "id": 150319,
-        "indicators": [
-            "kolonial[ernm]{0,2} verein.*",
-            "Kolonialverein.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialengländer",
-        "id": 150356,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialfeier",
-        "id": 150491,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialforstdienst",
-        "id": 124137,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialforstwirtschaft",
-        "id": 150089,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialgedenken",
-        "id": 150352,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialgesellschaft",
-        "id": 124397,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialkongress",
-        "id": 60735,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialkriegerspende",
-        "id": 60122,
-        "indicators": [
-            "Kolonialkrieger-Spende"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialmedizin",
-        "id": 150213,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialpolitik",
-        "id": 150096,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialpolizei",
-        "id": 120240,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialprodukte",
-        "id": 150365,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialschuldienst",
-        "id": 119888,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialschule",
-        "id": 58981,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialsoldaten",
-        "id": 59751,
-        "parent_id": 54456,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialspende",
-        "id": 150466,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialunternehmungen",
-        "id": 117010,
-        "indicators": [
-            "kolonialunternehmen.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kolonialwaren",
-        "id": 851805,
-        "parent_id": 54606,
-        "type": 35
-    },
-    {
-        "culture_de": "Kondoa",
-        "id": 157280,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Kondutschi",
-        "id": 505211,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Konflikte",
-        "id": 164341,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Konstantinhafen",
-        "id": 505226,
-        "indicators": [
-            "Konstantin-hafen"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Kontscha",
-        "id": 505185,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Korrespondenz",
-        "exclusions": [],
-        "id": 388,
-        "indicators": [
-            "Brief[en]*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Krankenhaus",
-        "id": 164880,
-        "indicators": [
-            "Hospit[aä]l.*",
-            "Krankenh[aä]us.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Krankenpflege",
-        "id": 150245,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Krankheiten",
-        "exclusions": [
-            "Krankheiten"
-        ],
-        "id": 166196,
-        "indicators": [
-            "Tropenkrankheit.*",
-            "Infektionskrankheit.*",
-            "Nervenkrankheit.*",
-            ".*leiden"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kreuzergeschwader, Ostasiatisches I. (deutsches)",
-        "id": 118731,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kribi",
-        "id": 505147,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Krieg",
-        "id": 166642,
-        "indicators": [
-            ".*gefecht.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kriegsentschädigung",
-        "id": 118058,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kriegsgefangene",
-        "id": 117590,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kriegsgesetzgebung",
-        "id": 150044,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Krisen",
-        "id": 164248,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kultur",
-        "id": 166127,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kunst",
-        "id": 165016,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Kusaie",
-        "id": 505255,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Kusseri",
-        "id": 156670,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Kwajelin",
-        "id": 505239,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Lamotrik",
-        "id": 505250,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Landherrenschaften - Hauptregistratur",
-        "id": 122430,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Landschaften",
-        "exclusions": [],
-        "id": 397,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Landwirtschaft",
-        "id": 164820,
-        "indicators": [
-            "Ackerbau",
-            "Viehzucht"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Leerformulare",
-        "exclusions": [],
-        "id": 381,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Lepra",
-        "id": 851938,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Lindi",
-        "id": 505200,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Literatur",
-        "id": 168405,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Lolodorf",
-        "id": 505150,
-        "indicators": [
-            "Mlole"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Lome",
-        "id": 637511,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Lomie",
-        "id": 505168,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "London",
-        "id": 118342,
-        "parent_id": 168390,
-        "type": 42
-    },
-    {
-        "culture_de": "Lüderitzbucht",
-        "id": 505261,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Mafia",
-        "id": 505213,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mahenge",
-        "id": 505207,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mahinland",
-        "id": 851811,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Mainz",
-        "id": 124231,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Majuro",
-        "id": 505240,
-        "parent_id": 779858,
-        "type": 42
-    },
-    {
-        "culture_de": "Malaria",
-        "id": 851930,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Malimba",
-        "id": 505146,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Maltahöhe",
-        "id": 505278,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Manuskripte",
-        "exclusions": [],
-        "id": 399,
-        "indicators": [
-            "Manuscript",
-            "Manuskript"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Marianen",
-        "id": 779860,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Marine",
-        "id": 851905,
-        "indicators": [
-            "Kriegsmarine",
-            "Seemacht",
-            "S.M.S", "SMS"
-        ],
-        "parent_id": 54456,
-        "type": 35
-    },
-    {
-        "culture_de": "Marokkokrise",
-        "id": 150134,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Marshall-Inseln",
-        "id": 779858,
-        "indicators": [
-            "Marshallinseln",
-            "Marschallinseln"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Mbweni",
-        "id": 505212,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Medien",
-        "id": 167405,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Medikament",
-        "id": 164878,
-        "indicators": [
-            "Medikamente",
-            "Impfstoff",
-            "Chinin",
-            "apotheke"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Medizin",
-        "id": 164874,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Merkblätter",
-        "exclusions": [],
-        "id": 398,
-        "indicators": [
-            "merkblatt"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Mikindani",
-        "id": 505201,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Militär",
-        "id": 54456,
-        "indicators": [
-            "Askari.*",
-            "Kompanie.*",
-            "Schutztruppe",
-            "Polizeitruppe",
-            "Askaris",
-            "Soldaten",
-            "Soldat",
-            "Feldwebel",
-            "Offizier",
-            "Offiziere",
-            "Niederschlagung",
-            ".*kommando",
-            "Unteroffizier.*",
-            ".*lieutenan.*",
-            "kommandeur[s]*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Militärischer Konflikt",
-        "id": 153131,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Misahöhe",
-        "id": 637513,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Mission",
-        "id": 54451,
-        "indicators": [
-            "Pastor",
-            "Missionar",
-            "Missions.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Missum-Missum",
-        "id": 505155,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Mohoro",
-        "id": 505215,
-        "parent_id": 115988,
-        "indicators":["Mohorro"]
-        "type": 42
-    },
-    {
-        "culture_de": "Molundu",
-        "id": 505169,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Mora",
-        "id": 505186,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Moschi",
-        "id": 505205,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mpapua",
-        "id": 505197,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mpim",
-        "id": 505163,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Mrogoro",
-        "id": 505222,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mtschinga",
-        "id": 505217,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Muanza",
-        "id": 505193,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Mulifanua",
-        "id": 505282,
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Mundame",
-        "id": 505174,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Musik",
-        "exclusions": [],
-        "id": 403,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Mutiatele",
-        "id": 505281,
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Nachlaßangelegenheiten",
-        "id": 150438,
-        "indicators": [
-            "Nachlass[-]*Angelegenheit[en]*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Nachlässe",
-        "id": 54458,
-        "indicators": [
-            "Nachlass*",
-            "Nachlaß",
-            "NL"
-        ],
-        "levels_of_description": [
-            227,
-            228,
-            229
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Namorik",
-        "id": 505256,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Naturwissenschaft",
-        "id": 165864,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Nauru",
-        "id": 168397,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Neu-Hannover",
-        "id": 505234,
-        "indicators": [
-            "neuhannover"
-        ],
-        "parent_id": 779862,
-        "type": 42
-    },
-    {
-        "culture_de": "Neu-Langenburg",
-        "id": 505210,
-        "indicators": [
-            "neulangenburg"
-        ],
-        "parent_id": 779862,
-        "type": 42
-    },
-    {
-        "culture_de": "Neu-Mecklenburg",
-        "id": 150183,
-        "indicators": [
-            "neumecklenburg"
-        ],
-        "parent_id": 779862,
-        "type": 42
-    },
-    {
-        "culture_de": "Neu-Pommern",
-        "id": 150115,
-        "indicators": [
-            "neupommern"
-        ],
-        "parent_id": 779862,
-        "type": 42
-    },
-    {
-        "culture_de": "Ngatik",
-        "id": 505253,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Ngaundere",
-        "id": 505152,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Niederländisch-Indien",
-        "id": 153136,
-        "parent_id": 150359,
-        "type": 42
-    },
-    {
-        "culture_de": "Niederländische Kolonien",
-        "id": 150359,
-        "parent_id": 168392,
-        "type": 42
-    },
-    {
-        "culture_de": "Nomoi",
-        "id": 505242,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Nordisches Kolonialkontor GmbH",
-        "id": 122911,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Notenblatt",
-        "exclusions": [],
-        "id": 419,
-        "indicators": [
-            "Notenbl[aä]tt.*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Notgeld",
-        "id": 119654,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Nsork",
-        "id": 505165,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Nssakpe",
-        "id": 505176,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Nssanakang",
-        "id": 505177,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Oberappellationsgericht",
-        "id": 123929,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Okahandja",
-        "id": 505269,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Olama",
-        "id": 505170,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Oleaï",
-        "id": 505248,
-        "indicators": [
-            "Olai"
-        ],
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Omaruru",
-        "id": 505274,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Ossidinge",
-        "id": 505151,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Otawi",
-        "id": 505268,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Outjo",
-        "id": 505273,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Oyem",
-        "id": 505164,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Pagan",
-        "id": 505257,
-        "parent_id": 779860,
-        "type": 42
-    },
-    {
-        "culture_de": "Palau",
-        "id": 505245,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Pangani",
-        "id": 505214,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Paris",
-        "id": 122531,
-        "parent_id": 119882,
-        "type": 42
-    },
-    {
-        "culture_de": "Partituren",
-        "exclusions": [],
-        "id": 418,
-        "indicators": [
-            "Partitur"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Pest",
-        "id": 851937,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Petitionen",
-        "exclusions": [],
-        "id": 408,
-        "indicators": [
-            "Petition"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Pferderennen",
-        "id": 166079,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Pferdesport",
-        "id": 167345,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Physische Objekte",
-        "exclusions": [],
-        "id": 410,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Pingelap",
-        "id": 505254,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Plantagen",
-        "id": 150534,
-        "indicators": [
-            ".plantage.*",
-            ".*pflanzung[en]*"
-        ],
-        "parent_id": 54606,
-        "type": 35
-    },
-    {
-        "culture_de": "Pocken",
-        "id": 851932,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Politik",
-        "id": 165598,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Polizei",
-        "id": 165764,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ponape",
-        "id": 155109,
-        "indicators": [
-            "Puinipet"
-        ],
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Porto Seguro",
-        "id": 637521,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Portraits",
-        "exclusions": [],
-        "id": 412,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Poster",
-        "exclusions": [],
-        "id": 414,
-        "indicators": [
-            "Plakat.*",
-            "Plakatsammlung",
-            "Postersammlung"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Postkarten",
-        "exclusions": [],
-        "id": 413,
-        "indicators": [
-            "Postkarte"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Prisenamt",
-        "id": 150038,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Programme",
-        "exclusions": [],
-        "id": 416,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Pulap",
-        "id": 505252,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Rabaul",
-        "id": 154393,
-        "indicators": [
-            "Simpson[-]*hafen"
-        ],
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Rassismus",
-        "id": 168387,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Rechtsprechung",
-        "id": 164813,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Regierung",
-        "id": 166217,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Regierungsbaumeister",
-        "id": 150455,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Rehoboth",
-        "id": 505263,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Reichskolonialbund",
-        "id": 118015,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Religion",
-        "id": 166027,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Religion",
-        "id": 851806,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Rio del Rey",
-        "id": 505175,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Rota",
-        "id": 505259,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Ruanda",
-        "id": 505191,
-        "indicators": [
-            "Rwanda"
-        ],
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Sadani",
-        "id": 157278,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Saipan",
-        "id": 505246,
-        "indicators": [
-            "Saipán"
-        ],
-        "parent_id": 779860,
-        "type": 42
-    },
-    {
-        "culture_de": "Sakbajeme",
-        "id": 505178,
-        "indicators": [
-            "sakbayeme"
-        ],
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Salelawulu",
-        "id": 505284,
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Salomon-Inseln",
-        "id": 851809,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Samoa",
-        "id": 153158,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Sangmelima",
-        "id": 505180,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Sanguri",
-        "id": 637518,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Sansane-Mangu",
-        "id": 637519,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Satuwal",
-        "id": 505251,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Sawaii",
-        "id": 505279,
-        "indicators": [
-            "Sawaíí"
-        ],
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Schagga",
-        "id": 505286,
-        "parent_id": 156054,
-        "type": 42
-    },
-    {
-        "culture_de": "Schakamba",
-        "id": 505288,
-        "parent_id": 156054,
-        "type": 42
-    },
-    {
-        "culture_de": "Schießen",
-        "id": 165772,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schiff  \"Appam\"",
-        "id": 150039,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schiff \"Carl Peters\"",
-        "id": 168394,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schiff \"Erich Woermann\"",
-        "id": 121999,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schiff \"Kamerun\"",
-        "id": 121987,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schifffahrt",
-        "id": 168408,
-        "indicators": [
-            "schiff.*",
-            "hafen.*",
-            "dampfer.*",
-            "seefracht"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schlafkrankheit",
-        "id": 851931,
-        "parent_id": 166196,
-        "type": 35
-    },
-    {
-        "culture_de": "Schuckmannsburg",
-        "id": 505272,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Schulbehörde",
-        "id": 122800,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schule",
-        "id": 164864,
-        "indicators": [
-            "Schulen",
-            "Schul"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schutzgebiete",
-        "id": 150063,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schutztruppe",
-        "id": 154067,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Schwarzwasserfieber",
-        "id": 851934,
-        "parent_id": 851930,
-        "type": 35
-    },
-    {
-        "culture_de": "Schwerin",
-        "id": 167512,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Senat-Kriegsakten",
-        "id": 122198,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Sigmaringen",
-        "id": 114721,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Sokode",
-        "id": 637516,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Sonstige Dokumente",
-        "exclusions": [],
-        "id": 401,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Soppo",
-        "id": 505157,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Sport",
-        "id": 164834,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Sprachwissenschaften",
-        "id": 168122,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Ssongea",
-        "id": 505208,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Stadtbilder",
-        "exclusions": [],
-        "id": 386,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Stempel",
-        "id": 168448,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Stephansort",
-        "id": 505227,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Strafvollzug",
-        "id": 166539,
-        "indicators": [
-            ".*gefängnis.*",
-            ".*gefangene.*"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Stuttgart",
-        "id": 114741,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Sultanat Witu",
-        "id": 156056,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Swakopmund",
-        "id": 505262,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Südafrika",
-        "id": 119921,
-        "parent_id": 117053,
-        "type": 42
-    },
-    {
-        "culture_de": "Südwestafrika-Denkmünze aus Stahl",
-        "id": 116266,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Tabora",
-        "id": 505194,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Tagebücher",
-        "exclusions": [],
-        "id": 389,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Tanga",
-        "id": 505195,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Tanz",
-        "id": 165056,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Telegrafie",
-        "id": 168416,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Theater",
-        "id": 164796,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Tibati",
-        "id": 505183,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Tientsin",
-        "id": 708518,
-        "parent_id": 150292,
-        "type": 42
-    },
-    {
-        "culture_de": "Tier",
-        "id": 165755,
-        "indicators": [
-            "tiere"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Tiko",
-        "id": 505158,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Tinian",
-        "id": 505258,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Togo",
-        "id": 150315,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Toma",
-        "id": 505232,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Towe",
-        "id": 637520,
-        "parent_id": 150315,
-        "type": 42
-    },
-    {
-        "culture_de": "Tradition",
-        "id": 167315,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Transkriptionen",
-        "exclusions": [],
-        "id": 421,
-        "indicators": [
-            "Transkription"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Transport",
-        "id": 164244,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Transportunfall",
-        "id": 166392,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Truk",
-        "id": 155298,
-        "parent_id": 779859,
-        "type": 42
-    },
-    {
-        "culture_de": "Tsingtau",
-        "id": 166069,
-        "parent_id": 116257,
-        "type": 42
-    },
-    {
-        "culture_de": "Tübingen",
-        "id": 115549,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Udjidji",
-        "id": 505196,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Ugogo",
-        "id": 505221,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Ukami",
-        "id": 505223,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Ukoko",
-        "id": 505166,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Uluguru",
-        "id": 505220,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Ululssi",
-        "id": 505247,
-        "parent_id": 165918,
-        "type": 42
-    },
-    {
-        "culture_de": "Unruhen",
-        "id": 165019,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Upolu",
-        "id": 505280,
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Urlaub",
-        "id": 166228,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Urundi",
-        "id": 505192,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Usambara",
-        "id": 505218,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Ussagara",
-        "id": 505219,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Usumbura",
-        "id": 505204,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Verdun",
-        "id": 150311,
-        "parent_id": 119882,
-        "type": 42
-    },
-    {
-        "culture_de": "Vermischtes",
-        "id": 165808,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Verordnung",
-        "id": 150055,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Versailler Vertrag",
-        "id": 150186,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Verzeichnisse",
-        "exclusions": [],
-        "id": 385,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Victoria",
-        "id": 505148,
-        "parent_id": 57382,
-        "type": 42
-    },
-    {
-        "culture_de": "Viehwirtschaft",
-        "id": 150419,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Waitoomuti",
-        "id": 505283,
-        "parent_id": 153158,
-        "type": 42
-    },
-    {
-        "culture_de": "Warmbad",
-        "id": 505266,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Waterberg",
-        "id": 505277,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Weingarten",
-        "id": 150464,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Werbebotschaften",
-        "exclusions": [],
-        "id": 378,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Wiedhafen",
-        "id": 505209,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Wilhelmstal",
-        "id": 505206,
-        "parent_id": 115988,
-        "type": 42
-    },
-    {
-        "culture_de": "Wilhelmstal",
-        "id": 505270,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Windhuk",
-        "id": 505260,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Wirtschaft",
-        "id": 54606,
-        "indicators": [
-            "Firma",
-            "m.b.H",
-            "mbH",
-            "AG",
-            "DKG"
-        ],
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Wissenschaft",
-        "id": 167620,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Wissenschaftliche Sammlungen",
-        "id": 168401,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Witu",
-        "id": 505287,
-        "parent_id": 156054,
-        "type": 42
-    },
-    {
-        "culture_de": "Wituland",
-        "id": 156054,
-        "parent_id": 153162,
-        "type": 42
-    },
-    {
-        "culture_de": "Wohnen",
-        "id": 166108,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "Worms",
-        "id": 60737,
-        "parent_id": 165757,
-        "type": 42
-    },
-    {
-        "culture_de": "Zeichnungen",
-        "exclusions": [],
-        "id": 390,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Zeitpläne",
-        "exclusions": [],
-        "id": 420,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Zeitschriften",
-        "exclusions": [],
-        "id": 407,
-        "indicators": [
-            "Zeitungsartikel",
-            "Tageblatt",
-            "Anzeiger",
-            "Zeitung",
-            "Zeitungsausschnitt.*"
-        ],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Zeitungsausschnitt",
-        "id": 150148,
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "Zesfontein",
-        "id": 505271,
-        "parent_id": 115159,
-        "type": 42
-    },
-    {
-        "culture_de": "Zulu-Krieg",
-        "id": 150442,
-        "parent_id": 153131,
-        "type": 35
-    },
-    {
-        "culture_de": "Zwischenablage",
-        "exclusions": [],
-        "id": 387,
-        "indicators": [],
-        "parent_id": 110,
-        "type": 78
-    },
-    {
-        "culture_de": "deutsch-amerikanische Beziehungen",
-        "id": 150132,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-britische Beziehungen",
-        "id": 150095,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-französische Beziehungen",
-        "id": 150094,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-italienische Beziehungen",
-        "id": 150101,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-marokkanische Beziehungen",
-        "id": 150108,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-russische Beziehungen",
-        "id": 150093,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsch-österreichische Beziehungen",
-        "id": 150102,
-        "parent_id": 163386,
-        "type": 35
-    },
-    {
-        "culture_de": "deutsche Flottenpolitik",
-        "id": 150136,
-        "parent_id": 110,
-        "type": 35
-    },
-    {
-        "culture_de": "einzelne Schiffe",
-        "id": 851808,
-        "parent_id": 168408,
-        "type": 35
-    },
-    {
-        "culture_de": "evangelische Mission",
-        "id": 54608,
-        "indicators": [
-            "Nordeutsche Mission",
-            "Basler",
-            "Rheinische Mission",
-            "Bethel",
-            "Emdoa",
-            "Ostasienmission"
-        ],
-        "parent_id": 54451,
-        "type": 35
-    },
-    {
-        "culture_de": "katholische Mission",
-        "id": 54607,
-        "indicators": [
-            "Pallott.*",
-            "Steyler",
-            "Neuendettelsau",
-            "Jesu",
-            "katholi.*",
-            "Apostolat.*"
-        ],
-        "parent_id": 54451,
-        "type": 35
-    }
+  {
+    "culture_de": "Abong-Mbang",
+    "id": 505160,
+    "indicators": [
+      "Abongmbang",
+      "Abong Mbang"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Adel",
+    "id": 167505,
+    "indicators": [
+      "Durchlaucht"
+    ],
+    "last_modified": "2018-07-13_22:27:54",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Admiralitäts-Inseln",
+    "id": 505233,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779862,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "übriges Afrika",
+    "culture_en": "other Africa",
+    "id": 117053,
+    "last_modified": "2018-07-18_19:25:09",
+    "parent_id": 110,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ahmednagar",
+    "id": 150337,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 168389,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Akoafim",
+    "id": 505181,
+    "indicators": [
+      "Akoa-fem",
+      "Akoafem",
+      "Akoa-fim"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Akonolinga",
+    "id": 505162,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Aktiengesellschaft",
+    "id": 150062,
+    "indicators": [
+      "AG"
+    ],
+    "last_modified": "2018-02-23_23:48:09",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Alben",
+    "culture_en": "Albums",
+    "culture_fr": "Albums",
+    "exclusions": [],
+    "id": 379,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Alltag",
+    "id": 167378,
+    "last_modified": "2018-06-03_05:24:31",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Anecho",
+    "id": 637514,
+    "indicators": [
+      "Anécho"
+    ],
+    "last_modified": "2018-07-18_18:46:49",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Angaur",
+    "id": 168417,
+    "last_modified": "2018-07-19_16:46:48",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Apia",
+    "id": 376308,
+    "indicators": [
+      "Apía"
+    ],
+    "last_modified": "2018-07-17_14:30:30",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Arbeit",
+    "id": 166101,
+    "last_modified": "2018-06-02_22:31:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Architektur",
+    "culture_en": "Architecture",
+    "culture_fr": "Architecture",
+    "exclusions": [],
+    "id": 380,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Architektur",
+    "id": 166025,
+    "last_modified": "2018-06-02_22:31:47",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Aruscha",
+    "id": 150372,
+    "last_modified": "2018-07-13_21:55:43",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "übriges Asien",
+    "id": 168392,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 110,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Astrolabe Bai",
+    "id": 505229,
+    "indicators": [
+      "Astrolabe-Bai",
+      "Astrolabebucht",
+      "Astrolabe-Bucht"
+    ],
+    "last_modified": "2018-07-19_16:41:27",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Atakpame",
+    "id": 637512,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Aufnahmeprotokolle",
+    "culture_en": "Recording logs",
+    "culture_fr": "Journaux d'enregistrements",
+    "exclusions": [],
+    "id": 417,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Aufstand",
+    "id": 150286,
+    "last_modified": "2018-02-28_01:02:58",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Aufstand der Herero und Nama",
+    "id": 154056,
+    "last_modified": "2018-04-17_11:39:32",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Aufstand der Sokehs",
+    "id": 168421,
+    "indicators": [
+      "Ponape-Aufstand"
+    ],
+    "last_modified": "2018-07-14_08:51:07",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ausbildung",
+    "id": 164868,
+    "indicators": [
+      "Lehre"
+    ],
+    "last_modified": "2018-07-19_12:12:42",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Auslandsdeutsche",
+    "id": 150049,
+    "last_modified": "2018-02-23_23:40:46",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Auswanderung",
+    "id": 119237,
+    "indicators": [
+      "Emmigration"
+    ],
+    "last_modified": "2018-02-24_10:03:55",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Auszeichnung",
+    "id": 120068,
+    "last_modified": "2018-02-24_09:45:42",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ayoshöhe",
+    "id": 505171,
+    "indicators": [
+      "Ayos-Höhe",
+      "Ajoshöhe"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bad Cannstatt",
+    "id": 118144,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bafia",
+    "id": 505159,
+    "indicators": [
+      "Bapea"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bagamoyo",
+    "id": 505202,
+    "indicators": [
+      "Bagamojo"
+    ],
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bahn",
+    "id": 167366,
+    "indicators": [
+      "Eisenbahn.*",
+      "Bahn.*"
+    ],
+    "last_modified": "2018-06-03_05:24:30",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Banjo",
+    "id": 505153,
+    "indicators": [
+      "Banyo"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bassari",
+    "id": 637517,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Batanga",
+    "id": 505189,
+    "indicators": [
+      "Gross-Batanga",
+      "Batanga-Küste"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Baturi",
+    "id": 505149,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bauwesen",
+    "id": 60960,
+    "indicators": [
+      "Bauarbeiten"
+    ],
+    "last_modified": "2018-02-24_08:38:39",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Beri-Beri",
+    "id": 851933,
+    "last_modified": "2018-07-19_17:05:10",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Berlin",
+    "id": 58911,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Berlinhafen",
+    "id": 505224,
+    "indicators": [
+      "Berlin-Hafen",
+      "Berlin-Reede"
+    ],
+    "last_modified": "2018-07-19_16:40:57",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Beruf",
+    "id": 166119,
+    "last_modified": "2018-06-02_22:31:54",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bethanien",
+    "id": 505265,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bevölkerung",
+    "id": 166076,
+    "last_modified": "2018-06-02_22:31:51",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bikini",
+    "id": 505241,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779858,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bildarchive",
+    "id": 57104,
+    "last_modified": "2017-10-25_22:46:51",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Bildung",
+    "id": 165766,
+    "last_modified": "2018-06-02_22:31:25",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bildungswesen",
+    "id": 150364,
+    "last_modified": "2018-02-25_09:46:09",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bismarckarchipel",
+    "id": 779862,
+    "indicators": [
+      "Bismarck-archipel"
+    ],
+    "last_modified": "2018-07-19_07:37:39",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bismarckburg",
+    "id": 157285,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bismarckburg",
+    "id": 637515,
+    "last_modified": "2018-07-18_18:46:24",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bochum",
+    "id": 58946,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bonaberi",
+    "id": 505167,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Bougainville",
+    "id": 505235,
+    "last_modified": "2018-07-19_16:44:16",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Boxeraufstand",
+    "id": 117858,
+    "indicators": [
+      "Boxer-Aufstand"
+    ],
+    "last_modified": "2018-02-28_01:00:59",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Brauchtum",
+    "id": 165058,
+    "last_modified": "2018-06-02_22:30:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Breitseiten",
+    "culture_en": "Broadsides",
+    "culture_fr": "Bordées",
+    "exclusions": [],
+    "id": 383,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Buddhismus",
+    "id": 166353,
+    "indicators": [
+      "buddhis.*",
+      "Budhis.*"
+    ],
+    "last_modified": "2018-07-19_12:04:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bukoba",
+    "id": 157289,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Burenkrieg",
+    "id": 150443,
+    "last_modified": "2018-02-28_01:01:42",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Börse",
+    "id": 165583,
+    "indicators": [
+      "Aktienkurs.*",
+      "Aktien-Kurs.*"
+    ],
+    "last_modified": "2018-06-02_22:31:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Bücher",
+    "culture_en": "Books",
+    "culture_fr": "Livres",
+    "exclusions": [],
+    "id": 382,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Carnot",
+    "id": 505154,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "China",
+    "id": 150292,
+    "indicators": [
+      "Chines.*"
+    ],
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 168392,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Cholera",
+    "id": 851936,
+    "last_modified": "2018-07-19_17:08:30",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Cocanada",
+    "id": 122572,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 168389,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Daily-Telegraph-Affäre (1909)",
+    "id": 119164,
+    "last_modified": "2017-11-16_06:56:43",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Daressalam",
+    "id": 150373,
+    "indicators": [
+      "Dar-es-salaam",
+      "Deresalam"
+    ],
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Dehane",
+    "id": 505188,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Denkmal",
+    "id": 166361,
+    "indicators": [
+      ".*statue.*",
+      ".*ehrenmal.*"
+    ],
+    "last_modified": "2018-06-02_22:32:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Deutsch-Französischer Krieg 1870/71",
+    "id": 120006,
+    "last_modified": "2018-03-07_21:20:37",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Deutsch-Neuguinea",
+    "id": 165918,
+    "indicators": [
+      "Neu-Guinea"
+    ],
+    "last_modified": "2018-07-13_21:49:55",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Deutsch-Ostafrika",
+    "id": 115988,
+    "indicators": [
+      "Deutsch-Ost-Afrika"
+    ],
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Deutsch-Südwestafrika",
+    "id": 115159,
+    "indicators": [
+      "Südwest-Afrika"
+    ],
+    "last_modified": "2018-04-17_15:14:47",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Deutsche Kolonial-Wander-Ausstellung",
+    "id": 119243,
+    "indicators": [
+      "Deutsche Kolonial-Wanderausstellung"
+    ],
+    "last_modified": "2017-11-16_06:56:50",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Deutsche Kolonialpolitik",
+    "id": 115369,
+    "last_modified": "2018-02-24_00:03:28",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Deutsche Kolonien und Schutzgebiete",
+    "id": 153162,
+    "indicators": [
+      "Deutsche Kolonien"
+    ],
+    "last_modified": "2018-04-17_15:14:47",
+    "parent_id": 110,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Deutsches Kolonialblatt",
+    "id": 114686,
+    "indicators": [
+      "DKBL"
+    ],
+    "last_modified": "2018-03-07_20:42:33",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Deutschland",
+    "id": 165757,
+    "indicators": [
+      "Deutsch[esnm]{1,2} Reich[es]*"
+    ],
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 168391,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Dichtung",
+    "culture_en": "Poetry",
+    "culture_fr": "Poésie",
+    "exclusions": [],
+    "id": 411,
+    "indicators": [
+      "Gedicht",
+      "Gedichte"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Diplomatische Beziehungen",
+    "id": 163386,
+    "indicators": [
+      ".*konsul.*",
+      ".*diplomat.*",
+      "Verbalnote."
+    ],
+    "last_modified": "2018-05-08_06:56:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Diplomatischer Dienst",
+    "id": 150085,
+    "last_modified": "2018-02-24_00:20:28",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Drucke",
+    "culture_en": "Prints",
+    "culture_fr": "Affiches",
+    "exclusions": [],
+    "id": 415,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Druckschrift",
+    "id": 150144,
+    "last_modified": "2018-02-24_07:34:26",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Duala",
+    "id": 123432,
+    "last_modified": "2018-07-13_21:53:32",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Dume",
+    "id": 505161,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Dysenterie",
+    "id": 851935,
+    "last_modified": "2018-07-19_17:07:11",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ebolowa",
+    "id": 505179,
+    "indicators": [
+      "Ebolova"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Edea",
+    "id": 117258,
+    "last_modified": "2018-07-13_21:53:32",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Eisenbahn",
+    "id": 168135,
+    "last_modified": "2018-07-09_22:10:38",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Elato",
+    "id": 505249,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Eniwetok",
+    "id": 505238,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779858,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Entnazifizierung",
+    "id": 150459,
+    "last_modified": "2018-02-25_11:34:24",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Erster Weltkrieg",
+    "id": 119090,
+    "indicators": [
+      "Erste[mnr] Weltkrieg."
+    ],
+    "last_modified": "2018-02-28_01:02:14",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Erziehung",
+    "id": 166092,
+    "last_modified": "2018-06-02_22:31:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Eseka",
+    "id": 505190,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Essays",
+    "culture_en": "Essays",
+    "culture_fr": "Essais",
+    "exclusions": [],
+    "id": 392,
+    "indicators": [
+      "Essay"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Ethnographie",
+    "culture_en": "Ethnography",
+    "culture_fr": "Ethnographie",
+    "exclusions": [],
+    "id": 393,
+    "indicators": [
+      "etnographi.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "übriges Europa",
+    "id": 168391,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 110,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Expedition",
+    "id": 150422,
+    "last_modified": "2018-02-25_10:46:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Feindvermögen",
+    "id": 150059,
+    "last_modified": "2018-02-23_23:46:59",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Filme",
+    "culture_en": "Motion Pictures",
+    "culture_fr": "Images en mouvement",
+    "exclusions": [],
+    "id": 402,
+    "indicators": [
+      "Film",
+      "35 mm",
+      "16 mm"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Finanzen",
+    "id": 167566,
+    "indicators": [
+      "Budget",
+      "Haushaltstitel"
+    ],
+    "last_modified": "2018-06-03_05:24:43",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Finschhafen",
+    "id": 505225,
+    "indicators": [
+      "Finsch-Hafen"
+    ],
+    "last_modified": "2018-07-19_16:40:34",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Flugschriften",
+    "culture_en": "Pamphlets",
+    "culture_fr": "Dépliants",
+    "exclusions": [],
+    "id": 406,
+    "indicators": [
+      "Flugschrift",
+      "Propagandaschrift",
+      "Flugschriftensammlung",
+      "Flugbl[aä]tt.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Flugwesen",
+    "id": 150555,
+    "indicators": [
+      ".*flugzeug.*",
+      ".*luftschiff.*",
+      ".*flieger.*",
+      "Luftfahr.*"
+    ],
+    "last_modified": "2018-02-27_07:44:35",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Flüchtlinge",
+    "id": 150051,
+    "last_modified": "2018-02-23_23:40:46",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Forschung",
+    "id": 167622,
+    "last_modified": "2018-07-19_12:13:41",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Forstschutzkommando",
+    "id": 124161,
+    "last_modified": "2017-11-16_07:11:21",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Fotografien",
+    "culture_en": "Photographs",
+    "culture_fr": "Photographies",
+    "exclusions": [],
+    "id": 409,
+    "indicators": [
+      "Photographie",
+      "Foto",
+      "Fotosammlun.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Frankfurt (Main)",
+    "id": 124328,
+    "indicators": [
+      "Frankfurt/Main"
+    ],
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Frankreich",
+    "id": 119882,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 168391,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Freizeit",
+    "id": 166106,
+    "last_modified": "2018-06-02_22:31:53",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Friedensverhandlungen",
+    "id": 150165,
+    "last_modified": "2018-02-24_07:54:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Friedrichs-Wilhelmshafen",
+    "id": 505228,
+    "indicators": [
+      "Friedrich-Wilhelm-Hafen",
+      "Friedrich-Wilhelmhafen"
+    ],
+    "last_modified": "2018-07-19_16:45:15",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Gazelle-Halbinsel",
+    "id": 150113,
+    "indicators": [],
+    "last_modified": "2018-07-19_11:58:52",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Gedenken",
+    "id": 150362,
+    "last_modified": "2018-02-25_09:43:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gedenkstätte",
+    "id": 166363,
+    "indicators": [
+      "grab",
+      ".*gräber",
+      "friedhof",
+      "gedenkstein.*"
+    ],
+    "last_modified": "2018-06-02_22:32:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gelbfieber",
+    "id": 851939,
+    "last_modified": "2018-07-19_17:10:23",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gemälde",
+    "culture_en": "Paintings",
+    "culture_fr": "Peintures",
+    "exclusions": [],
+    "id": 405,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Gesellschaft",
+    "id": 164798,
+    "last_modified": "2018-06-02_22:30:10",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gesetz",
+    "id": 150293,
+    "last_modified": "2018-02-24_09:53:37",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gesundheitspersonal",
+    "id": 165596,
+    "last_modified": "2018-06-02_22:31:13",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gesundheitspersonal",
+    "id": 851940,
+    "last_modified": "2018-07-19_17:11:37",
+    "parent_id": 164876,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gesundheitswesen",
+    "id": 164876,
+    "last_modified": "2018-07-19_17:11:37",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Gewerbekammer",
+    "id": 122203,
+    "last_modified": "2017-11-16_07:10:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ghana",
+    "id": 165680,
+    "indicators": [
+      "Goldküste",
+      "Gold Coast"
+    ],
+    "last_modified": "2018-07-18_19:25:09",
+    "parent_id": 117053,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Gobabis",
+    "id": 505276,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Gonsenheim",
+    "id": 124360,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Grootfontein",
+    "id": 505264,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Großbritannien",
+    "id": 168390,
+    "indicators": [
+      "england.*"
+    ],
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 168391,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Haager Konvention",
+    "id": 117361,
+    "last_modified": "2017-11-16_06:53:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Hall-Inseln",
+    "id": 505243,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Halle",
+    "id": 150468,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Hamburg",
+    "id": 150351,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Handel",
+    "id": 165581,
+    "last_modified": "2018-06-02_22:31:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Handelsregister",
+    "id": 122386,
+    "last_modified": "2017-11-16_07:10:28",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Haushaltsfragen",
+    "id": 150538,
+    "last_modified": "2018-02-27_07:07:26",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Herbertshöhe",
+    "id": 505231,
+    "last_modified": "2018-07-19_16:47:14",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Hereroaufstand",
+    "id": 150120,
+    "last_modified": "2018-02-28_01:00:36",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Hochbau",
+    "id": 60954,
+    "last_modified": "2018-02-24_08:31:03",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Idenau",
+    "id": 505187,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Illustrationen",
+    "culture_en": "Illustrations",
+    "culture_fr": "Illustrations",
+    "exclusions": [],
+    "id": 395,
+    "indicators": [
+      "Zeichnung",
+      "Croquis",
+      "Kroquis",
+      "Skizze"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Indien",
+    "id": 168389,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 168392,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Interviews",
+    "culture_en": "Interviews",
+    "culture_fr": "Entrevues",
+    "exclusions": [],
+    "id": 396,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Iringa",
+    "id": 156766,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Islam",
+    "id": 851807,
+    "last_modified": "2018-07-19_12:05:36",
+    "parent_id": 851806,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Italien",
+    "id": 122970,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 168391,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Jabassi",
+    "id": 505172,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Jaluit",
+    "id": 505237,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779858,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Jap",
+    "id": 505244,
+    "indicators": [
+      "Yap"
+    ],
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Jaunde",
+    "id": 168638,
+    "indicators": [
+      "Yaunde"
+    ],
+    "last_modified": "2018-07-17_11:11:10",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Johann-Albrechtshöhe",
+    "id": 505173,
+    "indicators": [
+      "Johann-Albrecht[s]*-Höhe"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Joko",
+    "id": 505184,
+    "indicators": [
+      "Yoko"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Journalismus",
+    "id": 167402,
+    "indicators": [
+      "Journalist.*"
+    ],
+    "last_modified": "2018-06-03_05:24:32",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Jukaduma",
+    "id": 505182,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Justiz",
+    "id": 150431,
+    "indicators": [
+      ".*gericht[esn]*",
+      "Strafverhandlung.*"
+    ],
+    "last_modified": "2018-02-25_11:01:01",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kabakaul",
+    "id": 505230,
+    "last_modified": "2018-07-19_16:48:45",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kabylen",
+    "id": 150310,
+    "last_modified": "2018-02-24_10:08:21",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kaiser-Wilhelmsland",
+    "id": 779861,
+    "last_modified": "2018-07-19_07:35:55",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kakao",
+    "id": 150333,
+    "last_modified": "2018-02-24_10:36:32",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kamerun",
+    "id": 57382,
+    "indicators": [
+      "Cameroon.*"
+    ],
+    "last_modified": "2018-07-13_21:53:32",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kanu",
+    "id": 164836,
+    "last_modified": "2018-06-02_22:30:14",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kapitaï und Koba",
+    "id": 851812,
+    "indicators": [
+      "Kapitai und Koba"
+    ],
+    "last_modified": "2018-07-19_16:55:32",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kapregiment",
+    "id": 150181,
+    "last_modified": "2018-02-24_08:11:07",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Karema",
+    "id": 505198,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Karibib",
+    "id": 505275,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Karlsruhe",
+    "culture_en": "Karlsruhe\"\"",
+    "id": 116110,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Karneval",
+    "id": 166129,
+    "last_modified": "2018-06-02_22:31:54",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Karolinen",
+    "id": 779859,
+    "last_modified": "2018-07-19_07:33:00",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Karten",
+    "culture_en": "Maps",
+    "culture_fr": "Cartes",
+    "exclusions": [],
+    "id": 400,
+    "indicators": [
+      "Masstab",
+      "Maßstab",
+      "Karte"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Keetmanshoop",
+    "id": 505267,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kentu",
+    "id": 505156,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kiautschou",
+    "id": 116257,
+    "last_modified": "2018-07-13_21:54:56",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kigali",
+    "id": 505203,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kijunja",
+    "id": 168639,
+    "last_modified": "2018-07-16_19:55:11",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kilimatinde",
+    "id": 168438,
+    "last_modified": "2018-07-14_09:01:03",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kilwa",
+    "id": 156762,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kilwa-Kissiwani",
+    "id": 505216,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kilwa-Kiwindsche",
+    "id": 505199,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kiongue",
+    "id": 505285,
+    "last_modified": "2018-07-17_21:45:29",
+    "parent_id": 156054,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kiëta",
+    "id": 505236,
+    "indicators": [
+      "Kieta"
+    ],
+    "last_modified": "2018-07-19_16:44:16",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kolonialausstellung",
+    "id": 60265,
+    "indicators": [
+      "Kolonial-Ausstellung"
+    ],
+    "last_modified": "2018-02-24_00:29:11",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialbeamter",
+    "id": 150493,
+    "indicators": [
+      ".*kolonial[-]*beamte.*"
+    ],
+    "last_modified": "2018-02-26_16:47:20",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialdienst",
+    "id": 118154,
+    "last_modified": "2017-11-16_06:54:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Koloniale Vereine",
+    "id": 150319,
+    "indicators": [
+      "kolonial[ernm]{0,2} verein.*",
+      "Kolonialverein.*"
+    ],
+    "last_modified": "2018-02-24_10:15:11",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialengländer",
+    "id": 150356,
+    "last_modified": "2018-02-25_09:41:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialfeier",
+    "id": 150491,
+    "last_modified": "2018-02-26_16:45:55",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialforstdienst",
+    "id": 124137,
+    "last_modified": "2018-02-24_09:55:48",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialforstwirtschaft",
+    "id": 150089,
+    "last_modified": "2018-02-24_00:22:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialgedenken",
+    "id": 150352,
+    "last_modified": "2018-02-25_09:29:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialgesellschaft",
+    "id": 124397,
+    "last_modified": "2017-11-16_07:11:52",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialkongress",
+    "id": 60735,
+    "last_modified": "2017-11-15_23:05:17",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialkriegerspende",
+    "id": 60122,
+    "indicators": [
+      "Kolonialkrieger-Spende"
+    ],
+    "last_modified": "2017-11-15_23:04:42",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialmedizin",
+    "id": 150213,
+    "indicators": [],
+    "last_modified": "2018-02-24_08:41:44",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialpolitik",
+    "id": 150096,
+    "last_modified": "2018-02-24_00:26:30",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialpolizei",
+    "id": 120240,
+    "last_modified": "2018-02-24_08:14:15",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialprodukte",
+    "id": 150365,
+    "last_modified": "2018-02-25_09:46:09",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialschuldienst",
+    "id": 119888,
+    "last_modified": "2017-11-16_06:57:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialschule",
+    "id": 58981,
+    "last_modified": "2018-02-24_08:35:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialsoldaten",
+    "id": 59751,
+    "last_modified": "2018-02-28_00:57:56",
+    "parent_id": 54456,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialspende",
+    "id": 150466,
+    "last_modified": "2018-02-25_11:47:37",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialunternehmungen",
+    "id": 117010,
+    "indicators": [
+      "kolonialunternehmen.*"
+    ],
+    "last_modified": "2017-11-16_06:53:33",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kolonialwaren",
+    "id": 851805,
+    "last_modified": "2018-07-19_12:03:10",
+    "parent_id": 54606,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kondoa",
+    "id": 157280,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kondutschi",
+    "id": 505211,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Konflikte",
+    "id": 164341,
+    "last_modified": "2018-06-02_22:29:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Konstantinhafen",
+    "id": 505226,
+    "indicators": [
+      "Konstantin-hafen"
+    ],
+    "last_modified": "2018-07-19_16:49:07",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kontscha",
+    "id": 505185,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Korrespondenz",
+    "culture_en": "Correspondence",
+    "culture_fr": "Correspondance",
+    "exclusions": [],
+    "id": 388,
+    "indicators": [
+      "Brief[en]*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Krankenhaus",
+    "id": 164880,
+    "indicators": [
+      "Hospit[aä]l.*",
+      "Krankenh[aä]us.*"
+    ],
+    "last_modified": "2018-06-02_22:30:17",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Krankenpflege",
+    "id": 150245,
+    "last_modified": "2018-07-19_17:02:49",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Krankheiten",
+    "exclusions": [
+      "Krankheiten"
+    ],
+    "id": 166196,
+    "indicators": [
+      "Tropenkrankheit.*",
+      "Infektionskrankheit.*",
+      "Nervenkrankheit.*",
+      ".*leiden"
+    ],
+    "last_modified": "2018-07-19_17:03:38",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kreuzergeschwader, Ostasiatisches I. (deutsches)",
+    "id": 118731,
+    "last_modified": "2017-11-16_06:55:35",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kribi",
+    "id": 505147,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Krieg",
+    "id": 166642,
+    "indicators": [
+      ".*gefecht.*"
+    ],
+    "last_modified": "2018-06-02_22:32:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kriegsentschädigung",
+    "id": 118058,
+    "last_modified": "2018-02-24_10:17:07",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kriegsgefangene",
+    "id": 117590,
+    "last_modified": "2017-11-16_06:54:15",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kriegsgesetzgebung",
+    "id": 150044,
+    "last_modified": "2018-02-23_23:32:36",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Krisen",
+    "id": 164248,
+    "last_modified": "2018-06-02_22:29:27",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kultur",
+    "id": 166127,
+    "last_modified": "2018-06-02_22:31:54",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kunst",
+    "id": 165016,
+    "last_modified": "2018-06-02_22:30:26",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Kusaie",
+    "id": 505255,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kusseri",
+    "id": 156670,
+    "last_modified": "2018-07-13_21:53:32",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Kwajelin",
+    "id": 505239,
+    "last_modified": "2018-07-19_16:49:42",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Lamotrik",
+    "id": 505250,
+    "last_modified": "2018-07-19_16:44:58",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Lanherrenschaften - Hauptregistratur",
+    "id": 122430,
+    "last_modified": "2017-11-16_07:10:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Landwirtschaft",
+    "id": 164820,
+    "indicators": [
+      "Ackerbau",
+      "Viehzucht"
+    ],
+    "last_modified": "2018-06-02_22:30:12",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Lepra",
+    "id": 851938,
+    "last_modified": "2018-07-19_17:09:41",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Lindi",
+    "id": 505200,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Literatur",
+    "id": 168405,
+    "last_modified": "2018-07-14_08:42:31",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Lolodorf",
+    "id": 505150,
+    "indicators": [
+      "Mlole"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Lome",
+    "id": 637511,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Lomie",
+    "id": 505168,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "London",
+    "id": 118342,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 168390,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Lüderitzbucht",
+    "id": 505261,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mafia",
+    "id": 505213,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mahenge",
+    "id": 505207,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mahinland",
+    "id": 851811,
+    "last_modified": "2018-08-22_13:01:33",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mainz",
+    "id": 124231,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Majuro",
+    "id": 505240,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779858,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Malaria",
+    "id": 851930,
+    "last_modified": "2018-07-19_17:05:52",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Malimba",
+    "id": 505146,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Maltahöhe",
+    "id": 505278,
+    "indicators": [
+      "Malta-Höhe"
+    ],
+    "last_modified": "2018-09-01_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Manuskripte",
+    "culture_en": "Manuscripts",
+    "culture_fr": "Manuscrits",
+    "exclusions": [],
+    "id": 399,
+    "indicators": [
+      "Manuscript",
+      "Manuskript",
+      "Handschriftliche.Aufzeichnung.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Marianen",
+    "id": 779860,
+    "last_modified": "2018-07-19_07:34:34",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Marine",
+    "id": 851905,
+    "indicators": [
+      "Kriegsmarine",
+      "Seemacht",
+      "S.M.S",
+      "SMS"
+    ],
+    "last_modified": "2018-07-19_16:57:48",
+    "parent_id": 54456,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Marokkokrise",
+    "id": 150134,
+    "last_modified": "2018-02-24_07:26:23",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Marshall-Inseln",
+    "id": 779858,
+    "indicators": [
+      "Marshallinseln",
+      "Marschallinseln"
+    ],
+    "last_modified": "2018-07-19_07:23:59",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mbweni",
+    "id": 505212,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Medien",
+    "id": 167405,
+    "last_modified": "2018-06-03_05:24:32",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Medikament",
+    "id": 164878,
+    "indicators": [
+      "Medikamente",
+      "Impfstoff",
+      "Chinin",
+      "apotheke"
+    ],
+    "last_modified": "2018-07-19_17:01:19",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Medizin",
+    "id": 164874,
+    "last_modified": "2018-06-02_22:30:17",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Merkblätter",
+    "culture_en": "Leaflets",
+    "culture_fr": "Dépliants",
+    "exclusions": [],
+    "id": 398,
+    "indicators": [
+      "merkblatt"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Mikindani",
+    "id": 505201,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Militär",
+    "id": 54456,
+    "indicators": [
+      "Askari.*",
+      "Kompanie.*",
+      "Schutztruppe",
+      "Polizeitruppe",
+      "Askaris",
+      "Soldaten",
+      "Soldat",
+      "Feldwebel",
+      "Offizier",
+      "Offiziere",
+      "Niederschlagung",
+      ".*kommando",
+      "Unteroffizier.*",
+      ".*lieutenan.*",
+      "kommandeur[s]*"
+    ],
+    "last_modified": "2017-10-14_23:33:43",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Militärischer Konflikt",
+    "id": 153131,
+    "last_modified": "2018-02-28_00:59:57",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Misahöhe",
+    "id": 637513,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mission",
+    "id": 54451,
+    "indicators": [
+      "Pastor",
+      "Missionar",
+      "Missions.*"
+    ],
+    "last_modified": "2017-10-16_10:52:45",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Missum-Missum",
+    "id": 505155,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mohoro",
+    "id": 505215,
+    "indicators": [
+      "Mohorro"
+    ],
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Molundu",
+    "id": 505169,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mora",
+    "id": 505186,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Moschi",
+    "id": 505205,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mpapua",
+    "id": 505197,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mpim",
+    "id": 505163,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mrogoro",
+    "id": 505222,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mtschinga",
+    "id": 505217,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Muanza",
+    "id": 505193,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mulifanua",
+    "id": 505282,
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Mundame",
+    "id": 505174,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Musik",
+    "culture_en": "Music",
+    "culture_fr": "Musique",
+    "exclusions": [],
+    "id": 403,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Mutiatele",
+    "id": 505281,
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Nachlaßangelegenheiten",
+    "id": 150438,
+    "indicators": [
+      "Nachlass[-]*Angelegenheit[en]*"
+    ],
+    "last_modified": "2018-02-25_11:13:51",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Nachlässe",
+    "id": 54458,
+    "indicators": [
+      "Nachlass*",
+      "Nachlaß",
+      "NL"
+    ],
+    "last_modified": "2017-10-15_04:19:25",
+    "levels_of_description": [
+      227,
+      228,
+      229
+    ],
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Namorik",
+    "id": 505256,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Naturwissenschaft",
+    "id": 165864,
+    "last_modified": "2018-06-02_22:31:33",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Nauru",
+    "id": 168397,
+    "last_modified": "2018-07-14_08:34:55",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Neu-Hannover",
+    "id": 505234,
+    "indicators": [
+      "neuhannover"
+    ],
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779862,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Neu-Langenburg",
+    "id": 505210,
+    "indicators": [
+      "neulangenburg"
+    ],
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 779862,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Neu-Mecklenburg",
+    "id": 150183,
+    "indicators": [
+      "neumecklenburg"
+    ],
+    "last_modified": "2018-07-13_21:49:27",
+    "parent_id": 779862,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Neu-Pommern",
+    "id": 150115,
+    "indicators": [
+      "neupommern"
+    ],
+    "last_modified": "2018-07-13_21:58:25",
+    "parent_id": 779862,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ngatik",
+    "id": 505253,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ngaundere",
+    "id": 505152,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Niederländisch-Indien",
+    "id": 153136,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 150359,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Niederländische Kolonien",
+    "id": 150359,
+    "last_modified": "2018-07-18_19:26:31",
+    "parent_id": 168392,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Nomoi",
+    "id": 505242,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Nordisches Kolonialkontor GmbH",
+    "id": 122911,
+    "last_modified": "2017-11-16_07:10:43",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Notenblatt",
+    "culture_en": "Sheet Music",
+    "culture_fr": "Partition de musique",
+    "exclusions": [],
+    "id": 419,
+    "indicators": [
+      "Notenbl[aä]tt.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Notgeld",
+    "id": 119654,
+    "last_modified": "2017-11-16_06:57:24",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Nsork",
+    "id": 505165,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Nssakpe",
+    "id": 505176,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Nssanakang",
+    "id": 505177,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Oberappellationsgericht",
+    "id": 123929,
+    "last_modified": "2017-11-16_07:11:07",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Okahandja",
+    "id": 505269,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Olama",
+    "id": 505170,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Oleaï",
+    "id": 505248,
+    "indicators": [
+      "Olai"
+    ],
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Omaruru",
+    "id": 505274,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ossidinge",
+    "id": 505151,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Otawi",
+    "id": 505268,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Outjo",
+    "id": 505273,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Oyem",
+    "id": 505164,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Pagan",
+    "id": 505257,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779860,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Palau",
+    "id": 505245,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Pangani",
+    "id": 505214,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Paris",
+    "id": 122531,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 119882,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Partituren",
+    "culture_en": "Scores",
+    "culture_fr": "Notes",
+    "exclusions": [],
+    "id": 418,
+    "indicators": [
+      "Partitur"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Pest",
+    "exclusions": [
+      "buda"
+    ],
+    "id": 851937,
+    "last_modified": "2018-09-01_17:08:41",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Petitionen",
+    "culture_en": "Petitions",
+    "culture_fr": "Pétitions",
+    "exclusions": [],
+    "id": 408,
+    "indicators": [
+      "Petition"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Pferderennen",
+    "id": 166079,
+    "last_modified": "2018-09-01_22:31:51",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Pferdesport",
+    "id": 167345,
+    "indicators": [
+      "rennbahn"
+    ],
+    "last_modified": "2018-09-01_05:24:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Physische Objekte",
+    "culture_en": "Physical Objects",
+    "culture_fr": "Objets physiques",
+    "exclusions": [],
+    "id": 410,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Pingelap",
+    "id": 505254,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Plantagen",
+    "id": 150534,
+    "indicators": [
+      ".plantage.*",
+      ".*pflanzung[en]*"
+    ],
+    "last_modified": "2018-07-13_22:23:57",
+    "parent_id": 54606,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Pocken",
+    "id": 851932,
+    "last_modified": "2018-07-19_17:04:28",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Politik",
+    "id": 165598,
+    "last_modified": "2018-06-02_22:31:13",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Polizei",
+    "id": 165764,
+    "last_modified": "2018-06-02_22:31:25",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ponape",
+    "id": 155109,
+    "indicators": [
+      "Puinipet"
+    ],
+    "last_modified": "2018-07-13_21:58:57",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Porto Seguro",
+    "id": 637521,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Portraits",
+    "culture_en": "Portraits",
+    "culture_fr": "Portraits",
+    "exclusions": [],
+    "id": 412,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Poster",
+    "culture_en": "Posters",
+    "culture_fr": "Affiches (posters)",
+    "exclusions": [],
+    "id": 414,
+    "indicators": [
+      "Plakat.*",
+      "Plakatsammlung",
+      "Postersammlung"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Postkarten",
+    "culture_en": "Postcards",
+    "culture_fr": "Cartes postales",
+    "exclusions": [],
+    "id": 413,
+    "indicators": [
+      "Postkarte"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Prisenamt",
+    "id": 150038,
+    "last_modified": "2018-02-23_23:30:43",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Programme",
+    "culture_en": "Programs",
+    "culture_fr": "Programmes",
+    "exclusions": [],
+    "id": 416,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Pulap",
+    "id": 505252,
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Rabaul",
+    "id": 154393,
+    "indicators": [
+      "Simpson[-]*hafen"
+    ],
+    "last_modified": "2018-07-19_16:42:32",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Rassismus",
+    "id": 168387,
+    "last_modified": "2018-07-10_07:14:20",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Rechtsprechung",
+    "id": 164813,
+    "last_modified": "2018-06-02_22:30:11",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Regierung",
+    "id": 166217,
+    "last_modified": "2018-06-02_22:32:01",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Regierungsbaumeister",
+    "id": 150455,
+    "last_modified": "2018-02-25_11:31:18",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Rehoboth",
+    "id": 505263,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Reichskolonialbund",
+    "id": 118015,
+    "last_modified": "2017-11-16_06:54:50",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Religion",
+    "id": 166027,
+    "last_modified": "2018-06-02_22:31:47",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Religion",
+    "id": 851806,
+    "last_modified": "2018-07-19_12:03:40",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Rio del Rey",
+    "id": 505175,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Rota",
+    "id": 505259,
+    "last_modified": "2018-07-19_16:50:36",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ruanda",
+    "id": 505191,
+    "indicators": [
+      "Rwanda"
+    ],
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sadani",
+    "id": 157278,
+    "last_modified": "2018-07-13_21:48:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Saipan",
+    "id": 505246,
+    "indicators": [
+      "Saipán"
+    ],
+    "last_modified": "2018-07-17_21:44:54",
+    "parent_id": 779860,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sakbajeme",
+    "id": 505178,
+    "indicators": [
+      "sakbayeme"
+    ],
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Salelawulu",
+    "id": 505284,
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Salomon-Inseln",
+    "id": 851809,
+    "last_modified": "2018-07-19_16:43:47",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Samoa",
+    "id": 153158,
+    "last_modified": "2018-07-13_21:59:24",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sangmelima",
+    "id": 505180,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sanguri",
+    "id": 637518,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sansane-Mangu",
+    "id": 637519,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Satuwal",
+    "id": 505251,
+    "last_modified": "2018-07-19_16:51:23",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sawaii",
+    "id": 505279,
+    "indicators": [
+      "Sawaíí"
+    ],
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Schagga",
+    "id": 505286,
+    "last_modified": "2018-07-17_21:45:29",
+    "parent_id": 156054,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Schakamba",
+    "id": 505288,
+    "last_modified": "2018-07-17_21:45:29",
+    "parent_id": 156054,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Schießen",
+    "id": 165772,
+    "last_modified": "2018-06-02_22:31:26",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schiff  \"Appam\"",
+    "id": 150039,
+    "last_modified": "2018-07-19_12:11:45",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schiff \"Carl Peters\"",
+    "id": 168394,
+    "last_modified": "2018-07-19_12:10:19",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schiff \"Erich Woermann\"",
+    "culture_en": "Schiff  \"Togo\"",
+    "id": 121999,
+    "last_modified": "2018-07-19_12:11:02",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schiff \"Kamerun\"",
+    "culture_en": "Schiff  \"Kamerun\"",
+    "id": 121987,
+    "last_modified": "2018-07-19_12:11:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schifffahrt",
+    "id": 168408,
+    "indicators": [
+      "schiff.*",
+      "hafen.*",
+      "dampfer.*",
+      "seefracht"
+    ],
+    "last_modified": "2018-07-14_08:44:03",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schlafkrankheit",
+    "id": 851931,
+    "last_modified": "2018-07-19_17:04:15",
+    "parent_id": 166196,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schuckmannsburg",
+    "id": 505272,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Schulbehörde",
+    "id": 122800,
+    "last_modified": "2018-02-23_23:52:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schule",
+    "id": 164864,
+    "indicators": [
+      "Schulen",
+      "Schul"
+    ],
+    "last_modified": "2018-06-02_22:30:16",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schutzgebiete",
+    "id": 150063,
+    "last_modified": "2018-02-23_23:48:09",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schutztruppe",
+    "id": 154067,
+    "last_modified": "2018-04-17_11:39:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schwarzwasserfieber",
+    "id": 851934,
+    "last_modified": "2018-07-19_17:05:52",
+    "parent_id": 851930,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Schwerin",
+    "id": 167512,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Senat-Kriegsakten",
+    "id": 122198,
+    "last_modified": "2017-11-16_07:10:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Sigmaringen",
+    "id": 114721,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sokode",
+    "id": 637516,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sonstige Dokumente",
+    "culture_en": "Miscellaneous Documents",
+    "culture_fr": "Documents divers",
+    "exclusions": [],
+    "id": 401,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Soppo",
+    "id": 505157,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sport",
+    "id": 164834,
+    "last_modified": "2018-06-02_22:30:14",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Sprachwissenschaften",
+    "id": 168122,
+    "last_modified": "2018-07-09_22:04:30",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Ssongea",
+    "id": 505208,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Stempel",
+    "id": 168448,
+    "last_modified": "2018-07-14_20:24:21",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Stephansort",
+    "id": 505227,
+    "last_modified": "2018-07-19_16:51:45",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Strafvollzug",
+    "id": 166539,
+    "indicators": [
+      ".*gefängnis.*",
+      ".*gefangene.*"
+    ],
+    "last_modified": "2018-06-02_22:32:22",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Stuttgart",
+    "id": 114741,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Sultanat Witu",
+    "id": 156056,
+    "last_modified": "2018-07-19_16:53:59",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Swakopmund",
+    "id": 505262,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Südafrika",
+    "id": 119921,
+    "last_modified": "2018-07-18_19:25:09",
+    "parent_id": 117053,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Südwestafrika-Denkmünze aus Stahl",
+    "id": 116266,
+    "last_modified": "2017-11-16_06:52:56",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Tabora",
+    "id": 505194,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tagebücher",
+    "culture_en": "Diaries",
+    "culture_fr": "Agendas",
+    "exclusions": [],
+    "id": 389,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Tanga",
+    "id": 505195,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tanz",
+    "id": 165056,
+    "last_modified": "2018-06-02_22:30:29",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Telegrafie",
+    "id": 168416,
+    "last_modified": "2018-07-14_08:48:18",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Theater",
+    "id": 164796,
+    "last_modified": "2018-06-02_22:30:10",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Tibati",
+    "id": 505183,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tientsin",
+    "id": 708518,
+    "last_modified": "2018-07-18_19:41:20",
+    "parent_id": 150292,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tier",
+    "id": 165755,
+    "indicators": [
+      "tiere"
+    ],
+    "last_modified": "2018-06-02_22:31:25",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Tiko",
+    "id": 505158,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tinian",
+    "id": 505258,
+    "last_modified": "2018-07-19_16:52:19",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Togo",
+    "id": 150315,
+    "last_modified": "2018-07-13_22:03:27",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Toma",
+    "id": 505232,
+    "last_modified": "2018-07-19_16:52:44",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Towe",
+    "id": 637520,
+    "last_modified": "2018-07-18_11:51:22",
+    "parent_id": 150315,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tradition",
+    "id": 167315,
+    "last_modified": "2018-06-03_05:24:27",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Transkriptionen",
+    "culture_en": "Transcriptions",
+    "culture_fr": "Transcriptions",
+    "exclusions": [],
+    "id": 421,
+    "indicators": [
+      "Transkription"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Transport",
+    "id": 164244,
+    "last_modified": "2018-06-02_22:29:27",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Transportunfall",
+    "id": 166392,
+    "last_modified": "2018-06-02_22:32:13",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Truk",
+    "id": 155298,
+    "last_modified": "2018-07-13_22:05:18",
+    "parent_id": 779859,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tsingtau",
+    "id": 166069,
+    "last_modified": "2018-07-13_21:54:56",
+    "parent_id": 116257,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Tübingen",
+    "id": 115549,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Udjidji",
+    "id": 505196,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ugogo",
+    "id": 505221,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ukami",
+    "id": 505223,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ukoko",
+    "id": 505166,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Uluguru",
+    "id": 505220,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ululssi",
+    "id": 505247,
+    "last_modified": "2018-07-19_16:53:16",
+    "parent_id": 165918,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Unruhen",
+    "id": 165019,
+    "last_modified": "2018-06-02_22:30:26",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Upolu",
+    "id": 505280,
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Urlaub",
+    "id": 166228,
+    "last_modified": "2018-06-02_22:32:02",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Urundi",
+    "id": 505192,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Usambara",
+    "id": 505218,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Ussagara",
+    "id": 505219,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Usumbura",
+    "id": 505204,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Verdun",
+    "id": 150311,
+    "last_modified": "2018-07-18_19:25:49",
+    "parent_id": 119882,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Vermischtes",
+    "id": 165808,
+    "last_modified": "2018-06-02_22:31:28",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Verordnung",
+    "id": 150055,
+    "last_modified": "2018-07-13_22:18:54",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Versailler Vertrag",
+    "id": 150186,
+    "last_modified": "2018-02-24_08:13:30",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Verzeichnisse",
+    "culture_en": "Catalogs",
+    "culture_fr": "Catalogues",
+    "exclusions": [],
+    "id": 385,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Victoria",
+    "id": 505148,
+    "last_modified": "2018-07-17_21:39:44",
+    "parent_id": 57382,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Viehwirtschaft",
+    "id": 150419,
+    "last_modified": "2018-07-13_22:21:44",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Waitoomuti",
+    "id": 505283,
+    "last_modified": "2018-07-17_21:45:21",
+    "parent_id": 153158,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Warmbad",
+    "id": 505266,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Waterberg",
+    "id": 505277,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Weingarten",
+    "id": 150464,
+    "last_modified": "2018-04-17_15:14:47",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Werbebotschaften",
+    "culture_en": "Advertisements",
+    "culture_fr": "Publicités",
+    "exclusions": [],
+    "id": 378,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Wiedhafen",
+    "id": 505209,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Wilhelmstal",
+    "id": 505206,
+    "last_modified": "2018-07-17_21:44:32",
+    "parent_id": 115988,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Wilhelmstal",
+    "id": 505270,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Windhuk",
+    "id": 505260,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Wirtschaft",
+    "id": 54606,
+    "indicators": [
+      "Firma",
+      "m.b.H",
+      "mbH",
+      "AG",
+      "DKG"
+    ],
+    "last_modified": "2018-07-13_22:23:57",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Wissenschaft",
+    "id": 167620,
+    "last_modified": "2018-07-13_22:18:02",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Wissenschaftliche Sammlungen",
+    "id": 168401,
+    "last_modified": "2018-07-14_08:38:34",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Witu",
+    "id": 505287,
+    "last_modified": "2018-07-17_21:45:29",
+    "parent_id": 156054,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Wituland",
+    "id": 156054,
+    "last_modified": "2018-04-17_15:14:47",
+    "parent_id": 153162,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Wohnen",
+    "id": 166108,
+    "last_modified": "2018-06-02_22:31:53",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Worms",
+    "id": 60737,
+    "last_modified": "2018-07-19_16:39:44",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Zeichnungen",
+    "culture_en": "Drawings",
+    "culture_fr": "Dessins",
+    "exclusions": [],
+    "id": 390,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Zeitpläne",
+    "culture_en": "Timetables",
+    "culture_fr": "Calendriers",
+    "exclusions": [],
+    "id": 420,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Zeitschriften",
+    "culture_en": "Periodicals",
+    "culture_fr": "Périodiques",
+    "exclusions": [],
+    "id": 407,
+    "indicators": [
+      "Zeitungsartikel",
+      "Tageblatt",
+      "Anzeiger",
+      "Zeitung",
+      "Zeitungsausschnitt.*"
+    ],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Zeitungsausschnitt",
+    "id": 150148,
+    "last_modified": "2018-02-24_07:39:48",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "Zesfontein",
+    "id": 505271,
+    "last_modified": "2018-07-17_21:45:08",
+    "parent_id": 115159,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Zulu-Krieg",
+    "id": 150442,
+    "last_modified": "2018-02-28_01:01:20",
+    "parent_id": 153131,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Zwischenablage",
+    "culture_en": "Clippings",
+    "culture_fr": "Coupures de presse",
+    "exclusions": [],
+    "id": 387,
+    "indicators": [],
+    "last_modified": "2017-09-26_04:47:14",
+    "parent_id": 110,
+    "taxonomy_id": 78,
+    "type": 78
+  },
+  {
+    "culture_de": "deutsch-amerikanische Beziehungen",
+    "id": 150132,
+    "last_modified": "2018-05-08_07:00:51",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-britische Beziehungen",
+    "id": 150095,
+    "last_modified": "2018-05-08_07:01:45",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-französische Beziehungen",
+    "id": 150094,
+    "last_modified": "2018-05-08_06:59:05",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-italienische Beziehungen",
+    "id": 150101,
+    "last_modified": "2018-05-08_06:57:37",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-marokkanische Beziehungen",
+    "id": 150108,
+    "last_modified": "2018-02-24_00:30:36",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-russische Beziehungen",
+    "id": 150093,
+    "last_modified": "2018-05-08_06:59:38",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsch-österreichische Beziehungen",
+    "id": 150102,
+    "last_modified": "2018-05-08_06:58:34",
+    "parent_id": 163386,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "deutsche Flottenpolitik",
+    "id": 150136,
+    "last_modified": "2018-02-24_07:28:13",
+    "parent_id": 110,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "einzelne Schiffe",
+    "id": 851808,
+    "last_modified": "2018-07-19_12:09:49",
+    "parent_id": 168408,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "evangelische Mission",
+    "id": 54608,
+    "indicators": [
+      "Nordeutsche Mission",
+      "Basler",
+      "Rheinische Mission",
+      "Bethel",
+      "Emdoa",
+      "Ostasienmission"
+    ],
+    "last_modified": "2017-10-16_10:52:46",
+    "parent_id": 54451,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "katholische Mission",
+    "id": 54607,
+    "indicators": [
+      "Pallott.*",
+      "Steyler",
+      "Neuendettelsau",
+      "Jesu",
+      "katholi.*",
+      "Apostolat.*"
+    ],
+    "last_modified": "2017-10-16_10:52:46",
+    "parent_id": 54451,
+    "taxonomy_id": 35,
+    "type": 35
+  },
+  {
+    "culture_de": "Langenburg",
+    "id": 930065,
+    "last_modified": "2018-08-22_19:18:34",
+    "parent_id": 165757,
+    "taxonomy_id": 42,
+    "type": 42
+  },
+  {
+    "culture_de": "Belagerung von Tsingtau",
+    "id": 934156,
+    "last_modified": "2018-08-27_04:52:24",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Bezirk Langenburg",
+    "id": 940788,
+    "last_modified": "2018-08-30_17:42:07",
+    "parent_id": 115988,
+    "type": 42
+  },
+  {
+    "culture_de": "Bezirk Moschi",
+    "id": 943738,
+    "last_modified": "2018-08-30_17:41:22",
+    "parent_id": 115988,
+    "type": 42
+  },
+  {
+    "culture_de": "Bezirk Ssongea",
+    "id": 947889,
+    "last_modified": "2018-08-30_17:40:12",
+    "parent_id": 115988,
+    "type": 42
+  },
+  {
+    "culture_de": "Bezirk Usumbura",
+    "id": 944241,
+    "last_modified": "2018-08-30_17:40:52",
+    "parent_id": 115988,
+    "type": 42
+  },
+  {
+    "culture_de": "Bezirk Wilhelmstal",
+    "id": 931675,
+    "last_modified": "2018-08-30_17:39:37",
+    "parent_id": 115988,
+    "type": 42
+  },
+  {
+    "culture_de": "Bismarck-Archipel",
+    "id": 931636,
+    "last_modified": "2018-09-21_13:39:22",
+    "parent_id": 165918,
+    "type": 42
+  },
+  {
+    "culture_de": "Caprivizipfel",
+    "id": 937840,
+    "last_modified": "2018-08-30_17:37:25",
+    "parent_id": 115159,
+    "type": 42
+  },
+  {
+    "culture_de": "Deutsche Kolonialzeitung",
+    "id": 931810,
+    "last_modified": "2018-08-27_00:22:33",
+    "parent_id": 110,
+    "type": 78
+  },
+  {
+    "culture_de": "Hamburgisches Kolonialinstitut",
+    "id": 931712,
+    "last_modified": "2018-08-26_23:13:27",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Kongokonferenz",
+    "id": 931906,
+    "last_modified": "2018-08-27_01:31:25",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Maji-Maji-Aufstand",
+    "id": 937235,
+    "last_modified": "2018-08-27_09:14:16",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Marshallinseln",
+    "id": 931697,
+    "last_modified": "2018-09-21_13:40:06",
+    "parent_id": 165918,
+    "type": 42
+  },
+  {
+    "culture_de": "Neuguinea-Mark",
+    "id": 931666,
+    "last_modified": "2018-08-26_22:01:56",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Qingdao",
+    "id": 931639,
+    "last_modified": "2018-09-21_13:41:03",
+    "parent_id": 116257,
+    "type": 42
+  },
+  {
+    "culture_de": "Schlacht am Waterberg",
+    "id": 931718,
+    "last_modified": "2018-08-26_23:16:37",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Tsingtauer Neueste Nachrichten",
+    "id": 934202,
+    "last_modified": "2018-08-27_04:56:43",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Bildung",
+    "id": 963500,
+    "last_modified": "2018-09-21_13:30:05",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Kultur",
+    "id": 963503,
+    "last_modified": "2018-09-21_13:30:06",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Politik",
+    "id": 963493,
+    "last_modified": "2018-09-21_13:30:05",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Polizei",
+    "id": 963523,
+    "last_modified": "2018-09-21_13:30:08",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Rostock",
+    "id": 963700,
+    "last_modified": "2018-09-25_12:51:10",
+    "parent_id": 165757,
+    "type": 42
+  },
+  {
+    "culture_de": "Bremen",
+    "id": 990997,
+    "last_modified": "2018-09-25_20:33:24",
+    "parent_id": 165757,
+    "type": 42
+  },
+  {
+    "culture_de": "München",
+    "id": 990998,
+    "last_modified": "2018-09-25_20:44:07",
+    "parent_id": 165757,
+    "type": 42
+  }
 ]

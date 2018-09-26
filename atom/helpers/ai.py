@@ -584,11 +584,11 @@ class ai(object):
 			self.BOW = BOWClassifier(2, len(self.WORD2IX))
 			self.BOW=torch.load('atom/data/bow.pt')
 			self.BOW.eval()
-			text=self.clean_text(text)
-			bow_vec = Variable(self.make_bow_vector(text.split()))
-			logprobs = self.BOW(bow_vec)
-			pred = np.argmax(logprobs.data.numpy())
-			return pred
+		text=self.clean_text(text)
+		bow_vec = Variable(self.make_bow_vector(text.split()))
+		logprobs = self.BOW(bow_vec)
+		pred = np.argmax(logprobs.data.numpy())
+		return pred
 """
 	def predict(self,text):
 		# function for evaluating user input sentence

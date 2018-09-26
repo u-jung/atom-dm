@@ -26,6 +26,7 @@ import urllib
 import json
 import sys
 import time
+import pprint
 
 from atom.main import data_manager, g
 from atom.config import api_keys
@@ -35,9 +36,9 @@ class Ddb(object):
 	
 	oauth_consumer_key=api_keys.API_KEYS["DDB"]
 	base_url='https://api.deutsche-digitale-bibliothek.de/'
-	id_list_file='ddb/id_list.json'
-	id_all_file='ddb/id_all.json'
-	result_file='ddb/results.json'
+	id_list_file='../data/ddb_id_list.json'
+	id_all_file='../data/ddb_id_all.json'
+	result_file='../data/ddb_results.json'
 	id_list=[]
 	id_all=[]
 	results=[]
@@ -48,9 +49,9 @@ class Ddb(object):
 	languages={}
 	count=0
 	dm=data_manager.DataManager()
-	ID_INDEX_FILE="ddb/id_index.json"
-	ID_INDEX=[]
-	BLOCKED_FILE="ddb/blocked.txt"       # list of items which should ne be retrieved
+	ID_INDEX_FILE="../data/ddb_id_index.json"
+	ID_INDEX={}
+	BLOCKED_FILE="../data/ddb_blocked.txt"       # list of items which should ne be retrieved
 	BLOCKED=[]
 	
 	LABELS=	{
@@ -285,7 +286,7 @@ class Ddb(object):
 			
 			e['_status']='confirmed'  # Bei Zeiten ändern
 			e['_original_from']='DDB'
-			e['culture']=CULTURE
+			e['culture']=g.CULTURE
 			self.repair_repository_entry(e)
 			if e['levelOfDescription']=='institution':
 				e['levelOfDescription']='Collection'
@@ -297,7 +298,7 @@ class Ddb(object):
 		self.store_id_list()
 		return d.copy()
 	
-	def export(self, counter, from_term):
+equest	def export(self, counter, from_term):
 		"""
 		retrieves data from the German www.deutsche-digitale-bibliothek.de.
 		Sends them back to DataManager in batches of {counter} size
@@ -340,8 +341,8 @@ class Ddb(object):
 									item_dict['legacyId']=match['id']
 									if 'apd_level_of_description' in item_dict:
 										item_dict['levelOfDescription']=self.dm._get_level_of_description(item_dict['apd_level_of_description'])
-									item_dict['culture']=CULTURE
-									item_dict['language']=CULTURE
+									item_dict['culture']=g.CULTURE
+									item_dict['language']=g.CULTURE
 									if (match['id'] not in self.CURRENT_ITEMS and match['id'] not in self.dm.LEGACY_IDS 
 										and match['id'] not in self.dm.TMP_OUT and match['id'] not in self.dm.DEF_OUT):
 										export_item_family.append(item_dict.copy())
@@ -490,7 +491,7 @@ class Ddb(object):
 		else:
 			return None
 
-
+	"""
 	def OLDsearch_items(self,query_list):
 		try:
 		#while True:
@@ -521,6 +522,7 @@ class Ddb(object):
 			self.store_id_list()
 			print("Error:", sys.exc_info()[0])
 			print(e)
+		"""
 			
 	def _search_generator(self,search_term):
 		"""
@@ -539,14 +541,16 @@ class Ddb(object):
 			
 				d=[]
 				r=self.get('','search','','json','"'+search_term[0]+'"',number_of_docs)
-				print (results)
-				results.extend(r['results'][0]['docs'])
-				number_of_results=int(r['numberOfResults'])
-				number_of_docs+=int(r['results'][0]['numberOfDocs'])
-				
+				#print ("r:",r)
+				if 'results' in r:
+					results.extend(r['results'][0]['docs'])
+					number_of_results=int(r['numberOfResults'])
+					number_of_docs+=int(r['results'][0]['numberOfDocs'])
+				else:
+					return []
 				
 				MAX_RETRIEVAL=200
-				if number_of_results>MAX_RETRIEVAL and search_term[1]!=WD_COLONY:
+				if number_of_results>MAX_RETRIEVAL and search_term[1]!=g.WD_COLONY:
 					log=str(number_of_results)+"\t"+search_term[0]+"\tDDB\t"+time.strftime("%Y-%m-%d %H:%M:%S")+"[aborted]\n"+search_log
 					self.dm.SEARCH_LOG=log+self.dm.SEARCH_LOG	
 					return []
@@ -571,8 +575,11 @@ class Ddb(object):
 		except Exception as e: 
 		#
 			#self.store_id_list()
-			print("Error:", sys.exc_info()[0])
+			print("We have an error on Ddb._search_generator:", sys.exc_info()[0])
 			print(e)	
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+			print(exc_type, fname, exc_tb.tb_lineno)
 			
 	def OLDanalyze_results(self,item, with_children=True, with_parents=True, review=False):
 		result=(self.get(item,'items','view','json'))
@@ -875,7 +882,7 @@ class Ddb(object):
 			d['title']=result['item']['label']
 		else:
 			d['title']=""
-		d['culture']=CULTURE
+		d['culture']=g.CULTURE
 		d['_status']='candidate'
 		d['legacyId']=item
 		# Some archives also add the creator to the repository entry, seperated by semicolon
@@ -919,8 +926,8 @@ class Ddb(object):
 					d['parentId']=result['hierarchy'][i]['parent']
 					d['title']=result['hierarchy'][i]['label']
 					d['levelOfDescription']=dm.get_level_of_description(result['hierarchy'][i]['type'])
-					d['culture']=CULTURE
-					d['language']=CULTURE
+					d['culture']=g.CULTURE
+					d['language']=g.CULTURE
 					d['_original_id']=d['legacyId']
 					d['repository']=repository
 					d['_status']='candidate'
@@ -946,8 +953,8 @@ class Ddb(object):
 			d['parentId']=e['parent']
 			d['title']=e['label']
 			d['levelOfDescription']=self.get_level_of_description(e['type'])
-			d['culture']=CULTURE
-			d['language']=CULTURE
+			d['culture']=g.CULTURE
+			d['language']=g.CULTURE
 			d['_original_id']=d['legacyId']
 			d['repository']=repository
 			d['_status']='candidate'	
@@ -1003,8 +1010,8 @@ class Ddb(object):
 								self._write_to_id_index(parent,item_dict['descriptionIdentifier'])
 					item_dict['title']=match['label']
 					item_dict['legacyId']=match['id']
-					item_dict['culture']=CULTURE
-					item_dict['language']=CULTURE
+					item_dict['culture']=g.CULTURE
+					item_dict['language']=g.CULTURE
 					item_dict['levelOfDescription']=self.dm._get_level_of_description(match['type'])
 					item_dict['repository']=repository
 					if match['parent']:
@@ -1064,8 +1071,8 @@ class Ddb(object):
 										print ("we have a child ",item)
 										item_dict['legacyId']=match['id']
 										item_dict['title']=match['label']
-										item_dict['culture']=CULTURE
-										item_dict['language']=CULTURE
+										item_dict['culture']=g.CULTURE
+										item_dict['language']=g.CULTURE
 										item_dict['levelOfDescription']=self.dm._get_level_of_description(match['type'])
 										item_dict['repository']=repository
 										item_dict['parentId']=item
@@ -1077,8 +1084,8 @@ class Ddb(object):
 									print ("not in time " , item_dict['eventDates'])
 							item_dict['legacyId']=match['id']
 							item_dict['title']=match['label']
-							item_dict['culture']=CULTURE
-							item_dict['language']=CULTURE
+							item_dict['culture']=g.CULTURE
+							item_dict['language']=g.CULTURE
 							item_dict['levelOfDescription']=self.dm._get_level_of_description(match['type'])
 							item_dict['repository']=repository
 							item_dict['parentId']=item
@@ -1101,8 +1108,8 @@ class Ddb(object):
 					d['parentId']=result['hierarchy'][i]['parent']
 					d['title']=result['hierarchy'][i]['label']
 					d['levelOfDescription']=self.get_level_of_description(result['hierarchy'][i]['type'])
-					d['culture']=CULTURE
-					d['language']=CULTURE
+					d['culture']=g.CULTURE
+					d['language']=g.CULTURE
 					d['_original_id']=d['legacyId']
 					d['repository']=repository
 					e['_status']='candidate'

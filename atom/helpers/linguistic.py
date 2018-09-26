@@ -33,7 +33,7 @@ class Linguistic(object):
 	def __del__(self):
 		pass
 		
-		
+
 	def create_corpus(self):
 		"""
 		atom database dump an corpus creation

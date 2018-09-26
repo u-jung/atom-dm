@@ -48,6 +48,11 @@ class fileOps(object):
 			data_type=source_file[-4:].lower()
 			data_type=data_type.strip(".")		
 		if os.path.isfile(source_file):
+			if os.path.getsize(source_file)==0:
+				if data_type=='txt':
+					return ""
+				else:
+					return []
 			f=open(source_file, 'r')
 			if data_type== "txt":
 				if list_output:
@@ -96,6 +101,7 @@ class fileOps(object):
 			if data_var=={}:
 				onj= self.load_data(source_file,data_type,True)
 				return obj
+
 		return data_var
 	
 		
@@ -108,7 +114,7 @@ class fileOps(object):
 		
 		
 	
-	def save_data(self,data,destination_file, data_type=None, fieldnames=None):
+	def save_data(self,data,destination_file, data_type=None, fieldnames=None, delimiter=";"):
 		"""
 		Stores data into a file depending on the data_type
 		"""
@@ -119,8 +125,12 @@ class fileOps(object):
 		if data_type == "txt":
 			if isinstance(data,str):
 				f.write(str(data))
+			if isinstance(data,list) or isinstance(data,tuple):
+				for e in data:
+					f.write(delimiter.join(e) + "\n")
+				
 			else:
-				print("data needs to be a string or a number but not a list, tuple or dict!")
+				print("Error on fo.save_data(): data needs to be a string, a number, a list  (of scalars) or a tuple (of scalars) but not a  dict! Is now: ", data[0:2], "...", " Destination file: ", destination_file)
 				return 0
 		elif data_type =="csv":
 			if fieldnames:
@@ -226,7 +236,11 @@ class stringOps(object):
 		return text
 	
 	
-	
+	def escapeQuotes(self,text):
+		text=self.replaceChars(text,'"','\\"')
+		text=self.replaceChars(text,"'","\\'")
+		return text
+		
 	def dedupSpaces(self,text):
 		while text.find("  ")>-1:
 			text=text.replace("  "," ")
@@ -240,8 +254,24 @@ class stringOps(object):
 		text=text.replace("<br>","\n")
 		text=text.replace("<br />"," \n")
 		return text
-
-
+		
+	def clean_text(self,item):
+		item=self.replaceChars(item,self.SATZZEICHEN,"")
+		item=self.replaceChars(item,self.LQGQ,"")
+		item=self.replaceChars(item,self.ANFUHRUNGSZEICHEN,"")
+		item=self.replaceChars(item,self.STRICHE," ")
+		item=self.replaceChars(item,['\n',']n','\t',"b'",'¤',"‧"]," ")
+		item=self.replaceChars(item,"'°%§[]*"," ")
+		item=self.dedupSpaces(item)
+		item=item.lower()
+		return item
+	
+	def clean_text_re(self,item):
+		item=self.replaceChars(item,",;!:°%§"," ")
+		item=self.replaceChars(item,self.STRICHE," ")
+		item=self.dedupSpaces(item)
+		item=item.lower()
+		return item
 
 class osOps(object):
 		
@@ -263,7 +293,7 @@ class osOps(object):
 			child = pexpect.spawn(cmdline)
 			idx = child.expect([prompt, pexpect.EOF], 3) # 2
 			if idx == 0: # if prompted for the sudo password
-				self.log.debug('sudo password was asked.')
+				#self.log.debug('sudo password was asked.')
 				child.sendline(passwd)
 				child.expect(pexpect.EOF)
 			return child.before
