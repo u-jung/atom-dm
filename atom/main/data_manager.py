@@ -283,6 +283,67 @@ class DataManager(object):
 			print(term[0])
 
 		f.close()
+	
+	def build_upper_levels(self,l,institution_id,field):
+		"""
+		creates a field in each dict of list with seperate records building upper hierarchy levels
+		"""
+		
+		if l is None:
+			filename=input("From File: ")
+			l=fo.load_data(filename)
+		if institution_id is None:
+			institution_id=input("Instituion_id :")
+		if field is None:
+			field=input("Field :")		
+			
+		for e in l:
+			for k,v in {'culture':'de','script':'latn','language':'de','languageNote':'deutsch'}.items():
+				if not k in e:
+					e[k]=v
+			e['levelOfDescription']="File"
+			if field in e:
+				arr=e[field].split(">")
+				
+				e['c']=[]
+				for ee in arr:
+					
+					d={}
+					d['title']=ee.strip()
+					for f in ("culture","repository","languageNote","script",'language','languageNote'):
+						if f in e:
+							d[f]=e[f]
+					
+					if arr.index(ee)==0:
+						d['legacyId']=institution_id
+						parent_id=institution_id
+						d['levelOfDescription']="Tektonik_collection"
+					else:
+						d['legacyId']=institution_id+"_"+re.sub(r'\W',"",d['title'].lower())
+						d['parentId']=parent_id
+						parent_id=d['legacyId']
+						d['levelOfDescription']="Class"
+					if len(arr)>1 and arr.index(ee)==1:
+						d['levelOfDescription']="Fonds"
+					
+					e['c'].append(d.copy())
+				e['parentId']=parent_id
+			else:
+				e['parentId']=institution_id
+		new_l=[]
+		for e in l:
+			if 'c' in e:
+				for ee in e['c']:
+					if not next((x for x in new_l if x['legacyId']==ee['legacyId']),False):
+						new_l.append(ee.copy())
+				del e['c']
+			new_l.append(e.copy())
+		new_l=self.hierarchy_sort(new_l)
+		print(new_l)
+		fo.save_data(new_l[0],filename+".json","json")
+		self.write_csv( new_l[0], filename+".csv", record_type='archival_description')
+		return new_l[0]
+		
 
 	def join_csv(self, add_keyword=True):
 		"""
@@ -376,7 +437,7 @@ class DataManager(object):
 				l = self._write_to_parents(l, e['parentId'], 'out', '.')
 
 		print([(x['out'],x['legacyId'],x['parentId']) for x in l])	
-		q=input("-----------------")
+		#q=input("-----------------")
 				
 		# outake the manually not confirmed (thoose and children marked with x)
 		for i in range(0,len(l)):
@@ -703,12 +764,12 @@ class DataManager(object):
 			query = 'SELECT DISTINCT ?item where{\
 				{optional{?item wdt:P17/wdt:P279* wd:Q329618 .}} \
 				union \
-				{optional{?item wdt:P2541/wdt:P279* wd:Q329618 .}}\
+				{optional{?item wdt:P2541/(wdt:P131|wdt:P279) wd:Q329618 .}}\
 				union{ optional{?item wdt:P131/wdt:P279* wd:Q329618 .}} \
-				union{ optional{?item wdt:P17/wdt:P279* wd:Q329618 .}}\
 				union{ optional{?item wdt:P361/wdt:P279* wd:Q329618 .}}\
 				union{ optional{?item wdt:P2650/wdt:P279* wd:Q329618 .}}\
-				union{ optional{?item wdt:P937/wdt:P279* wd:Q329618 .}}}\
+				union{ optional{?item wdt:P937/(wdt:P131|wdt:P279)* wd:Q329618 .}}\
+                }\
 				order by ?item'
 			l = self._get_from_WDQ(query)
 			if len(l['results']['bindings']) > 0:
@@ -725,13 +786,15 @@ class DataManager(object):
 		keyword = {}
 		self._open_keywords()
 		entities = self._get_entities(False)
+		#print(entities[0:10] , len(self.KEYWORDS))
+		#a=input(len(entities))
 		i = len(entities)
 		j = 0
 		counter={"created":0,"modified":0,"not modified":0,"entities":0, "empty":[]}
 		for entity in entities:
 			counter['entities']+=1
 			
-			print ("Eintitiy: ", entity)
+			print ("Eintitiy: ", entity, end=" : ")
 			#print('[[ ', i, ' ]]')
 			i -= 1
 			j += 1
@@ -757,9 +820,12 @@ class DataManager(object):
 				  bind(if(lang(?itemLabel)="de",?itemLabel,"") as ?de).}\
 				  group by ?item '				
 			l = self._get_from_WDQ(query)
-			e=next((x for x in self.KEYWORDS if x['item'] == entity.strip(' ')), None)
+			e=next((x for x in self.KEYWORDS if x['item'] == entity.strip()), None)
+			#print("exist?", e)
 			if  e is None:
+				print(entity, " is unknown")
 				if len(l['results']['bindings']) > 0:
+					#print(".. and it has some values.")
 					keyword['item'] = entity
 					keyword['label_de'] = self._get_uniq(l['results']['bindings'][0]['label_de']['value'])[0]
 					keyword['description'] = self._get_uniq(l['results']['bindings'][0]['description']['value'])[0]
@@ -776,26 +842,26 @@ class DataManager(object):
 							keyword['label_de'] = keyword['search_terms'][0]
 						else:
 							continue
-						if keyword['label_clean'] != '':
-							params = {'action': 'wbsearchentities', 
-							 'props': '', 
-							 'language': g.CULTURE, 
-							 'search': keyword['label_clean'], 
-							 'limit': 50, 
-							 'format': 'json'}
-							url = self.WD_API_ENDPOINT + '?' + urllib.parse.urlencode(params)
-							#print(url)
-							headers = {}
-							headers['accept'] = 'application/sparql-results+json'
-							req = urllib.request.Request(url, None, headers)
-							with urllib.request.urlopen(req, timeout=30) as (response):
-								the_page = response.read().decode('utf-8')
-							r = requests.get(url)
-							rjson = json.loads(r.text)
-							keyword['frequency'] = self._get_frequency(rjson)
-						self.KEYWORDS.append(keyword.copy())
-						print(keyword["    ", 'label_de'], " created")
-						counter['created']+=1
+					if keyword['label_clean'] != '':
+						params = {'action': 'wbsearchentities', 
+						 'props': '', 
+						 'language': g.CULTURE, 
+						 'search': keyword['label_clean'], 
+						 'limit': 50, 
+						 'format': 'json'}
+						url = self.WD_API_ENDPOINT + '?' + urllib.parse.urlencode(params)
+						#print(url)
+						headers = {}
+						headers['accept'] = 'application/sparql-results+json'
+						req = urllib.request.Request(url, None, headers)
+						with urllib.request.urlopen(req, timeout=30) as (response):
+							the_page = response.read().decode('utf-8')
+						r = requests.get(url)
+						rjson = json.loads(r.text)
+						keyword['frequency'] = self._get_frequency(rjson)
+					self.KEYWORDS.append(keyword.copy())
+					print(keyword['label_de'], " created")
+					counter['created']+=1
 				else:
 					print(l)
 					counter['empty'].append(entity)
@@ -832,7 +898,7 @@ class DataManager(object):
 						print("    ", e['label_de'], " not modified")
 						counter['not modified']+=1
 				else:
-					print(entity, l)
+					#print(entity, l)
 					counter['empty'].append(entity)
 					
 			
@@ -1655,10 +1721,10 @@ class DataManager(object):
 		tmp.sort(key=lambda x: x[0])
 
 		for e in tmp:
+			kw = next((x for x in self.KEYWORDS if x['item'] == e[2]), False)
 			if return_keyword_object:
-				if e[0].lower() in not_to_provide:
+				if e[0].lower() in not_to_provide or self._is_excluded(e[0],kw):
 					continue
-				kw = next((x for x in self.KEYWORDS if x['item'] == e[2]), False)
 				kw_obj = {'id': kw['item'], 
 				 'label': kw['label_de'], 
 				 'description_identifier': 'http://www.wikidata.org/entity/' + kw['item'], 
@@ -1671,10 +1737,21 @@ class DataManager(object):
 				 }
 				yield (e[0], e[1], kw_obj)
 			else:
-				if e[0].lower() in not_to_provide:
+				if e[0].lower() in not_to_provide or self._is_excluded(e[0],kw):
 					continue
 				yield (
 				 e[0], e[1])
+
+
+	def _is_excluded(self, search_term, keyword):
+		"""
+		returns True if search_term is part of the "exclusions" list inside the keyword item
+		"""
+		if "exclusions" in keyword:
+			for e in keyword['exclusions']:
+				if e.lower().strip()==search_term.lower().strip():
+					return True
+		return False
 
 	def _blocked_by_description(self, s):
 		blocker = [
@@ -2896,7 +2973,7 @@ class access_points(object):
 	ACCESS_POINTS_LIST = []
 	ACCESS_POINTS_LIST_FILE = 'atom/data/access_points.json'
 	dm = DataManager()
-	SUBJECT_AP = 35
+	SUBJECT_AP = 35  #predefined by atom' installation routine
 	PLACE_AP = 42
 	GENRE_AP = 78
 	NEW_RELATION_FILE = 'tmp_results/new_authority_relations.json'
@@ -2971,7 +3048,7 @@ class access_points(object):
 	def find_other_access_points(self, proceed=True):
 		"""
 		Looks for other access points in AtoM database
-		(depreciated)
+		(DEPRECIATED)
 		"""
 		sql = 'select oi.id, title, scope_and_content,slug from information_object_i18n oi join slug s on oi.id=s.object_id ;'
 		information_objects = self.dm.get_mysql(sql, False, False)
@@ -3062,6 +3139,7 @@ class access_points(object):
 		"""
 		Looks if some label from autority data are present in a specific information object.
 		proceed: False if changes in database should be avoided 
+		(DEPRECIATED)
 		"""
 		self.update_access_points_list()
 		self.dm._open_names_suffixes()
@@ -3220,7 +3298,7 @@ class access_points(object):
 			counter['information_objects']+=1
 			result = self.find_access_points_in_text(information_object['cargo'], self.FROM_AP_ITERATOR, g.CULTURE, False, last_revision)
 			if result:
-				print(information_object['cargo'][0:40], result)
+				#print(information_object['cargo'][0:40], result)
 				counter=self.analyze_ap_result(result, counter, unwanted_relations, information_object)
 		
 		# check new information object against all ap
@@ -3229,7 +3307,7 @@ class access_points(object):
 			counter['information_objects']+=1
 			result = self.find_access_points_in_text(information_object['cargo'], ap_iterator, g.CULTURE, False, last_revision)
 			if result:
-				print(information_object['cargo'][0:40], result)
+				#print(information_object['cargo'][0:40], result)
 				counter=self.analyze_ap_result(result, counter, unwanted_relations, information_object)
 		
 				
@@ -3266,7 +3344,7 @@ class access_points(object):
 				if actor_id == 0: 
 					sql = 'select a.id,ai.authorized_form_of_name,ai.culture,a.description_identifier \
 						from actor_i18n ai join actor a on a.id=ai.id  \
-						where authorized_form_of_name ="' + e['label'] + '" or authorized_form_of_name="'+ap._reorder_name(e['label'])+'";'
+						where authorized_form_of_name ="' + e['label'] + '" or authorized_form_of_name="'+self._reorder_name(e['label'])+'";'
 					r = self.dm.get_mysql(sql, True, False)  # Does the name match?
 					if r:
 						actor_id = r[0]
@@ -3280,7 +3358,7 @@ class access_points(object):
 					print(sql)
 					r = self.dm.get_mysql(sql, True, True)
 					if self._normalize_instance(e['entity_type']) == g.A_ENTITY_TYPES['HUMAN']:
-						label = ap._reorder_name(e['label'])
+						label = self._reorder_name(e['label'])
 					else:
 						label = e['label']
 					sql = 'insert into slug (object_id,slug,serial_number) value (' + str(last_id) + ',"' + self.dm._create_slug(label) + '",0);'
@@ -3302,7 +3380,8 @@ class access_points(object):
 					r=self.dm.get_mysql(sql,True,True)
 					counter['actor_relations']+=1
 		for e in self.result_generator(result):
-			if not isinstance(e[0]['id'], int):
+			#if not isinstance(e[0]['id'], int):
+			if  isinstance(e[0]['id'], int):
 				if 'description_identifer' in e[0] and len(e[0]['description_identifier']) > 1:
 					#sql = "select id from term where code='" + e[0]['description_identifier'] + "' and taxonomy_id=" + str(e[1]) + ';'
 					sql='select t.id from term t join note n on t.id=n.object_id join note_i18n ni on n.id=ni.id \
@@ -3313,7 +3392,8 @@ class access_points(object):
 					if r:
 						term_id = r[0]
 				else:
-					print("no description_identifier in e: ", e)
+					pass
+					#print("no description_identifier in e: ", e)
 				if term_id == 0:
 					sql = 'select t.id from term_i18n ti join term t on t.id=ti.id where t.taxonomy_id=' + str(e[1]) + ' and ti.name="' + e[0]['label'] + '" and ti.culture="' + g.CULTURE + '";'
 					r = self.dm.get_mysql(sql, True, False)
@@ -3337,9 +3417,12 @@ class access_points(object):
 					r=self.dm.get_mysql(sql,True,True)
 					
 			else:
-				print( e[0]['id'] , "isn't int")
+				#print( e[0]['id'] , "isn't int", type(e[0]['id']), isinstance(e[0]['id'], int))
+				
 				continue
 			relation = next((x for x in unwanted_relations if x[0] == information_object['id'] and x[1] == e[0]['id']), False)
+			#print("e", relation, "|",term_id)
+			#input ("????")
 			if not relation:
 				sql= 'select object_id, term_id from object_term_relation where term_id='+str(term_id)+' and object_id=' +str(information_object['id']) + ';'
 				r=self.dm.get_mysql(sql,True,False)
@@ -3376,15 +3459,18 @@ class access_points(object):
 
 			i += 1
 			if not isinstance(term[0], str):
+				print(term[0], " has no instance ", term)
 				continue
 			if term[0] in '[]':
+				print("Term is empty ", term)
 				continue
 			append = False
 			instance = self._normalize_instance(str(term[1]))
-			
+			#print(term[0], " instance: ", instance) 
 			if instance in g.A_ENTITY_TYPES.values():
 				key = 'actors'
 			else:
+
 				if instance in ('subject', self.SUBJECT_AP):
 					key = self.SUBJECT_AP
 				else:
@@ -3399,14 +3485,16 @@ class access_points(object):
 							if 'other' not in tmp:
 								tmp['other'] = []
 							#print(instance, key, '<<<<<<<<<<<<<<<', term[0])
-						if 'exclusions' in term[2]:
-							for exclusion in term[2]['exclusions']:
-								pattern = re.compile('\\W' + so.clean_text_re(exclusion) + '\\W', re.IGNORECASE)
-								if re.search(pattern, ' ' + text + ' '):
-									continue
+				if 'exclusions' in term[2]:
+					for exclusion in term[2]['exclusions']:
+						pattern = re.compile('\\W' + so.clean_text_re(exclusion) + '\\W', re.IGNORECASE)
+						if re.search(pattern, ' ' + text + ' '):
+							continue
 
 			pattern = re.compile('\\W' + so.clean_text_re(term[0]) + '\\W', re.IGNORECASE)
+			#print(pattern)
 			if re.search(pattern, ' ' + so.clean_text(text) + ' '):
+
 				if return_word:
 					tmp[key].append(term[0])
 				else:
@@ -3526,7 +3614,7 @@ class access_points(object):
 		for relation in relation_to_delete:
 			sql = 'delete from object where id=' + str(relation[0]) + ';'
 			x = self.dm.get_mysql(sql, False, True)
-		print (len(relation_to_delete), " relations_deleted")
+		print (len(relation_to_delete), " actor relations deleted")
 		
 		for relation in object_term_relations:
 			parents=self.dm.parent_information_objects(relation[3],information_objects,[])
@@ -3536,7 +3624,7 @@ class access_points(object):
 		for relation in object_term_relation_to_delete:
 			sql = 'delete from object where id=' + str(relation[0]) + ';'
 			x = self.dm.get_mysql(sql, False, True)			
-
+		print (len(object_term_relation_to_delete), " actor relations deleted")
 	def _is_in_relation(self, subject_id, object_id, relations, new_relations):
 		"""
 		Returns true if at least one pair of subject_id - object_id is found in relations
@@ -3649,7 +3737,7 @@ class access_points(object):
 						orphan[2] = g.A_ENTITY_TYPES[entity_type_labels[int(input_str)]]
 						c += 1
 						if entity_type_labels[int(input_str)] == 'HUMAN' and orphan[1].find(',') == -1:
-							orphan[1] = ap._reorder_name(orphan[1])
+							orphan[1] = self._reorder_name(orphan[1])
 				else:
 					break
 			else:
@@ -3682,7 +3770,7 @@ class access_points(object):
 				if self._normalize_instance(confirmed[2])==g.A_ENTITY_TYPES['HUMAN']:
 					
 					if len(confirmed[1].strip(" ").split(" "))>1 and confirmed[1].find(",")==-1:
-						print("Changing ", confirmed[1], " to ", ap._reorder_name(confirmed[1]))
+						print("Changing ", confirmed[1], " to ", self._reorder_name(confirmed[1]))
 						sql='update actor_i18n set authorized_form_of_name="'+self._reorder_name(confirmed[1]) +'" where id='+str(confirmed[0])+' and culture="'+g.CULTURE+'";'
 						r=self.dm.get_mysql(sql,True, True)
 			e = next((x for x in confirmed_authority_data if ((confirmed[1] == x[1] or x[1]==self._reorder_name(confirmed[1]) and not( x[1] is None)) or (not(x[3] is None and confirmed[3] is None) and confirmed[3]==x[3] ) )and confirmed[0] != x[0]), False)

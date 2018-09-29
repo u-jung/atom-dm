@@ -65,8 +65,8 @@ class Findbuch():
 	
 	FIELD_MAPPING={
 	"title":['Titel', 'Band', "Dokumenttitel", "Inhalt","Angabe des Objekts"],
-	"scopeAndContent":['Enthält', "Darin", 'Verweis', "Beschreibung","Enthält auch", 'Enthält'],
-	"eventDates":["Dat. => Findbuch", "Datierung","Datierung von","Datierung bis"],
+	"scopeAndContent":['Enthält', "Darin", 'Verweis', "Beschreibung","Enthält auch", 'Enthält', 'Personenindex',"Institutionenindex"],
+	"eventDates":["Dat. => Findbuch", "Datierung","Datierung von","Datierung bis","Dat. - Findbuch"],
 	"extendAndMedium":['Umfang',"Format / Umfang", "Medium","Maßstab"],
 	'relatedUnitsOfDescription':['Quelle'],
 	'findingAids':['findingAids'],
@@ -76,8 +76,8 @@ class Findbuch():
 	"script":[],
 	"languageNote":[],
 	"generalNote":["Abbruchdatum","Vermerk","Originalbeschriftung","Straßenumbenennung","Sicherung","Provenienz","Provenienz/Quelle","Edition", "Entnommen", "Reservefeld", "Verzeichnungsprotokoll","Bemerkungen","Bemerkung", "Bereich"],
-	"identifier":[],
-	"alternativeIdentifiers":["alte Archiv-Sign.", "Spruchakte", "l. Num.", "Signatur", "PADUA"],   #always accompagned by d['alternativeIdentifierLabels']='Former call number'
+	"identifier":["l. Num."],
+	"alternativeIdentifiers":["alte Archiv-Sign.", "Spruchakte", "l. Num.", "Signatur", "PADUA", "alte Archiv-Sign."],   #always accompagned by d['alternativeIdentifierLabels']='Former call number'
 	"relatedUnitsOfDescription":["Microfilm/-fiche", "Digital?"],
 	"archivalHistory":["Überlieferungsgeschichte"],
 	"accessConditions":["Rechte", "gesperrt bis","gesperrt für","Besondere Sperrfrist"],
@@ -93,6 +93,9 @@ class Findbuch():
 	
 	PREFIXES =(
 	"Rechte",
+	"Personenindex",
+	"Institutionenindex",
+	"l. Num.",
 	"Vermerk",
 	"Originalbeschriftung",
 	"Format",
@@ -269,6 +272,7 @@ class Findbuch():
 				d['hierarchy']=[x for x in item_elem if x!="+#+"]
 				if d['hierarchy'][0][0:2]=="ve":
 					d['identifier']=d['hierarchy'][0][2:]+ " "+d['hierarchy'][1].split("_")[0]
+					d['identifier']=d['identifier'][1:] if d['identifier'][0:1]=="_" else d['identifier']
 					d['levelOfDescription']="File"
 					d['fb_id']=d['hierarchy'][1][d['hierarchy'][1].rfind("_")+1:]
 

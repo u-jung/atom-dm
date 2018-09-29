@@ -47,11 +47,12 @@ import platform
 import logging
 import subprocess
 import pexpect
-	
+import pathlib
 import logging
 import pycurl
 import xmltodict 
 import os
+import time
 
 from datetime import datetime
 
@@ -134,7 +135,7 @@ def main(args):
 					if args[3] in ("fr","FR"):
 						tr.translate_information_objects("FR")					
 									
-				if args[2] in ("find-access-points-in-atom"):
+				if args[2] in ("find-access-points-in-atom", "find-ap"):
 					ap=data_manager.access_points()
 					if args[3] in ("Wikidata", "wd","WD"):
 						print("open Wikidata corpus")
@@ -143,10 +144,12 @@ def main(args):
 					else:
 						print ("open AtoM corpus")
 						ap.find_access_points_in_atom("atom",args[4] or "")
-						
+					print ("normalize access points")
 					ap.normalize_name_access_points()
+					print ('normalize other access_points')
 					ap.normalize_other_access_points()	
 					#ap.find_other_access_points(True)
+					print ('clean up lower relations')
 					ap.clean_lower_relations()
 					ap.rebuild_nested()
 				if args[2] in ("index-wd-keywords","index-wd-corpus"):
@@ -162,6 +165,13 @@ def main(args):
 		elif args[1] in ("--keywords", "-k"):
 			dm=data_manager.DataManager()	
 			dm._index_keywords()
+		elif args[1] in ("--build-upper-levels"):
+			dm=data_manager.DataManager()	
+			pa=dm.TMP_RESULTS_PATH+time.strftime("%Y%m%d_%H%M%S")
+			pathlib.Path(pa).mkdir(parents=True, exist_ok=True) 
+			l=dm.build_upper_levels(None,None,None)
+			dm._post_import(l,pa)
+			dm.write_csv(l,pa+"/import.csv","archival_description")
 		elif args[1] in ("--clean", "-c"):
 			dm=data_manager.DataManager()
 			if len(args)>2:

@@ -756,8 +756,8 @@
     "indicators": [
       "Deutsch[esnm]{1,2} Reich[es]*"
     ],
-    "last_modified": "2018-07-19_16:39:44",
-    "parent_id": 168391,
+    "last_modified": "2018-09-26_08:30:07",
+    "parent_id": 110,
     "taxonomy_id": 42,
     "type": 42
   },
@@ -4388,5 +4388,40 @@
     "last_modified": "2018-09-25_20:44:07",
     "parent_id": 165757,
     "type": 42
+  },
+  {
+    "culture_de": "Astronomie",
+    "id": 992837,
+    "last_modified": "2018-09-27_17:39:04",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Bahn",
+    "id": 992819,
+    "last_modified": "2018-09-27_17:39:03",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Gesellschaft",
+    "id": 992749,
+    "last_modified": "2018-09-27_17:38:57",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Regierung",
+    "id": 992767,
+    "last_modified": "2018-09-27_17:38:58",
+    "parent_id": 110,
+    "type": 35
+  },
+  {
+    "culture_de": "Theater",
+    "id": 992755,
+    "last_modified": "2018-09-27_17:38:57",
+    "parent_id": 110,
+    "type": 35
   }
 ]
