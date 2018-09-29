@@ -25,6 +25,24 @@
 
 ##API_KEY_FILE="/home/kol/api_keys.json"
 
+# This is the main wikidata sparql query which defines the corpus of keywords
+# make sure it's working inside https://query.wikidata.org
+
+WD_ENTITY_QUERY='SELECT DISTINCT ?item where{\
+			{optional{?item wdt:P17/wdt:P279* wd:Q329618 .}} \
+			union \
+			{optional{?item wdt:P2541/(wdt:P131|wdt:P279) wd:Q329618 .}}\
+			union{ optional{?item wdt:P131/wdt:P279* wd:Q329618 .}} \
+			union{ optional{?item wdt:P361/wdt:P279* wd:Q329618 .}}\
+			union{ optional{?item wdt:P2650/wdt:P279* wd:Q329618 .}}\
+			union{ optional{?item wdt:P937/(wdt:P131|wdt:P279)* wd:Q329618 .}}\
+			}\
+			order by ?item'
+
+
+#A cookie is necessary to retrieve data from findbuch net
+PHP_SESSION_COOKIE ='PHPSESSID=56570757349f28e903a9ce6894a474a5'
+
 # CONST WIKIDATA Instances
 WD_HUMAN="Q5"	
 WD_MISSION="Q20746389"

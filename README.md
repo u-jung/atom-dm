@@ -63,7 +63,8 @@ Try:
 
 ### What's already working ###
 #### Filling the keyword list using a Wikidata Query ####
-The retrieved keywords are stored in *atom/data/keywords.json* . To use your own query replace parts of teh query stored as WD_ENTITY_QUERY inside atom/main/data_manager.py (class: DataManager). Make sure that your query retrieves a column of Wikidata object URI called *?item*.
+The retrieved keywords are stored in *atom/data/keywords.json* . 
+To use your own query replace parts of the query stored as WD_ENTITY_QUERY inside *atom/main/g.py* . Make sure that your query retrieves a column of Wikidata object URI called *?item*.
 
 Try:
 
@@ -71,6 +72,7 @@ Try:
 
 #### Retrieving archival description from www.deutsche-digitale-bibliothek.de ####
 Remember you need to store your API-Key inside  *atom/config/api_key.py*
+The process uses the keywords stored inside *atom/data/keywords.json* to lookup for items. You my set date filter options inside 
 
 Try:
 
@@ -92,6 +94,31 @@ Try:
 `./atom-dm -i kal`
 
 The procedure is the same as described on *Retrieving archival description from www.deutsche-digitale-bibliothek.de*
+
+
+#### Retrieving archival description from a repository inside findbuch.net ####
+**Important!** Before using this feature make sure you have the right to do so. Ask the concerned institutions if you may use their metadata inside your AtoM installation.
+
+Befor you can start retrieving data from one of those repository open the site of the repository inside your browser. Now get the following informations:
+* the sub domain of the repository aka the part between *https://*and *.findbuch.net* inside the url
+* the repository id. You will find this as the arid parameter inside the url query string
+* a valid PHP session id. Open the javascript cosnole on your broweser and enter *document.cokie* . Replace the current value of PHP_SESSION_COOKIE inside *atom/main/g.py* with your cookie parameter!
+
+Try:
+
+`./atom-dm -i fbn {repository sub domain} {repository id}`
+
+
+Try:
+
+`./atom-dm -i kal`
+
+The procedure is the same as described on *Retrieving archival description from www.deutsche-digitale-bibliothek.de*
+
+
+
+
+
 
 ### Here comes the Query to get a list of libraries and archives described by Wikidata ###
 (You can use it at https://query.wikidata.org)
