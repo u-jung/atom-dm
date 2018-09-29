@@ -162,7 +162,7 @@ def main(args):
 			pass
 		elif args[1] in ("--linguistic", "-l"):
 			pass
-		elif args[1] in ("--keywords", "-k"):
+		elif args[1] in ("--keywords", "-k", "--index-keywords"):
 			dm=data_manager.DataManager()	
 			dm._index_keywords()
 		elif args[1] in ("--build-upper-levels"):

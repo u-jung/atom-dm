@@ -45,10 +45,24 @@ class DataManager(object):
 	- Some management tasks of AtoM
 			
 	"""
+	
+	WD_ENTITY_QUERY='SELECT DISTINCT ?item where{\
+				{optional{?item wdt:P17/wdt:P279* wd:Q329618 .}} \
+				union \
+				{optional{?item wdt:P2541/(wdt:P131|wdt:P279) wd:Q329618 .}}\
+				union{ optional{?item wdt:P131/wdt:P279* wd:Q329618 .}} \
+				union{ optional{?item wdt:P361/wdt:P279* wd:Q329618 .}}\
+				union{ optional{?item wdt:P2650/wdt:P279* wd:Q329618 .}}\
+				union{ optional{?item wdt:P937/(wdt:P131|wdt:P279)* wd:Q329618 .}}\
+                }\
+				order by ?item'
+	
 	indexstore = 'candidates'
 	max_results = 200000
 	jump_fonds = [
 	 'BArch R 1001', 'BArch R 1002', 'BArch R 1003', 'BArch R 8023', 'BArch R 8024', 'BArch R 1003', 'BArch R 8124', 'BArch RW 51', 'BArch RH 88', 'BArch RW 51']
+	
+	
 	KEYWORDS_FILE = 'atom/data/keywords.json'
 	KILLERS_FILE = 'atom/data/killers.txt'
 	ENTITIES_FILE = 'atom/data/entities.txt'
@@ -761,16 +775,7 @@ class DataManager(object):
 					return entities
 				file.close()
 		else:
-			query = 'SELECT DISTINCT ?item where{\
-				{optional{?item wdt:P17/wdt:P279* wd:Q329618 .}} \
-				union \
-				{optional{?item wdt:P2541/(wdt:P131|wdt:P279) wd:Q329618 .}}\
-				union{ optional{?item wdt:P131/wdt:P279* wd:Q329618 .}} \
-				union{ optional{?item wdt:P361/wdt:P279* wd:Q329618 .}}\
-				union{ optional{?item wdt:P2650/wdt:P279* wd:Q329618 .}}\
-				union{ optional{?item wdt:P937/(wdt:P131|wdt:P279)* wd:Q329618 .}}\
-                }\
-				order by ?item'
+			query=self.WD_ENTITY_QUERY
 			l = self._get_from_WDQ(query)
 			if len(l['results']['bindings']) > 0:
 				for line in l['results']['bindings']:
