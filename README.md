@@ -16,40 +16,19 @@ One very interesting thing is the integration of data from Wikidata. These data 
 
 ## Suported sites for data import ##
 ### Archival descriptions ###
-DDB - www.deutsche-digitale-bibliothek.de / www.archivportal.de  (You need your API-Key to get access to their REST API)
-KAL - http://kalliope-verbund.info  (via SRU)
-FBN - Different repositories hosted on www.findbuch.net
+* DDB - www.deutsche-digitale-bibliothek.de / www.archivportal.de  (You need your API-Key to get access to their REST API)
+* KAL - http://kalliope-verbund.info  (via SRU)
+* FBN - Different repositories hosted on www.findbuch.net
 
 ### authority data ###
-Wikidata - www.wikidata.org (You have to adopt the SPARQL-Queries inside this code)
-Sigel-Verzeichnis  - http://sigel.staatsbibliothek-berlin.de
+* Wikidata - www.wikidata.org (You have to adopt the SPARQL-Queries inside this code)
+* Sigel-Verzeichnis  - http://sigel.staatsbibliothek-berlin.de
 
-
-## Installation ##
-*atom-dm* has been created to running on a Ubuntu 16.4 server installation which host also a recommended AtoM 2.4 installation using nginx an mySQL.
-Just unpack the zip file into the user's home directory. Once installed you can start the different tasks using the console.
-Note: You need to enter your MySQL parameter and API-Keys into atom/config/mysql_opts.py and atom/config/api_key.py 
-`./atom-dm {task group option} {more options}`
-
-### What's working already ###
-#### Filling the keyword list using a Wikidata Query ####
-The retrieved keywords are stored in *atom/data/keywords.json* . To use your own query replace parts of teh query stored as WD_ENTITY_QUERY inside atom/main/data_manager.py (class: DataManager). Make sure that your query retrieves a column of Wikidata object URI called *?item*.
-`./atom-dm --index-keywords`
-
-## Workflows ##
-### Import of data ###
-
-### Treatment of data ###
-
-
-### Translation ###
-It is possible to translate descriptions into other language using the service of www.DeepL.com
-
-
-
-## The Wikidata impact ##
-As the project is asking about traces of German Colonial Past in archives. It was necessary to create a main corpus of data objects related to this topic. We used "Deutsche Kolonien und Schutzgebiete" (https://www.wikidata.org/wiki/Q329618) as data root. You may test other topics. 
-Here is comes the query. You can use it at https://query.wikidata.org
+### The Wikidata impact ###
+As the project is asking about traces of German Colonial Past in archives. 
+It was necessary to create a main corpus of data objects related to this topic. 
+We used "Deutsche Kolonien und Schutzgebiete" (https://www.wikidata.org/wiki/Q329618) as data root. You may test other topics. 
+Here comes the query. You can use it at https://query.wikidata.org
 
 ```
 SELECT DISTINCT ?item ?itemLabel ?itemDescription
@@ -73,7 +52,46 @@ SELECT DISTINCT ?item ?itemLabel ?itemDescription
 	order by ?item
 ```
 
+## Installation ##
+*atom-dm* has been created to running on a Ubuntu 16.4 server installation which host also a recommended AtoM 2.4 installation using nginx an mySQL.
+Just unpack the zip file into the user's home directory. Once installed you can start the different tasks using the console.
+Note: You need to enter your MySQL parameter and API-Keys into atom/config/mysql_opts.py and atom/config/api_key.py 
 
+Try:
+
+`./atom-dm {task group option} {more options}`
+
+### What's already working ###
+#### Filling the keyword list using a Wikidata Query ####
+The retrieved keywords are stored in *atom/data/keywords.json* . To use your own query replace parts of teh query stored as WD_ENTITY_QUERY inside atom/main/data_manager.py (class: DataManager). Make sure that your query retrieves a column of Wikidata object URI called *?item*.
+
+Try:
+
+`./atom-dm --index-keywords`
+
+#### Retrieving archival description from www.deutsche-digitale-bibliothek.de ####
+Remember you need to store your API-Key inside  *atom/config/api_key.py*
+
+Try:
+
+`./atom-dm -i ddb`
+
+The imported data are stored in chunks of around 100 records as *import.csv* subfolders of *atom/tmp_results*. 
+At the end of teh process they will be all joined into *atom/tmp_results/import.csv*
+This file is ready for import into AtoM. But you should verify the data before do so. 
+Verification has two steps. 
+* You need manually mark obsolete items (e.g. Looking for *Kolonie* my also give results as *Villenkolonie* or *Ferienkolonie*. See *Join data* for more information.
+* Check for duplicate items and respected hierarchy.  A special file *import_preparation.log* for this along with import.csv.
+Note! It is usefull to not differ the names of different import.csv files. AtoM use them as part of premary key for look up tasks.
+During the task the tools checks also which one of the wikidata keywords will fit the retrieved items. 
+
+#### Retrieving archival description from Kalliope-Verbund ####
+
+Try:
+
+`./atom-dm -i kal`
+
+The procedure is the same as described on *Retrieving archival description from www.deutsche-digitale-bibliothek.de*
 
 ### Here comes the Query to get a list of libraries and archives described by Wikidata ###
 (You can use it at https://query.wikidata.org)
@@ -88,4 +106,4 @@ SELECT distinct ?isil ?item ?itemLabel  WHERE {
 }
 Order by ?isil
 ```
-# atom-dm
+
