@@ -53,7 +53,7 @@ Go to the unpacked directory and try:
 
 `./atom-dm {task group option} {more options}`
 
-### Which tools are already working ###
+### Tools that are working ###
 
 **Disclaimer**: This piece of work comes without any warranty. Please make sure you have always a backup copy of your data before trying out
 
@@ -136,7 +136,7 @@ The imported data are stored in chunks of around 100 records as *import.csv* sub
 At the end of the process they will be all joined into *atom/tmp_results/import.csv*
 This file is ready for import into AtoM. But you should verify the data before do so. 
 Verification has two steps. 
-* You need manually mark obsolete items (e.g. Looking for *Kolonie* my also give results as *Villenkolonie* or *Ferienkolonie*.  You can mark desired records with a dot in `out` field. Non desired records should be marked with `x` in the  `out` field. Later the marks will be propagated to parent and/or child records. See *Reducing data* for more information.
+* You need manually mark obsolete items (e.g. Looking for *Kolonie* my also give results as *Villenkolonie* or *Ferienkolonie*.  You can mark desired records with a dot in the `out` field. Non desired records should be marked with `x` in the  `out` field. Later the marks will be propagated to parent and/or child records. See *Reducing data* for more information.
 * Check for duplicate items and respected hierarchy.  A special file *import_preparation.log* for this along with import.csv.
 Note! It is usefull to not differ the names of different import.csv files. AtoM use them as part of premary key for look up tasks.
 During the task the tools checks also which one of the wikidata keywords will fit the retrieved items. 
@@ -173,7 +173,7 @@ You can change the configuration easily by modifying atom/helper/deepl.py
 `./atom-dm -m action=translate-information-objects lang={ISO-639-1 code of target language}`
 
 
-**Hint**: Make sure you have DeepL's cost control feature activated. Archival descriptions can conain lots of words.
+**Hint**: Make sure you have DeepL's cost control feature activated. Archival descriptions can contain lots of words.
 
 
 Examples for the ISO-639 code are *en* or *fr*
@@ -277,7 +277,7 @@ Try:
 
 ####Geografical data index####
 One part of the project site is a map browsing tool using OpenLayer and historical maps. Some of the maps come with their own name index. Those indexes where scanned and had to be inserted into a ElasticSearch index to become searchable.  
-A special task has been created to populate the ES index with data from `atom/data/atom_geo.csv`. The file is a tab seperated table without header and the following fields:
+A special task has been created to populate the ElasticSearch index with data from `atom/data/atom_geo.csv`. The file is a tab seperated table without header and the following fields:
 * id
 * location label
 * location label (ASCII)
