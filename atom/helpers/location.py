@@ -22,12 +22,13 @@
 #  
 #  
 
+from atom.main import g, data_manager
 
 class Location(object):
-	location_file="/home/kol/kol/data/atom_geo.csv"
+	location_file="atom/data/atom_geo.csv"
 	
 	def __init__(self):
-		self.dm=DataManager()
+		self.dm=data_manager.DataManager()
 	
 	def __del__(self):
 		pass

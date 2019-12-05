@@ -27,15 +27,17 @@ import json
 import sys
 import time
 import pprint
-
+from lxml import html
 from atom.main import data_manager, g
 from atom.config import api_keys
-
+from atom.helpers.helper import fileOps, listOps, stringOps, osOps, funcOps
+fo = fileOps()
 
 class Ddb(object):
 	
 	oauth_consumer_key=api_keys.API_KEYS["DDB"]
 	base_url='https://api.deutsche-digitale-bibliothek.de/'
+	BASE_URL_FRONTEND="https://www.deutsche-digitale-bibliothek.de/"
 	id_list_file='../data/ddb_id_list.json'
 	id_all_file='../data/ddb_id_all.json'
 	result_file='../data/ddb_results.json'
@@ -53,7 +55,7 @@ class Ddb(object):
 	ID_INDEX={}
 	BLOCKED_FILE="../data/ddb_blocked.txt"       # list of items which should ne be retrieved
 	BLOCKED=[]
-	
+	nofounds=""
 	LABELS=	{
 			'identifier':'descriptionIdentifier',
 			'title':'title',
@@ -68,19 +70,24 @@ class Ddb(object):
 			'flex_arch_031':'identifier',
 			'flex_arch_023':'title',
 			'flex_arch_030':'title',
+			'flex_arch_009':'extentAndMedium',
+			'flex_arch_013':'extentAndMedium',
 			'flex_arch_011':'extentAndMedium',
 			'flex_arch_012':'extentAndMedium',
 			'flex_arch_014':'repository',
 			'flex_arch_013':'archivalHistory',
+			'flex_arch_001':'arrangement',
+			'flex_arch_007':'languageNote',
 			'flex_arch_006':'acquisition',
 			'flex_arch_010':'scopeAndContent',
-			'flex_arch_024':'scopeAndContent',
+			'flex_arch_024':'archivalHistory',
+			'flex_arch_029':'scopeAndContent',
 			'flex_arch_032':'scopeAndContent',
 			'flex_arch_001':'arrangement',
 			'flex_arch_029':'arrangement',
 			'flex_arch_017':'languageNote',
 			'flex_arch_015':'physicalCharacteristics',
-			'flex_arch_016':'physicalCharacteristics',
+			'flex_arch_016':'genreAccessPoints',
 			'flex_arch_002':'findingAids',
 			'flex_arch_028':'relatedUnitsOfDescription',
 			'flex_arch_022':'publicationNote',
@@ -160,6 +167,286 @@ class Ddb(object):
 	
 	REQUESTED=[]
 	CURRENT_ITEMS=[]
+
+
+	FIELD_MAPPING={
+		'identifier':['flex_bibl_013','flex_mus_neu_410'],
+		'title':['flex_bibl_001','bin_010','flex_denk_008','flex_mus_10','flex_mus_20.10','flex_mus_30.50', 'flex_mus_neu_010', 'flex_mus_neu_015','label'],
+		'scopeAndContent':['description','Objektbeschreibung','subtitle','flex_bibl_015', 'flex_bibl_016','flex_denk_011', 'flex_film_001', 'flex_film_007','flex_mus_20.20'],
+		'extentAndMedium':['flex_bibl_009', 'flex_film_009','flex_film_017', 'flex_mus_200.100.10'],
+		'archivalHistory':[],
+		'arrangement':['bin_009'],
+		'accessConditions':[],
+		'reproductionConditions':['bin_009','stat_007','stat_010'],
+		'language':[],
+		'script':[],
+		'languageNote':['flex_bibl_008'],
+		'physicalCharacteristics':['flex_bibl_003','flex_denk_001','flex_film_006', 'flex_mus_neu_070','flex_mus_neu_060'],
+		'findingAids':[],
+		'locationOfOriginals':['flex_bibl_014','flex_mus_neu_400'],
+		'locationOfCopies':[],
+		'relatedUnitsOfDescription':[],
+		'publicationNote':[],
+		'digitalObjectURI':[],
+		'generalNote':['flex_bibl_012', 'flex_mus_neu_050',],
+		'subjectAccessPoints':['flex_arch_034','flex_bibl_011','flex_film_015','flex_mus_neu_350'],
+		'placeAccessPoints':['flex_denk_007','lex_denk_005','flex_denk_004','flex_denk_003','flex_denk_002','flex_film_014','flex_mus_neu_120'],
+		'nameAccessPoints':['flex_bibl_002','flex_denk_012','flex_film_002','flex_film_004','flex_mus_200.10.10'],
+		'genreAccessPoints':['flex_denk_013','flex_mus_30.40','flex_mus_neu_020'],
+		'descriptionIdentifier':['flex_bibl_013'],
+		'institutionIdentifier':[],
+		'rules':[],
+		'descriptionStatus':[],
+		'levelOfDetail':[],
+		'revisionHistory':[],
+		'languageOfDescription':[],
+		'scriptOfDescription':[],
+		'sources':[],
+		'archivistNote':[],
+		'publicationStatus':[],
+		'physicalObjectName':[],
+		'physicalObjectLocation':[],
+		'physicalObjectType':[],
+		'alternativeIdentifiers':[],
+		'alternativeIdentifierLabels':[],
+		'eventDates':['begin', 'end','flex_mus_200.30.30','flex_mus_200.10.30','flex_mus_200.60.30','flex_mus_200.90.30', 'bin_008','flex_bibl_006','flex_denk_010','flex_film_005','flex_mus_110','date', 'flex_mus_neu_130' ],
+		'eventTypes':[],
+		'eventStartDates':[],
+		'eventEndDates':[],
+		'eventDescriptions':[],
+		'eventActors':['flex_mus_neu_110',"$"]
+			
+	
+	}
+	
+	
+	FIELD_WITHOUT_INTRO={
+		"eventDates", "flex_mus_neu_400",'flex_mus_neu_340','label','subtitle', 'title',
+		'flex_mus_neu_050','flex_mus_neu_350','flex_mus_neu_020',
+		'flex_mus_neu_410','flex_mus_neu_070','flex_mus_neu_120', 'flex_mus_neu_010',
+		'flex_mus_neu_015','flex_mus_neu_110','flex_mus_neu_060'
+	}
+	
+	FIELD_NAMES={"bin_001":"[Content-Viewer-Image]",
+				"bin_002":"[Thumbnail-Preview]",
+				"bin_004":"[Content-Viewer-Großansicht]",
+				"bin_006":"[Medientyp]",
+				"bin_007":"[Person]",
+				"bin_008":"[Datum]",
+				"bin_009":"Bestand",
+				"bin_009":"Institution",
+				"bin_009":"[Rechte am Binärcontent]",
+				"bin_010":"[Titel für Bildunterschrift]",
+				"flex_arch_001":"Bestand",
+				"flex_arch_002":"Online-Findbuch im Angebot des Archivs",
+				"flex_arch_004":"Archivaliensignatur",
+				"flex_arch_005":"Alt-/Vorsignatur",
+				"flex_arch_006":"Provenienz",
+				"flex_arch_007":"Vorprovenienz",
+				"flex_arch_008":"Laufzeit",
+				"flex_arch_009":"Digitalisat im Angebot des Archivs",
+				"flex_arch_010":"Enthältvermerke",
+				"flex_arch_011":"Umfang",
+				"flex_arch_012":"Maße",
+				"flex_arch_013":"Material",
+				"flex_arch_014":"Urheber",
+				"flex_arch_015":"Formalbeschreibung",
+				"flex_arch_016":"Archivalientyp",
+				"flex_arch_017":"Sprache der Unterlagen",
+				"flex_arch_018":"Sonstige Erschließungsangaben",
+				"flex_arch_019":"Sonstige Erschließungsangaben",
+				"flex_arch_020":"Sonstige Erschließungsangaben",
+				"flex_arch_021":"Sonstige Erschließungsangaben",
+				"flex_arch_022":"Bemerkungen",
+				"flex_arch_024":"Bestandsbeschreibung",
+				"flex_arch_025":"Bestandssignatur",
+				"flex_arch_026":"Bestandslaufzeit",
+				"flex_arch_027":"indexbegriff Person",
+				"flex_arch_028":"Verwandte Bestände und Literatur",
+				"flex_arch_029":"Kontext",
+				"flex_arch_030":"Archivalientitel",
+				"flex_arch_031":"Signatur",
+				"flex_arch_032":"Beschreibung:",
+				"flex_arch_033":"indexbegriff Ort",
+				"flex_arch_034":"indexbegriff Sache",
+				"flex_bibl_001":"Weitere Titel",
+				"flex_bibl_002":"Beteiligte Personen und Organisationen",
+				"flex_bibl_003":"Dokumenttyp",
+				"flex_bibl_004":"Erschienen in",
+				"flex_bibl_005":"Ausgabe",
+				"flex_bibl_006":"Erschienen",
+				"flex_bibl_007":"Elektronische Ausgabe",
+				"flex_bibl_008":"Sprache",
+				"flex_bibl_009":"Umfang",
+				"flex_bibl_010":"Reihe",
+				"flex_bibl_011":"Thema",
+				"flex_bibl_012":"Anmerkungen",
+				"flex_bibl_013a":"PURL",
+				"flex_bibl_013b":"URN",
+				"flex_bibl_013c":"ISBN",
+				"flex_bibl_013d":"ISSN",
+				"flex_bibl_013e":"DOI",
+				"flex_bibl_013f":"Handle",
+				"flex_bibl_013":"Identifier",
+				"flex_bibl_014":"Standort",
+				"flex_bibl_015":"Abstract",
+				"flex_bibl_016":"Inhaltsverzeichnis",
+				"flex_denk_001":"Denkmalart",
+				"flex_denk_002":"Land",
+				"flex_denk_003":"Kreis",
+				"flex_denk_004":"Ort",
+				"flex_denk_005":"Ortsteil",
+				"flex_denk_006":"Straße und Hausnummer",
+				"flex_denk_007":"Lage",
+				"flex_denk_008":"Bezeichnung",
+				"flex_denk_009":"Denkmaltyp",
+				"flex_denk_010":"Datierung",
+				"flex_denk_011":"Beschreibung",
+				"flex_denk_012":"Beteiligte",
+				"flex_denk_013":"Denkmal-Kategorie",
+				"flex_denk_013":"Denkmaltyp (fein)",
+				"flex_film_001":"Weitere Titel",
+				"flex_film_002":"Urheber",
+				"flex_film_003":"Herausgeber",
+				"flex_film_004":"Mitwirkende",
+				"flex_film_005":"Entstanden",
+				"flex_film_006":"Medientyp",
+				"flex_film_007":"Beschreibung",
+				"flex_film_008":"Quelle",
+				"flex_film_009":"Format",
+				"flex_film_010":"Sprache",
+				"flex_film_011":"Objekttyp",
+				"flex_film_013":"Zeitlicher Bezug",
+				"flex_film_014":"Örtlicher Bezug",
+				"flex_film_015":"Bezug",
+				"flex_film_016":"Verweis auf Textdokument",
+				"flex_film_017":"Länge",
+				"flex_mus_100":"Kultur",
+				"flex_mus_10":"Objektbezeichnung",
+				"flex_mus_110":"Periode",
+				"flex_mus_140":"Maße",
+				"flex_mus_150":"Signatur",
+				"flex_mus_160":"Druckzustand",
+				"flex_mus_170":"Auflage",
+				"flex_mus_200.100.10":"Typzuweisung",
+				"flex_mus_200.100.20":"Typzuweisung (wo)",
+				"flex_mus_200.100.30":"Typzuweisung (wann)",
+				"flex_mus_200.10.10":"Hergestellt (von wem)",
+				"flex_mus_200.10.20":"Hergestellt (wo)",
+				"flex_mus_200.10.30":"Hergestellt (wann)",
+				"flex_mus_200.110.10":"Restauriert (von wem)",
+				"flex_mus_200.110.20":"Restauriert (wo)",
+				"flex_mus_200.110.30":"Restauriert (wann)",
+				"flex_mus_200.120.10":"Provenienz (von wem)",
+				"flex_mus_200.120.20":"Provenienz (wo)",
+				"flex_mus_200.120.30":"Provenienz (wann)",
+				"flex_mus_200.130.10":"Fall (wo)",
+				"flex_mus_200.130.20":"Fall (wann)",
+				"flex_mus_200.140.10":"Aufführung (von wem)",
+				"flex_mus_200.140.20":"Aufführung (wo)",
+				"flex_mus_200.140.30":"Aufführung (wann)",
+				"flex_mus_200.20.10":"Wurde genutzt (von wem)",
+				"flex_mus_200.20.20":"Wurde genutzt (wo)",
+				"flex_mus_200.20.30":"Wurde genutzt (wann)",
+				"flex_mus_200.30.10":"Geschaffen (von wem)",
+				"flex_mus_200.30.20":"Geschaffen (wo)",
+				"flex_mus_200.30.30":"Geschaffen (wann)",
+				"flex_mus_200.40.10":"Gefunden (von wem)",
+				"flex_mus_200.40.20":"Gefunden (wo)",
+				"flex_mus_200.40.30":"Gefunden (wann)",
+				"flex_mus_200.50.10":"Auftrag (von wem)",
+				"flex_mus_200.50.20":"Auftrag (wo)",
+				"flex_mus_200.50.30":"Auftrag (wann)",
+				"flex_mus_200.60.10":"Entworfen (von wem)",
+				"flex_mus_200.60.20":"Entworfen (wo)",
+				"flex_mus_200.60.30":"Entworfen (wann)",
+				"flex_mus_200.70.10":"Erworben (von wem)",
+				"flex_mus_200.70.20":"Erworben (wo)",
+				"flex_mus_200.70.30":"Erworben (wann)",
+				"flex_mus_200.80.10":"Erstbeschrieben (von wem)",
+				"flex_mus_200.80.20":"Erstbeschrieben (wo)",
+				"flex_mus_200.80.30":"Erstbeschrieben (wann)",
+				"flex_mus_200.90.10":"Gesammelt (von wem)",
+				"flex_mus_200.90.20":"Gesammelt (wo)",
+				"flex_mus_200.90.30":"Gesammelt (wann)",
+				"flex_mus_20.10":"Originaltitel",
+				"flex_mus_20.20":"Alternativer Titel",
+				"flex_mus_20":"Titel",
+				"flex_mus_30.100":"Schlagwort",
+				"flex_mus_30.10":"Sachsystematik",
+				"flex_mus_30.130":"Dokumenttyp",
+				"flex_mus_30.15":"Sachbegriff",
+				"flex_mus_30.200":"Warenart",
+				"flex_mus_30.20":"Stil",
+				"flex_mus_30.300":"Sprache",
+				"flex_mus_30.30":"Funktion",
+				"flex_mus_30.400":"Gruppe",
+				"flex_mus_30.40":"Genre",
+				"flex_mus_30.410":"Teiluntergruppe",
+				"flex_mus_30.420":"Untergruppe",
+				"flex_mus_30.500":"Taxon",
+				"flex_mus_30.50":"Sachtitel",
+				"flex_mus_30.510":"Klasse",
+				"flex_mus_30.520":"Ordnung",
+				"flex_mus_30.530":"Familie",
+				"flex_mus_30.540":"Gattung",
+				"flex_mus_30.550":"Art",
+				"flex_mus_30.5":"Profil",
+				"flex_mus_30.600":"Präparationsart",
+				"flex_mus_30.60":"Sammlung",
+				"flex_mus_30.610":"Stadium",
+				"flex_mus_30.620":"Geschlecht",
+				"flex_mus_30.630":"Shock",
+				"flex_mus_30.640":"Verwitterung",
+				"flex_mus_30.650":"Mineral",
+				"flex_mus_30.660":"Gesteinstyp",
+				"flex_mus_30.670":"Geologische Zeiteinheit",
+				"flex_mus_30.680":"Meteorit",
+				"flex_mus_30.70":"Sammlungsbereich",
+				"flex_mus_30.80":"Sachgebiet",
+				"flex_mus_310.10":"Literatur",
+				"flex_mus_310.20":"Objekt in Beziehung zu",
+				"flex_mus_320.20.10":"Abgebildet (was)",
+				"flex_mus_320.40.10":"Abgebildet (Ort)",
+				"flex_mus_320.5":"Abgebildet (wer)",
+				"flex_mus_450.10.70":"Fotograf",
+				"flex_mus_50.5":"Weitere Nummer",
+				"flex_mus_50":"Inventarnummer",
+				"flex_mus_5":"LIDO Identifikator",
+				"flex_mus_60.10":"Standort",
+				"flex_mus_70.10":"Objektgeschichte",
+				"flex_mus_70.20":"Art/Anzahl/Umfang",
+				"flex_mus_70":"Objektbeschreibung",
+				"flex_mus_80.10":"Material",
+				"flex_mus_80.20":"Technik",
+				"flex_mus_80":"Material/Technik",
+				"indexmeta_0002":"Titel",
+				"indexmeta_0003":"Verfasser",
+				"indexmeta_0004":"Illustrator",
+				"indexmeta_0008":"Event",
+				"indexmeta_0009":"Event-Beschreibung",
+				"indexmeta_0010":"Kontext",
+				"indexmeta_0014":"Labels Mediathek",
+				"indexmeta_0014":"Signatur",
+				"stat_001":"Institution",
+				"stat_002":"[Link zur KWE]",
+				"stat_003":"[Logo KWE]",
+				"stat_004":"[Medientyp-Icon]",
+				"stat_005":"[Bezeichnung/Titel]",
+				"stat_006":"Link auf diese Seite",
+				"stat_007":"Rechteinformation",
+				"stat_008":"Objekt beim Datengeber anzeigen",
+				"stat_009":"Ansehen in: [Viewer-Name]",
+				"stat_010":"Rechte",
+				"stat_011":"[Ranking]",
+				"stat_012":"Vollständiger Titel",
+				"stat_013":"Objekt wurde erworben mit Fördermitteln von",
+				"stat_014":"Objekt wurde digitalisiert mit Fördermitteln von",
+				"stat_015":"Objekt wurde retrokonvertiert mit Fördermitteln von",
+				"video_001":"[Content_Viewer_Video]",
+				"video_002":"[Poster-Image]"}
+
+
 
 	
 	def __init__(self):
@@ -298,53 +585,148 @@ class Ddb(object):
 		self.store_id_list()
 		return d.copy()
 	
-equest	def export(self, counter, from_term):
+	def get_item_by_id(self,ddb_id):
+		export_list=[]
+		export_item_family=[]
+		if not self.dm.is_in_atom(ddb_id):  # data still unknown in AtoM
+			item_raw=self.get(ddb_id,'items','view','json')
+			item_dict=self._get_content(item_raw)
+			print("item_dict", item_dict)
+			if not ('eventStartDates' in item_dict and 'eventEndDates' in item_dict):
+				item_dict['eventDates']=self._map('eventDates',item_dict,True,"str",True)
+				item_dict['eventStartDates']=self.dm.build_eventDates(item_dict['eventDates'])[0]
+				item_dict['eventEndDates']=self.dm.build_eventDates(item_dict['eventDates'])[1]
+				#print('->->---------------\n',item_dict['eventDates'],item_dict['eventStartDates'],item_dict['eventEndDates'])
+			item_dict['legacyId']=ddb_id
+			if 'apd_level_of_description' in item_dict:
+				item_dict['levelOfDescription']=self.dm._get_level_of_description(item_dict['apd_level_of_description'])
+			for field in self.FIELD_MAPPING.keys():
+				item_dict[field]=self._map(field,item_dict,True,"str",True)
+				item_dict=self._set_pipes(item_dict,["genreAccessPoints","placeAccessPoints","nameAccessPoints","subjectAccessPoints"])
+				item_dict=self._dedup(item_dict)
+				item_dict['culture']=g.CULTURE
+				item_dict['language']=g.CULTURE
+			if 'eventDates' in item_dict:
+				item_dict['eventStartDates']=self.dm.build_eventDates(item_dict['eventDates'])[0]
+				item_dict['eventEndDates']=self.dm.build_eventDates(item_dict['eventDates'])[1]
+			if not("levelOfDescription" in item_dict):
+				if 'identifer' in item_dict or 'extentAndMedium' in item_dict or 'physicalCharacteristics' in item_dict:
+					item_dict['levelOfDescription']="File"
+				else:
+					item_dict['levelOfDescription']="Class"
+			export_item_family.append(item_dict.copy())
+			#self.CURRENT_ITEMS.append(match['id'])
+			print("there is an item ",item_dict)
+			for d in self._parents_generator(item_dict['legacyId'],item_dict['repository']):
+				if d:
+					if isinstance(d,str):
+						export_item_family[len(export_item_family)-1]['parentId']=d  #connecting the tree
+					else:
+						
+						if d['legacyId']  not in self.CURRENT_ITEMS:
+							export_item_family.append(d)
+							self.CURRENT_ITEMS.append(d['legacyId'])
+						
+						print("there is a parent ",d)
+				else:
+					continue   #broken tree, we can't use this for AtoM
+			for d in self._children_generator(item_dict['legacyId'],item_dict['repository']):
+				if d['legacyId'] not in self.CURRENT_ITEMS:
+					export_item_family.append(d)
+					self.CURRENT_ITEMS.append(d['legacyId'])
+
+				print("there is a child ",d)
+		else:
+			print (ddb_id, " is already in AtoM")
+			self.dm.add_tmp_out(ddb_id)		
+		if len(export_item_family)>0:
+			export_item_family=[x for x in export_item_family if x is not None]
+			pprint.pprint(export_item_family)
+			#export_item_family.sort(key=operator.itemgetter('apd_level_of_description'))					
+			export_list.extend(export_item_family)	
+		return export_list.copy()
+	
+	def export(self,**kwargs):
 		"""
 		retrieves data from the German www.deutsche-digitale-bibliothek.de.
 		Sends them back to DataManager in batches of {counter} size
 		"""
+		#args=[counter:, from_term, predefined]
 		
 		export_list=[]
+		counter=kwargs['counter']
 		
-		for search_term in 	self.dm.search_term_generator(from_term):
+		#kwargs={'from_term':kwargs['from_term'], 'predefined':kwargs['predefined']}
+		if 'facet' in kwargs and 'facet_value' in kwargs:
+			facet= kwargs['facet'] + "=" + kwargs['facet_value']
+		else:
+			facet=""
+		
+		if 'id' in kwargs:
+			yield self.get_item_by_id(kwargs['id'])
+			return
+	
+		for search_term in 	self.dm.search_term_generator(**kwargs):
 			self._open_blocked()
-			for match in self._search_generator(search_term):
+			for match in self._search_generator(search_term, facet, kwargs['timespan'],kwargs):
 				print("------------------------------------------")
 				print(str(len(export_list)))
 				print ("Current search term : ", search_term)
 				print("------------------------------------------")
 				export_item_family=[]
-				
+				if len(match)==0:
+					self.nofounds+=search_term+"\n"
 				#print (match)
 				if 'id' in match:
 
 					if not self.dm.is_in_atom(match['id']):  # data still unknown in AtoM
 						print(match)
 						item_raw=self.get(match['id'],'items','view','json')
-						print(item_raw)
-						if self._is_archival_description(item_raw):
+						#print("item_raw -> ", item_raw)
+						
+						#if self._is_archival_description(item_raw) or kwargs['facet']!="":   # check for archival description if no facet where given else let pass everything
+						if self._is_archival_description(item_raw) or facet !="" or 'nopost' in kwargs:   # check for archival description if no facet where given else let pass everything
+						
 							item_dict=self._get_content(item_raw)
-							
-							self._write_to_id_index(match['id'],item_dict['descriptionIdentifier'])
-							if 'eventStartDates' in item_dict:
-								start=item_dict['eventStartDates']
-							else:
-								start=""
-							if 'eventEndDates' in item_dict:
-								end=item_dict['eventEndDates']
-							else:
-								end=""									
-							if self.dm._is_in_time(start,end):
+							print("item_dict", item_dict)
+							#self._write_to_id_index(match['id'],item_dict['descriptionIdentifier']) #obsolete ?
+							#if 'eventStartDates' in item_dict:
+							if not ('eventStartDates' in item_dict and 'eventEndDates' in item_dict):
+								
+								item_dict['eventDates']=self._map('eventDates',item_dict,True,"str",True)
+								item_dict['eventStartDates']=self.dm.build_eventDates(item_dict['eventDates'])[0]
+								item_dict['eventEndDates']=self.dm.build_eventDates(item_dict['eventDates'])[1]
+								
+							#print('->->---------------\n',item_dict['eventDates'],item_dict['eventStartDates'],item_dict['eventEndDates'])
+							if self.dm._is_in_time(item_dict['eventStartDates'],item_dict['eventEndDates']) or not kwargs['timespan'] or 'nopost' in kwargs:
 								#pprint.pprint(item_raw)
 								#pprint.pprint(item_dict)
-								if self.dm.predict_item(self._get_content_str(item_dict)):
+								if not (kwargs['predict']) or self.dm.predict_item(self._get_content_str(item_dict)) or 'nopost' in kwargs :
 									item_dict['legacyId']=match['id']
 									if 'apd_level_of_description' in item_dict:
 										item_dict['levelOfDescription']=self.dm._get_level_of_description(item_dict['apd_level_of_description'])
+
+									# adding mapped fields if original fields are not present
+									
+									for field in self.FIELD_MAPPING.keys():
+										
+										item_dict[field]=self._map(field,item_dict,True,"str",True)
+									print('fA',item_dict['findingAids'])
+									item_dict=self._set_pipes(item_dict,["genreAccessPoints","placeAccessPoints","nameAccessPoints","subjectAccessPoints"])
+									item_dict=self._dedup(item_dict)
 									item_dict['culture']=g.CULTURE
 									item_dict['language']=g.CULTURE
+									if 'eventDates' in item_dict:
+										item_dict['eventStartDates']=self.dm.build_eventDates(item_dict['eventDates'])[0]
+										item_dict['eventEndDates']=self.dm.build_eventDates(item_dict['eventDates'])[1]
+									if not("levelOfDescription" in item_dict):
+										if 'identifer' in item_dict or 'extentAndMedium' in item_dict or 'physicalCharacteristics' in item_dict:
+											item_dict['levelOfDescription']="File"
+										else:
+											item_dict['levelOfDescription']="Class"
+									
 									if (match['id'] not in self.CURRENT_ITEMS and match['id'] not in self.dm.LEGACY_IDS 
-										and match['id'] not in self.dm.TMP_OUT and match['id'] not in self.dm.DEF_OUT):
+										and match['id'] not in self.dm.TMP_OUT and match['id'] not in self.dm.DEF_OUT) :
 										export_item_family.append(item_dict.copy())
 										self.CURRENT_ITEMS.append(match['id'])
 
@@ -362,12 +744,14 @@ equest	def export(self, counter, from_term):
 													print("there is a parent ",d)
 											else:
 												continue   #broken tree, we can't use this for AtoM
-										for d in self._children_generator(item_dict['legacyId'],item_dict['repository']):
-											if d['legacyId'] not in self.CURRENT_ITEMS:
-												export_item_family.append(d)
-												self.CURRENT_ITEMS.append(d['legacyId'])
+										if not ('nopost' in kwargs):
+											print('looking for children')
+											for d in self._children_generator(item_dict['legacyId'],item_dict['repository']):
+												if d['legacyId'] not in self.CURRENT_ITEMS:
+													export_item_family.append(d)
+													self.CURRENT_ITEMS.append(d['legacyId'])
 
-											print("there is a child ",d)
+												print("there is a child ",d)
 								else:
 									print("prediction failed")
 									self.dm.add_tmp_out(match['id'])
@@ -391,12 +775,80 @@ equest	def export(self, counter, from_term):
 			
 			if len(export_list)>counter:
 					self.dm.store_out_files()
+					fo.save_data(self.nofounds,self.dm.TMP_RESULTS_PATH+"nofounds_"+time.strftime("%Y%m%d_%H%M%S")+".txt","txt")
 					yield export_list.copy()
 					export_list=[]
+		fo.save_data(self.nofounds,self.dm.TMP_RESULTS_PATH+"nofounds_"+time.strftime("%Y%m%d_%H%M%S")+".txt","txt")
 		yield export_list.copy()
 	
 
-			
+	def _set_pipes(self,d,fields):
+		for field in fields:
+			if field in d:
+				d[field]="|".join(d[field].split(";"))
+		return d.copy()
+	
+	def _dedup(self,d):
+		for k,v in d.items():
+			if not v is None:
+				tmp=v.split("|")
+				tmp=list(set(tmp))
+				d[k]="|".join(tmp)
+		return d.copy()
+	
+	def _map(self,term, item_dict, get_value=False,type="str", add=True):
+		term=term.strip('')
+		modified=False
+		print("....",term)
+		if term in item_dict and not add:
+			if get_value:
+				return item_dict[term]
+			else:
+				return term
+		print("...ist in item_dict.",term)
+		for e in self.FIELD_MAPPING[term]:
+			#print(term, e)
+			if e in item_dict:
+				print (e, "(mapping term) is in dict)")
+				if get_value:
+					if add:
+						if e in self.FIELD_NAMES:
+							fieldname=self.FIELD_NAMES[e]+": "
+							
+						else:
+							fieldname=e+": "
+							
+						if term in self.FIELD_WITHOUT_INTRO or e in self.FIELD_WITHOUT_INTRO:
+							fieldname=""
+						if term in item_dict:
+							item_dict[term]+= "|"+fieldname + item_dict[e]
+							modified=True
+						else:
+							item_dict[term]= fieldname + item_dict[e]
+							modified=True
+					else:
+						return item_dict[e]
+				else:
+					return e
+		else:
+			if term in item_dict:
+				return item_dict[term]
+		
+		if get_value:
+			if modified:
+				return item_dict[term]
+			else:
+				if type=="list":
+					return []
+				elif type=="bool":
+					return False
+				else:
+					return ""
+		
+		else:
+			return False
+		
+		
 				
 				
 	def OLD_load_tree(self,legacy_id):
@@ -420,15 +872,17 @@ equest	def export(self, counter, from_term):
 		"""
 		retrieves the information from all titles, scopenAndContent and date fields, helpful for predicting
 		"""
-		content_str=""
-		if 'arrangement' in item_dict:
-			content_str+=item_dict['arrangement']+"; "
-		if 'title' in item_dict:
-			content_str+=item_dict['title']+"; "
-		if 'scopeAndContent' in item_dict:
-			content_str+=item_dict['scopeAndContent']+"; "
+		return self._map('arrangement',item_dict,True) + "; " + self._map('title',item_dict,True) + "; " + self._map('scopeAndContent',item_dict,True) 
+		
+		#content_str=""
+		#if 'arrangement' in item_dict:
+			#content_str+=item_dict['arrangement']+"; "
+		#if 'title' in item_dict:
+			#content_str+=item_dict['title']+"; "
+		#if 'scopeAndContent' in item_dict:
+			#content_str+=item_dict['scopeAndContent']+"; "
 		#print ("Content String" , content_str)
-		return content_str
+		#return content_str
 			
 	
 
@@ -524,7 +978,7 @@ equest	def export(self, counter, from_term):
 			print(e)
 		"""
 			
-	def _search_generator(self,search_term):
+	def _search_generator(self,search_term, facet,timespan,kwargs):
 		"""
 		lookup for search results in DDB using the search terms from DataManager
 
@@ -540,13 +994,14 @@ equest	def export(self, counter, from_term):
 			while number_of_results> number_of_docs:
 			
 				d=[]
-				r=self.get('','search','','json','"'+search_term[0]+'"',number_of_docs)
+				r=self.get('','search','','json','"'+search_term[0]+'"',number_of_docs, facet, timespan,kwargs)
 				#print ("r:",r)
 				if 'results' in r:
 					results.extend(r['results'][0]['docs'])
 					number_of_results=int(r['numberOfResults'])
 					number_of_docs+=int(r['results'][0]['numberOfDocs'])
 				else:
+					
 					return []
 				
 				MAX_RETRIEVAL=200
@@ -668,7 +1123,7 @@ equest	def export(self, counter, from_term):
 			return in_all
 		
 
-	def get(self,item_id, method='items', subtype='aip', accept='json', query='', offset=0 ):
+	def get(self,item_id, method='items', subtype='aip', accept='json', query='', offset=0 , facet="", timespan=True, kwargs={}):
 		try:
 			
 			data={}
@@ -676,25 +1131,102 @@ equest	def export(self, counter, from_term):
 			service_url=method + '/' + item_id + '/' +subtype +'?'
 			if method=="search":
 				service_url=method + "?"
-				data['query']=query+" AND (begin_time:[684832 TO 701267] OR end_time:[684832 TO 701267]) AND sector:sec_01"
+				#data['query']=query+" AND (begin_time:[684832 TO 701267] OR end_time:[684832 TO 701267]) AND sector:sec_01"
+				if timespan:
+					data['query']=query+" AND (begin_time:[684832 TO 701267] OR end_time:[684832 TO 701267])"
+				else:
+					data['query']=query
+				if 'provider' in kwargs:
+					data['_']=kwargs['provider']
+				if 'identifier' in kwargs:
+					data['query']='apd_reference_number:("'+query+'")'
+				if 'htype' in kwargs:
+					data['query']+=' AND apd_level_of_description:("'+kwargs['htype']+'")'
 				data['sort']='ALPHA_ASC'
 				data['row']=1000
 				data['offset']=offset
 				#data['facet']="sector_fct"
 				#data['sector_fct']="sec_01"
+				if facet!="":
+					tmp=facet.split("=")
+					#fct=urllib.parse.quote_plus("facetValues[]")+"="+tmp[0]+"="+urllib.parse.quote_plus(tmp[1])
+					data['facet']=tmp[0]
+					data[tmp[0]]=tmp[1]
+					#data['query']+=" AND "+tmp[0]+":"+tmp[1]
+					#print(facet)
+					#print(tmp[0])
+					#print(tmp[1])
+					#fct='&facet='+tmp[0]+"&"+tmp[0]+"="+tmp[1]
+					
+				else:
+					fct=""
 				
 				
 			url_values = urllib.parse.urlencode(data)
-			full_url=self.base_url+service_url+url_values
 			
+			#full_url=self.base_url+service_url+url_values+fct
+			full_url=self.base_url+service_url+url_values
 			
 			print(full_url)
 			if accept=='json':
 				
-				r= urllib.request.urlopen(full_url, timeout=30).read().decode("utf-8")
+				r= urllib.request.urlopen(full_url, timeout=60).read().decode("utf-8")
 				if item_id+"|"+method not in self.REQUESTED:
 					self.REQUESTED.append(item_id+"|"+method)
-				return json.loads(r)
+				d= json.loads(r)
+				if 'results' in d :
+					count_results=len(d['results'][0]['docs'])
+					print ("RESULTS : " , count_results) 
+					if count_results==0:
+						self.nofounds+=query + "\n"
+					#stop=input("PAUSE...")
+					if not('nopost' in kwargs) and count_results==0 and offset==0:   # we'll now try to search the ID via the html interface
+						empty_result={
+											"numberOfResults": 0,
+											"results": [{
+												"name": "single",
+												"docs": [],
+												"numberOfDocs": 0
+											}],
+											"facets": [],
+											"entities": [],
+											"fulltexts": [],
+											"correctedQuery": "",
+											"highlightedTerms": [],
+											"randomSeed": ""
+										}
+						data={}
+						url=self.BASE_URL_FRONTEND+"searchresults?"
+						data['query']=query
+						data['isThumbnailFiltered']=False
+						data['offset']=0
+						data['rows']=10000
+						if facet!="":
+							data['facetValues[]']=facet
+						data = urllib.parse.urlencode(data)
+						print (url+data)
+						the_page= urllib.request.urlopen(url+data, timeout=60).read().decode("utf-8")
+						if the_page:
+							tree=html.fromstring(the_page)
+							print(len(the_page))
+							r=tree.xpath('//div[@class="col-sm-12"]//a/@href')
+							if r:
+								d=empty_result
+								r_new=[]
+								for e in r:
+									ddbid=e[6:38]
+									if not (ddbid in r_new) and ddbid==ddbid.upper():
+										d['results'][0]['docs'].append({'id':ddbid})
+										
+									
+								return d.copy()
+							else:
+								return empty_result
+						else:
+							return empty_result
+					
+				#return json.loads(r)
+				return d
 			if accept=="xml":
 				r= urllib.request.urlopen(full_url).read().decode("utf-8")
 				#d = xmltodict.parse(r)
@@ -704,6 +1236,11 @@ equest	def export(self, counter, from_term):
 		except Exception as e:
 			self.dm.store_out_files()
 			print('Error! Code: {c}, Message, {m}'.format(c = type(e).__name__, m = str(e)))
+			
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+			print(exc_type, fname, exc_tb.tb_lineno)
+			
 			return []
 
 			
@@ -734,7 +1271,7 @@ equest	def export(self, counter, from_term):
 		
 	def _get_content(self,result, item="", with_children=False, with_parents=False, review=False):
 		"""
-		retrieves recursivly the content of an item and store them into a AtoM ready dict
+		iterates recursivly trough the content of an item and store them into a AtoM ready dict
 		
 		Parameters:
 		result: the raw DDB dict
@@ -742,8 +1279,16 @@ equest	def export(self, counter, from_term):
 		
 		"""
 		d={}
+		#print("result -> " , result)
 		for e in self._get_key_value(result, ""):
-			d={**e,**d}
+			#print("===================",e)
+			for k,v in e.items():
+				if k in d:
+					d[k]+="|"+v
+				else:
+					d={**e,**d}
+		
+		#print("d -> " , d)
 		
 		if 'languageNote' in d:
 			d['language']=self._get_iso_639_1(d['languageNote'])
@@ -754,6 +1299,9 @@ equest	def export(self, counter, from_term):
 			d['eventEndDates']=self.dm.build_eventDates(d['eventDates'])[1]
 		else:
 			d['eventStartDates']=""
+		
+	
+
 		
 		return d.copy()
 	
@@ -800,6 +1348,56 @@ equest	def export(self, counter, from_term):
 			#yield from self._get_key_value(j,k_label)
 
 	def _get_key_value(self,j, k_label=""):
+		#print (type(j))
+		if isinstance(j,list):
+			if all(isinstance(x, str) for x in j):
+				yield {self._get_label(k_label):"|".join(j)}
+			else:
+				for e in j:
+					if isinstance(e,dict):
+						if '@id' in e: 
+							k_label=e['@id']
+						for k,v in e.items():
+							if isinstance(v,list) or isinstance(v,dict):
+								yield from self._get_key_value(v, k_label)
+							else:
+								if k=="value":
+									yield {self._get_label(k_label):v}
+					elif isinstance(e,list):
+						if all(isinstance(x, str) for x in e):
+							yield {self._get_label(k_label):"|".join(e)}
+						else:
+							yield from self._get_key_value(v, k_label)
+					else:
+						yield {self._get_label(k_label):e}
+								
+		elif isinstance(j,dict):
+			if '@id' in j: 
+				k_label=j['@id']
+			for k,v in j.items():	
+				#print (" ", type(v))
+				if isinstance(v,list):
+					if all(isinstance(x, str) for x in v):
+						yield {self._get_label(k_label):"|".join(v)}
+					else:				
+					
+						yield from self._get_key_value(v,k_label)
+				elif isinstance(v,dict):
+					yield from self._get_key_value(v,k_label)
+				else:
+					if k=="value":
+						yield {self._get_label(k_label):v}
+					else:
+						yield {self._get_label(k):v}
+		else:
+			print("simple value")
+			
+			yield {k_label:j}
+			yield from _get_key_value(j,k_label)
+
+
+
+	def OLD_get_key_value(self,j, k_label=""):
 		#print (type(j))
 		if isinstance(j,list):
 			if all(isinstance(x, str) for x in j):
@@ -907,7 +1505,7 @@ equest	def export(self, counter, from_term):
 			
 		if with_children:
 			self.get_children(d['_original_id'], d['repository'])
-		if d['eventStartDates']<'1946':
+		if d['eventStartDates']<str(g.SEARCH_TO+1):
 			return d.copy()
 		else:
 			return 'Not old enough'
@@ -1014,6 +1612,11 @@ equest	def export(self, counter, from_term):
 					item_dict['language']=g.CULTURE
 					item_dict['levelOfDescription']=self.dm._get_level_of_description(match['type'])
 					item_dict['repository']=repository
+					if 'generalNote' in item_dict:
+						item_dict['generalNote']+='|{{Data Source}} "Deutsche Digitale Bibliothek":https://www.deutsche-digitale-bibliothek.de/item/'+item_dict['legacyId']
+					else:
+						item_dict['generalNote']='{{Data Source}} "Deutsche Digitale Bibliothek":https://www.deutsche-digitale-bibliothek.de/item/'+item_dict['legacyId']
+	
 					if match['parent']:
 						item_dict['parentId']=match['parent']
 					else:

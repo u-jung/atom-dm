@@ -21,16 +21,28 @@
 #  MA 02110-1301, USA.
 #  
 #  
-
+import os
+import urllib
+import json
+import sys
+import time
+import re
+import pprint
+import xmltodict
+from lxml import html
+from atom.main import data_manager, g
+from atom.config import api_keys
+from atom.helpers.helper import fileOps, listOps, stringOps, osOps, funcOps
+fo = fileOps()
 
 class Kalliope(object):
 	
 	base_url="http://kalliope-verbund.info/sru"
-	dm=DataManager()
-	BLOCKED_FILE="kal/blocked.txt"       # list of items which should not be retrieved
+	dm=data_manager.DataManager()
+	BLOCKED_FILE="../data/blocked.txt"       # list of items which should not be retrieved
 	BLOCKED=[]
 	AUTHORITIES=[]
-	AUTHORITIES_FILE="kal/authorities.json"
+	AUTHORITIES_FILE="../data/authorities.json"
 	
 	
 	IGNORE_INSTITUTIONS=[]
@@ -59,16 +71,19 @@ class Kalliope(object):
 		
 
 
-	def export(self, counter, from_term):
+	def export(self, **kwargs):
 			"""
 			retrieves data from the German www.deutsche-digitale-bibliothek.de.
 			Sends them back to DataManager in batches of {counter} size
 			"""
+			counter=kwargs['counter']
+			from_term=kwargs['from_term']
 			export_item_family=[]
 			export_list=[]
 			self.open_authorities()
 			self._open_blocked()
-			for search_term in 	self.dm.search_term_generator(from_term,True):
+			print(kwargs)
+			for search_term in 	self.dm.search_term_generator(**kwargs):
 				print(search_term)
 				#self._open_blocked()
 				for match in self._search_generator(search_term[0]):
@@ -138,10 +153,10 @@ class Kalliope(object):
 		d={}
 		pprint.pprint(match)
 		#match=match['srw:recordData']['mods']
-		for fieldname in self.dm.ARCHIVAL_DESCRIPTIONS_FIELDS:
+		for fieldname in g.ARCHIVAL_DESCRIPTIONS_FIELDS:
 			d[fieldname]=""
-		d['culture']=CULTURE
-		d['levelOfDescription']="Class"
+		d['culture']=g.CULTURE
+		d['levelOfDescription']="Gliederung"
 		
 		d['legacyId']=match['identifier']['#text'][match['identifier']['#text'].rfind("/")+1:]
 		d['descriptionIdentifier']=d['legacyId']
@@ -157,11 +172,11 @@ class Kalliope(object):
 		if '@manuscript' in match['typeOfResource']:
 			if match['typeOfResource']['@manuscript']=="yes":
 				d['physicalCharacteristics']+="|Manuscript"
-				d['levelOfDescription']="File"
+				d['levelOfDescription']="Objekt"
 		if '@collection' in match['typeOfResource']:
 			if match['typeOfResource']['@collection']=="yes":
 				d['physicalCharacteristics']+="|Collection"
-				d['levelOfDescription']="Fonds"
+				d['levelOfDescription']="Sammlung"
 		if 	'languageOfCataloging' in match['recordInfo']:
 			if isinstance(match['recordInfo']['languageOfCataloging'],dict):
 				language= match['recordInfo']['languageOfCataloging']['languageTerm']
@@ -171,8 +186,8 @@ class Kalliope(object):
 				if '@type' in lang_term:
 					d['languageNote']=lang_term['#text']
 				if	'@authority' in lang_term:
-					if lang_term['#text'] in self.dm.LANGUAGES:
-						d['language']=self.dm.LANGUAGES[lang_term['#text']]
+					if lang_term['#text'] in g.LANGUAGES:
+						d['language']=g.LANGUAGES[lang_term['#text']]
 						d['culture']=d['language']
 		if 'abstract' in match:
 			if isinstance(match['abstract'],str):

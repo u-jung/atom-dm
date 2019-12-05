@@ -3,7 +3,7 @@
 #
 #  atom.py
 #  
-#  Copyright 2017 FH Potsdam FB Informationswissenschaften PR Kolonialismus <kol@fhp-kol-1>
+#  Copyright 2017 FH Potsdam FB Informationswissenschaften PR Kolonialismus projekt-kolonialzeit@fh-potsdam.de>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,6 @@
 #  
 # 
 
-
-
-
-
-
 """
 Handles the import of data into the candidate database from external sources as well of their export to AtoM csv.
 
@@ -43,107 +38,198 @@ External sources could be:
 
 import sys
 import platform
-
 import logging
 import subprocess
-import pexpect
+#import pexpect
 import pathlib
 import logging
-import pycurl
-import xmltodict 
+#import pycurl
+#import xmltodict 
 import os
 import time
-
 from datetime import datetime
-
 import operator
-import glob
-
+#import glob
 from collections import Counter
-
 import xml.etree.ElementTree as ET
 from slugify import slugify
-
 from atom.main import g, data_manager
-from atom.helpers import ai, linguistic, location,deepl
+from atom.helpers import  linguistic, location,deepl,helper
+fuo = helper.funcOps()
 
 
 def main(args):
 	
-	print (args)
+
+	d_args={"ops":[]}
+	#print (args)
+	last_key="ops"
+	for arg in args:
+		kv=arg.split("=")
+		if len(kv)==2:
+			a=kv[1].split(",")
+			d_args[kv[0].replace("-","_")]=kv[1] if len(a)==1 else a
+			if kv[1].lower()=="false":
+				d_args[kv[0].replace("-","_")]=False
+			if kv[1].lower()=="true":
+				d_args[kv[0].replace("-","_")]=True			
+			
+			last_key=kv[0].replace("-","_")
+		else:
+			if kv[0][0:1]=="-":
+				d_args["ops"].append(kv[0])
+			else:
+				a=kv[0].split(",")
+				if isinstance(d_args[last_key],list):
+					if len(a)>1:
+						d_args[last_key].extend(a)
+					else:
+						d_args[last_key].append(a[0])
+				else:
+					d_args[last_key]+=" " + a[0]
+					
+	
+	default_args={"timespan":True, 'predict':True,'predefined':[]}
+	d_args=fuo.get_args(d_args,default_args)
+		
+	print (d_args)		
+			
+	
 	err=0
 	if len(args)>1:
-		if args[1] in ("--import", "-i"):
-			if len(args)>2:
+		
+		if  "-i" in d_args["ops"]:
+			if 'source' in d_args:
 				dm=data_manager.DataManager()				
-				if args[2]=="ddb":
-					dm.imports("DDB","archival_description","","",True,"".join(args[3:4]))
-				if args[2] in ("fbn","FBN"):
-					predefined=[]
-					if len(args)>5:
-						if args[5].lower() in ("true", "predefined"):
-							predefined=g.PREDEFINED_SEARCH_TERMS
-					print(predefined)
-					dm.imports("FBN","archival_description","","",True,"","",args[3],args[4],predefined)
-				elif args[2]=="kal":
-					dm.imports("KAL")
-				elif args[2]=="eadxml":
-					#./atom-dm -i eadxml {import file} 
-					if len(args)>3 and os.path.isfile(args[3]):
-						if len(args)>4:
-							source_str=args[4]
-						else:
-							source_str=""
-						dm.imports("EADXML","archival_description",args[3],"","","",source_str)
-					else:
-						print("file not found")
+				if d_args['source'].lower() in ("ddb","fbn","kal","eadxml","ddbhtml","ape","nad","sca"):
+					dm.imports(**d_args)
+				else: 
+					print ("unknown import source")
+
 			else:
 				err=1
-		elif args[1] in ("--maintainance", "-m"):
-			if len(args)>2:
-				if args[2] == "publish":
+		elif "-h" in d_args['ops']:
+			f=open("README.md","r")
+			helptext=f.read()
+			f.close()
+			print(helptext)
+			
+		elif   "-m" in d_args["ops"]:
+			if 'action' in d_args:
+				if d_args['action'] =="create-sitemap":
+					dm=data_manager.DataManager()
+					dm.create_sitemaps()
+				if d_args['action'] == "publish":
 					dm=data_manager.DataManager()
 					dm.publish()
-				if args[2] in ("join-tmp-csv","join_tmp_csv"):
+				if d_args['action'] =="save-database":
+					os=helper.stringOps()
+					pass
+				if d_args['action'] =="create-location-index":
+					print("creating location index")
+					loc=location.Location()
+					loc.create_location_index()
+				if d_args['action']=="make-arrangements":
+					dm=data_manager.DataManager()
+					repository=""
+					if 'repository' in d_args:
+						repository=int(d_args['repository'])
+					dm.fill_repository_id()
+					dm.create_arrangements(repository)
+					
+				if d_args['action'] =="join-tmp-csv":
 					dm=data_manager.DataManager()
 					dm.join_csv()
-				if args[2] in ("reduce-csv"):
+				if d_args['action']=="fill-repository-id":
+					dm=data_manager.DataManager()
+					dm.fill_repository_id()						
+				if d_args['action'] =="reduce-csv":
 					dm=data_manager.DataManager()
 					dm.reduce_csv(True)	
-				if args[2] in ("merge-csv"):
+				if d_args['action'] =="sort-import":
+					dm=data_manager.DataManager()
+					dm.sort_import()
+				if d_args['action'] =="merge-csv":
 					dm=data_manager.DataManager()
 					dm.merge_csv(args[3],args[4])					
-				if args[2] in ("update-access-points-list"):
+				if d_args['action'] =="update-access-points-list":
 					ap=data_manager.access_points()
 					ap.update_access_points_list()
-				if args[2] in ("normalize-name-access-points"):
+				if d_args['action'] =="normalize-name-access-points":
 					ap=data_manager.access_points()
 					ap.normalize_name_access_points()	
-				if args[2] in ("normalize-other-access-points"):
+				if d_args['action'] =="add-wd-identifier2actor":
+					ap=data_manager.access_points()
+					ap.add_wd_identifier2actor()
+				if d_args['action'] =="add-wd-identifier2term":
+					ap=data_manager.access_points()
+					ap.add_wd_identifier2term()
+				if d_args['action'] =="normalize-other-access-points":
 					ap=data_manager.access_points()
 					ap.normalize_other_access_points()		
-				if args[2] in ("find-name-access-points"):
+				if d_args['action'] =="find-name-access-points":
 					ap=data_manager.access_points()
 					ap.find_name_access_points(True)
-				if args[2] in ("find-other-access-points"):#old
+				if d_args['action'] =="find-other-access-points":#old
 					ap=data_manager.access_points()
 					ap.find_other_access_points(True)	
-				if args[2] in ("translate-information-objects"):
-					tr=deepl.deepl()
-					if args[3] in ("en","EN"):
-						tr.translate_information_objects("EN")
-					if args[3] in ("fr","FR"):
-						tr.translate_information_objects("FR")					
-									
-				if args[2] in ("find-access-points-in-atom", "find-ap"):
+				if d_args['action'] == "add-other-names":
 					ap=data_manager.access_points()
-					if args[3] in ("Wikidata", "wd","WD"):
+					ap.add_other_names()
+				if d_args['action'] =="translate-information-objects":
+					tr=deepl.deepl()
+					if d_args['lang'] in ("en","EN"):
+						tr.translate_information_objects("EN")
+					if d_args['lang'] in ("fr","FR"):
+						tr.translate_information_objects("FR")	
+				if d_args['action'] == 'change-taxonomy':
+					taxonomy_from=int(d_args['from'])
+					taxonomy_to=int(d_args['to'])
+					ap=data_manager.access_points()
+					ap.change_taxonomy(taxonomy_from, taxonomy_to)				
+				
+				if d_args['action'] =="add-creator":
+					object_slug=d_args['oslug']
+					actor_slug=d_args['aslug']
+					dm=data_manager.DataManager()
+					dm.add_creator(object_slug,actor_slug)
+				if 	d_args['action'] =="replace":			
+					dm=data_manager.DataManager()	
+					search_term=input("search term ? ")
+					replace_term=input ('replace_term ? ')	
+
+					culture=input('culture ? ').lower()
+					if culture=="":
+						culture="de"
+					fields=input('fields in information_object_i18n to search for (separated by comma) ? \n (Just Enter for "title, scope_and_content,archival_history)": ')
+					if input("ignore case ? y/(n) ") in ( "yes","Yes","y","Y"):
+						ignore_case=True
+					else:
+						ignore_case=False
+					if input("words only ? y/(n) ")  in ( "yes","Yes","y","Y"):
+						words_only=True
+					else:
+						words_only=False	
+					q="So, you want to replace occurencies of '"+search_term+"' by '" + replace_term +"' in culture='"+culture+"' ?  y/(n)"
+					if input(q) not in ("yYjJ"):
+						sys.exit() 
+					print ("\n\n\nPLEASE MAKE SURE YOU HAVE A BACKUP COPY OF YOUR DATABASE!\n\n\n")
+					dm.replace(	search_term,replace_term,culture,fields, words_only,ignore_case)	
+				if d_args['action'] =="find-access-points-in-atom":
+					ap=data_manager.access_points()
+					if 'last_revision' in d_args:
+						last_revision=d_args['last_revision']
+					else:
+						last_revision=""		
+					print("lr",last_revision)	
+					if d_args['type'] in ("Wikidata", "wd","WD"):
 						print("open Wikidata corpus")
 						dm=data_manager.DataManager()
-						ap.find_access_points_in_atom("wd",args[4] or "")	
+
+						ap.find_access_points_in_atom("wd",last_revision)	
 					else:
 						print ("open AtoM corpus")
-						ap.find_access_points_in_atom("atom",args[4] or "")
+						ap.find_access_points_in_atom("atom",last_revision)
 					print ("normalize access points")
 					ap.normalize_name_access_points()
 					print ('normalize other access_points')
@@ -152,10 +238,18 @@ def main(args):
 					print ('clean up lower relations')
 					ap.clean_lower_relations()
 					ap.rebuild_nested()
-				if args[2] in ("index-wd-keywords","index-wd-corpus"):
+				if d_args['action'] =="index-wd-keywords":
+					
 					dm=data_manager.DataManager()
 					dm._index_keywords()									
+				if d_args['action'] =="create-keyword-list":
+					dm=data_manager.DataManager()
+					dm.create_keyword_list()									
 					
+		elif d_args['action']=="build-eventDates":
+			dm=data_manager.DataManager()
+			print("testing: build_EventDates")
+			print(dm.build_eventDates(d_args['param']))
 		elif args[1] in ('--create_access_points', "-a"):
 			pass
 		elif args[1] in ("--location", "-p"):
@@ -215,7 +309,7 @@ def main(args):
 				if args[2] =="test":
 					ki.testing()
 				if args[2] =="predict":
-					
+					from atom.helpers import ai
 					if len(args)>4:
 						print(ki.predict(args[3]))
 		elif args[1] in ("--help", "-h"):
@@ -225,7 +319,7 @@ def main(args):
 	if err==0:
 		return 0
 	else:
-		print ("Not enough arguments. See ./atomdm -h or --help for more information")
+		print ("Not enough arguments. See ./atom-dm -h or --help for more information")
 		return 1
 
 

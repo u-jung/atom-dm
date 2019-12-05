@@ -83,7 +83,7 @@ class fileOps(object):
 		
 	
 		
-	def load_data_once(self,data_var,source_file,data_type=None):
+	def load_data_once(self,data_var,source_file,data_type=None, list_output=False):
 		"""
 		Opens a file and returns a text or a json. The returned data_type will be determinated by the file name or the list_output parameter.
 		Before opening the file, this method checks if the target object is empty and need to be filled
@@ -223,8 +223,24 @@ class stringOps(object):
 	LQGQ="<>"
 	STRICHE="–-"
 	
+	ABBREVIATIONS_FILE='atom/data/abbreviations.json'
+	ABBREVIATIONS={}
 	def __init__(self):
 		pass
+	
+
+	
+	def open_abbreviations(self):
+		if len(self.ABBREVIATIONS.keys())==0:
+			fo=fileOps()
+			self.ABBREVIATIONS=fo.load_data(self.ABBREVIATIONS_FILE,"json","true")
+			
+	def decode_abbreviation(self,abbreviation):
+		self.open_abbreviations()
+		if abbreviation in self.ABBREVIATIONS:
+			return self.ABBREVIATIONS[abbreviation]
+		else:
+			return abbreviation
 		
 	def replaceChars(self,text,string_of_chars,replace_to):
 		"""
@@ -237,13 +253,25 @@ class stringOps(object):
 	
 	
 	def escapeQuotes(self,text):
-		text=self.replaceChars(text,'"','\\"')
-		text=self.replaceChars(text,"'","\\'")
-		return text
+		if text is None:
+			return ""
+		ret=""
+		for c in enumerate(text):
+			if c[1] in ("'",'"'):
+				if c[0]>0:
+					if text[c[0]-1][0]!='\\':
+						ret+="\\" + c[1]
+					else:
+						ret+=c[1]
+			else:
+				ret+=c[1]
+		return ret
 		
 	def dedupSpaces(self,text):
-		while text.find("  ")>-1:
-			text=text.replace("  "," ")
+		if isinstance(text,str):
+			text = re.sub(r'\s+', ' ',  text) 
+		#while text.find("  ")>-1:
+			#text=text.replace("  "," ")
 		return text
 	
 	def stripHtml(self, text,replacment=""):
@@ -269,14 +297,31 @@ class stringOps(object):
 	def clean_text_re(self,item):
 		item=self.replaceChars(item,",;!:°%§"," ")
 		item=self.replaceChars(item,self.STRICHE," ")
+		item=self.replaceChars(item,"[\(|\)|\{|\}]"," ")
 		item=self.dedupSpaces(item)
 		item=item.lower()
 		return item
+	
+	def iscapitalzed(self,text):
+		iscapitalized=True
+		for c in text:
+			if text.index(c)==0:
+				if not c.isupper():
+					iscapitalized=False
+			if c==" ":
+				if text.index(c)<len(text-2):
+					if not text[text.index(c)+1].isupper():
+						iscapitalized=False
+		return iscapitalized
+				
 
 class osOps(object):
+
 		
 		def __init__(self):
 			pass
+	
+
 	
 		def sudo_exec(self,cmdline, passwd):
 			"""
@@ -312,4 +357,19 @@ class osOps(object):
 					dcount+=1
 					os.rmdir(os.path.join(root,d))
 			return (dcount,fcount)
+			
+
+			
+		
+
+class funcOps(object):
+		def __init__(self):
+			pass
+		
+		def get_args(self, kwargs, args):
+			for k,v in args.items():
+				if not(k in kwargs):
+					kwargs[k]=args[k]
+			return kwargs.copy()
+
 

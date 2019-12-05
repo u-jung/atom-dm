@@ -51,6 +51,8 @@ class Findbuch():
 	"""
 	
 	RESULTS_DICT={}
+	#A cookie is necessary to retrieve data from findbuch net
+	PHP_SESSION_COOKIE ='PHPSESSID=7a4e30473e1c95d49da240a1332365cf'
 	
 	MAX_RESULTS=200
 	ARCHIVE_URL=""
@@ -64,20 +66,20 @@ class Findbuch():
 					}
 	
 	FIELD_MAPPING={
-	"title":['Titel', 'Band', "Dokumenttitel", "Inhalt","Angabe des Objekts"],
-	"scopeAndContent":['Enthält', "Darin", 'Verweis', "Beschreibung","Enthält auch", 'Enthält', 'Personenindex',"Institutionenindex"],
-	"eventDates":["Dat. => Findbuch", "Datierung","Datierung von","Datierung bis","Dat. - Findbuch"],
-	"extendAndMedium":['Umfang',"Format / Umfang", "Medium","Maßstab"],
+	"title":['Titel', 'Band', "Dokumenttitel", "Inhalt","Angabe des Objekts", "Bildtitel"],
+	"scopeAndContent":['Enthält', "Darin", 'Verweis', "Beschreibung","Enthält auch", 'Enthält', 'Personenindex',"Institutionenindex","Bemerkung/Enthält"],
+	"eventDates":["Dat. => Findbuch", "Datierung","Datierung von","Datierung bis","Dat. - Findbuch", "Laufzeit"],
+	"extendAndMedium":['Umfang',"Format / Umfang", "Medium","Maßstab","Größe","Umfang/Bl.","Format"],
 	'relatedUnitsOfDescription':['Quelle'],
 	'findingAids':['findingAids'],
 	"repository":[],
 	"eventActors":[],
-	"physicalCharacteristics":['Erhaltung', 'Fototyp', 'Dokumenttyp',  "Dokumentart", "Format"],
+	"physicalCharacteristics":['Erhaltung', 'Fototyp', 'Dokumenttyp',  "Dokumentart", "Format","Bildtyp","Material","Aufnahmeart","Erhaltung"],
 	"script":[],
 	"languageNote":[],
-	"generalNote":["Abbruchdatum","Vermerk","Originalbeschriftung","Straßenumbenennung","Sicherung","Provenienz","Provenienz/Quelle","Edition", "Entnommen", "Reservefeld", "Verzeichnungsprotokoll","Bemerkungen","Bemerkung", "Bereich"],
-	"identifier":["l. Num."],
-	"alternativeIdentifiers":["alte Archiv-Sign.", "Spruchakte", "l. Num.", "Signatur", "PADUA", "alte Archiv-Sign."],   #always accompagned by d['alternativeIdentifierLabels']='Former call number'
+	"generalNote":["Provenienz","Abbruchdatum","Vermerk","Originalbeschriftung","Straßenumbenennung","Sicherung","Provenienz","Provenienz/Quelle","Edition", "Entnommen", "Reservefeld", "Verzeichnungsprotokoll","Bemerkungen","Bemerkung", "Bereich","Akzession","Verlag"],
+	"identifier":["l. Num.","Signatur"],
+	"alternativeIdentifiers":["Feldhaus-Bildnr.","Alte Bildnummer","Repro in der Einheit","alte Archiv-Sign.", "Spruchakte", "l. Num.", "Signatur", "PADUA", "alte Archiv-Sign.","Überlieferter Abzug in der Einheit", "Nummer der CD"],   #always accompagned by d['alternativeIdentifierLabels']='Former call number'
 	"relatedUnitsOfDescription":["Microfilm/-fiche", "Digital?"],
 	"archivalHistory":["Überlieferungsgeschichte"],
 	"accessConditions":["Rechte", "gesperrt bis","gesperrt für","Besondere Sperrfrist"],
@@ -85,10 +87,11 @@ class Findbuch():
 	"language":[],
 	"locationOfOriginals":[],
 	"locationOfCopies":[],
-	"publicationNote":[],
-	"subjectAccessPoints":["Sachindex"],
-	"placeAccessPoints":["Land", "Gerichtsort 1","Gerichtsort 2", "Handlungsort 1", "Handlungsort 2"],
-	"nameAccessPoints":["Fotograf/Autor","Fotograf / Verlag","Personenindex"],
+	"publicationNote":["Dateiname","Repro (Fotograf/Jahr)"],
+	"subjectAccessPoints":["Sachindex","Sachschlagworte","Sachschlagwort"],
+	"placeAccessPoints":["Land", "Gerichtsort 1","Gerichtsort 2", "Handlungsort 1", "Handlungsort 2","Geo-Schlagwort","Geograph Schlagwort","Geographische Schlagwort","Erscheinungsort"],
+	"nameAccessPoints":["Fotograf/Autor","Fotograf / Verlag","Personenindex","Körperschaften","Personen","Körperschaft","Person"],
+	"genreAccessPoints":["Ausführungsart","Formalschlagworte","Formalschlagwort"]
 	}
 	
 	PREFIXES =(
@@ -128,23 +131,74 @@ class Findbuch():
 	"Bemerkung",
 	"Enthält auch",
 	"Digital?",
-	"Bereich"
+	"Bereich",
+	"Formalschlagworte",
+	"Formalschlagwort",
+	"Körperschaften",
+	"Personen",
+	"Körperschaft",
+	"Person",
+	"Datierung von",
+	"Datierung bis",
+	"Dat. - Findbuch", 
+	"Laufzeit"
 	)
 	
-	def __init__(self,archive_url,archive_id):
+	def __init__(self,archive_url,archive_id, session=""):
 		self.ARCHIVE_URL=archive_url
 		self.ARCHIVE_ID=archive_id
-		
+		if session!="":
+			if session[0:3]=="PHP":
+				self.PHP_SESSION_COOKIE=session
+			else:
+				self.PHP_SESSION_COOKIE="PHPSESSID="+session
 	
 	
-	def export(self, counter, from_term,predefined=[]):
+	def export(self,**kwargs):
 		"""
 		retrieves data from the German from {archive}.findbuch.net.
 		Sends them back to DataManager in batches of {counter} size
 		"""
+		if 'from_term' in kwargs:
+			from_term=kwargs['from_term']  
+		else: 
+			from_term =""
+			
+		if 'predefined' in kwargs:
+			predefined=kwargs['predefined']  
+		else: 
+			predefined=[]
+		
 		export_list=[]
+		if 'method' in kwargs and kwargs['method']=="list":
+			for k in g.KLASSEN:
+				d={'legacyId':self.ARCHIVE_ID+"_"+k[1],
+					'parent_id':self.ARCHIVE_ID,
+					'culture':g.CULTURE,
+					'levelOfDescription':"Gliederung",
+					'title':k[2]}
+				export_list.append(d.copy())
+			for k in g.KLASSEN:
+				#id_list=self.retrieve_id_list(kwargs['fonds_id'])
+				id_list=self.retrieve_id_list(k[0],k[1])
+				##id_list=fo.load_data("/tmp/id_list.json","json")
+				#fo.save_data(id_list,"/tmp/id_list.json")
+
+				for e in id_list:
+					#print(e)
+					d=self.get("","props",e[3:],"File")
+					match=self.map_props(d)
+					match['legacyId']=self.ARCHIVE_ID+"_"+e
+					match['parentId']=self.ARCHIVE_ID+"_"+k[1]
+					del match['props']
+					print(match)
+					export_list.append(match.copy())
+					print(len(export_list))
+			yield export_list.copy()
+			return
 		not_to_retrieve=['ferienkolonie','gartenkolonie','wohnkolonie', 'künstlerkolonie', 'villenkolonie','arbeiterkolonie']
-		for term in dm.search_term_generator(from_term,True,False,True,predefined):
+		#for term in dm.search_term_generator(from_term,True,False,True,predefined):
+		for term in dm.search_term_generator(**kwargs):
 			search_term=term[0]
 			for match in self._search_generator(search_term):
 				#print (export_list)
@@ -255,8 +309,56 @@ class Findbuch():
 							
 							
 			
+
+	def map_props(self,d):
+		match={}
+		match['props']=d.copy()
+		for k,v in match['props'].items():
+			if k in self.PREFIXES:
+				prefix=k+": "
+			else:
+				prefix=""
+			for field_k, field_v in self.FIELD_MAPPING.items():
+				if k in field_v:
+					if field_k in match:
+						match[field_k]+=" | "+prefix + v 
+					else:
+						match[field_k]=prefix + v
+		match['language']="de"
+		match['languageNote']="deutsch"
+		
+		#match['repository']=match['top'][0]
+		match['culture']="de"
+		match['languageOfDescription']="de"
+
+		if 'eventDates' in match:
+			match['eventStartDates']= dm.build_eventDates(match['eventDates'])[0]
+			match['eventEndDates']= dm.build_eventDates(match['eventDates'])[1]
+		if 'reproductionConditions' in match:
+			match['reproductionConditions']+=" | Das Recht zur Weiternutzung der Dokumente unterliegt den Bestimmungen des Archivs. Sie ist gegebenenfalls nur nach Zustimmung des Archivs gestattet."
+		else:
+			match['reproductionConditions']="Das Recht zur Weiternutzung der Dokumente unterliegt den Bestimmungen des Archivs. Sie ist gegebenenfalls nur nach Zustimmung des Archivs gestattet."
+
+		if not ('title' in match):
+			match['title']=match['top'][len(match['top'])-1]
+		return match.copy()
 			 
+	def retrieve_id_list(self,fonds_id,class_id=""):
+		id_list=[]
+		last=""
+		offset=0
+		while True:
 			
+			r=self.get("", 'list', "", "", fonds_id, offset, class_id)
+			offset+=20
+			print(len(r),r[-1:])
+			if r[-1:]==last or len(r)==0:
+				break
+			else:
+				last=r[-1:]
+				id_list.extend(r)
+		
+		return id_list.copy()		
 	
 	def _search_generator(self,search_term):
 		r=self.get(search_term,"search")
@@ -298,7 +400,25 @@ class Findbuch():
 
 		
 	
-	def get(self, search_term, method='search', fb_id="", level_of_description=""):
+	def get(self, search_term, method='search', fb_id="", level_of_description="", fonds_id="", offset="",class_id=""):
+
+		if method=='list':
+			if class_id=="":
+				kind="b"
+				kind_id=fonds_id[3:]
+			else:
+				kind="k"
+				kind_id=class_id[2:]
+			url="https://www."+self.ARCHIVE_URL+"."+self.BASE_URL + "middle.php?ar_id="+str(self.ARCHIVE_ID)+"&kind="+kind+"&id="+str(kind_id)+"&be_id="+str(fonds_id[3:])+"&pag2="+str(offset)+"&source=rechter"
+			print(url)
+			the_page= urllib.request.urlopen(url, timeout=30).read().decode("utf-8")
+			if the_page:
+				the_page=the_page.replace("<b></b>","<b>Archiv</b>")
+				tree=html.fromstring(the_page)
+				e=tree.xpath('//tr/@id')
+				return e	
+			else:
+				print("no page")		
 
 		if method=='top':
 			url="https://www."+self.ARCHIVE_URL+"."+self.BASE_URL + "top.php?ar_id="+str(self.ARCHIVE_ID)+"&kind="+self.CONVERTED_LEVEL[level_of_description]+"&id="+str(fb_id)+"&source=rech"
@@ -356,7 +476,7 @@ class Findbuch():
 			data={}
 			headers = {}
 			headers['Content-Type'] = 'application/x-www-form-urlencoded'
-			headers['Cookie']='PHPSESSID=56570757349f28e903a9ce6894a474a5'
+			headers['Cookie']=self.PHP_SESSION_COOKIE
 			#headers['Cookie']='PHPSESSID='
 			url="https://www."+self.ARCHIVE_URL+"."+self.BASE_URL + "rech.php?rech_start=yes"
 			data['words']=search_term

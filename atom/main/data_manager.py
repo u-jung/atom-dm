@@ -3,7 +3,7 @@
 #
 #  data_manager.py
 #  
-#  Copyright 2018 FH Potsdam FB Informationswissenschaften PR Kolonialismus <kol@fhp-kol-1>
+#  Copyright 2018 FH Potsdam FB Informationswissenschaften PR Kolonialismus <projekt-kolonialzeit@fh-potsdam.de>
 #  
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -24,44 +24,28 @@
 import urllib.parse, urllib.request, urllib
 from slugify import slugify
 from elasticsearch import Elasticsearch
-import json, csv, os, MySQLdb, re, time, pathlib, pprint, requests, shutil, getpass, sys
+import json, csv, os, MySQLdb, re, time, pathlib, pprint, requests, shutil, getpass, sys, gzip
 from datetime import datetime
 from atom.config import mysql_opts
 from atom.main import g
-from atom.helpers.helper import fileOps, listOps, stringOps, osOps
+from atom.helpers.helper import fileOps, listOps, stringOps, osOps, funcOps
 fo = fileOps()
 lo = listOps()
 so = stringOps()
 oo = osOps()
+fuo = funcOps()
 
 class DataManager(object):
 	"""
 	Core class of atom.py.
 	
 	Does manage:
-	- The import from external source into the candidates index of elastic search.
+	- The import from external sources 
 	- Evaluation of imported records and relevance check.
 	- Import of confirmed records into AtoM database
 	- Some management tasks of AtoM
 			
 	"""
-	
-	WD_ENTITY_QUERY='SELECT DISTINCT ?item where{\
-				{optional{?item wdt:P17/wdt:P279* wd:Q329618 .}} \
-				union \
-				{optional{?item wdt:P2541/(wdt:P131|wdt:P279) wd:Q329618 .}}\
-				union{ optional{?item wdt:P131/wdt:P279* wd:Q329618 .}} \
-				union{ optional{?item wdt:P361/wdt:P279* wd:Q329618 .}}\
-				union{ optional{?item wdt:P2650/wdt:P279* wd:Q329618 .}}\
-				union{ optional{?item wdt:P937/(wdt:P131|wdt:P279)* wd:Q329618 .}}\
-                }\
-				order by ?item'
-	
-	indexstore = 'candidates'
-	max_results = 200000
-	jump_fonds = [
-	 'BArch R 1001', 'BArch R 1002', 'BArch R 1003', 'BArch R 8023', 'BArch R 8024', 'BArch R 1003', 'BArch R 8124', 'BArch RW 51', 'BArch RH 88', 'BArch RW 51']
-	
 	
 	KEYWORDS_FILE = 'atom/data/keywords.json'
 	KILLERS_FILE = 'atom/data/killers.txt'
@@ -77,23 +61,8 @@ class DataManager(object):
 	TMP_OUT_FILE = 'search_history/tmp_out.txt'
 	DEF_OUT_FILE = 'search_history/def_out.txt'
 	INSTITUTIONS_FILE = 'atom/data/institutions.json'
+	AP_CONCORDANCE_FILE = 'atom/data/ap_concordance.json'
 	COUNTER = 0
-	LANGUAGES = {'ger': 'de', 
-	 'eng': 'en', 
-	 'fre': 'fr', 
-	 'spa': 'es', 
-	 'prt': 'pt', 
-	 'rus': 'ru', 
-	 'jpn': 'jp', 
-	 'zho': 'zh', 
-	 'ita': 'it', 
-	 'dan': 'dk', 
-	 'swe': 'sw', 
-	 'nld': 'nl', 
-	 'pol': 'pl', 
-	 'ara': 'ar', 
-	 'tur': 'tk'}
-	BASE_URL = 'http://vm.atom/'
 	KEYWORDS = []
 	STOPWORDS = []
 	FREQUENT_NAMES = []
@@ -105,131 +74,30 @@ class DataManager(object):
 	LEGACY_IDS = []
 	TMP_OUT = []
 	DEF_OUT = []
-	COORPORATE_DIFFENCES = ['zu', 'von', 'ag', 'a.g.', 'g.m.b.h', 'gmbh', 'd.k.g', 'dkg', 'ohg',
-	 'mbh', 'm.b.h', 'kg', 'k.g.']
-	ARCHIVAL_DESCRIPTIONS_FIELDS = [
-	 'prediction',
-	 'out',
-	 'keywordInfo',
-	 'legacyId',
-	 'parentId',
-	 'title',
-	 'levelOfDescription',
-	 'repository',
-	 'scopeAndContent',
-	 'subjectAccessPoints',
-	 'placeAccessPoints',
-	 'nameAccessPoints',
-	 'genreAccessPoints',
-	 'eventDates',
-	 'eventTypes',
-	 'eventStartDates',
-	 'eventEndDates',
-	 'eventDescriptions',
-	 'qubitParentSlug',
-	 'identifier',
-	 'accessionNumber',
-	 'extentAndMedium',
-	 'archivalHistory',
-	 'acquisition',
-	 'appraisal',
-	 'accruals',
-	 'arrangement',
-	 'accessConditions',
-	 'reproductionConditions',
-	 'language',
-	 'script',
-	 'languageNote',
-	 'physicalCharacteristics',
-	 'findingAids',
-	 'locationOfOriginals',
-	 'locationOfCopies',
-	 'relatedUnitsOfDescription',
-	 'publicationNote',
-	 'digitalObjectURI',
-	 'generalNote',
-	 'descriptionIdentifier',
-	 'institutionIdentifier',
-	 'rules',
-	 'descriptionStatus',
-	 'levelOfDetail',
-	 'revisionHistory',
-	 'languageOfDescription',
-	 'scriptOfDescription',
-	 'sources',
-	 'archivistNote',
-	 'publicationStatus',
-	 'physicalObjectName',
-	 'physicalObjectLocation',
-	 'physicalObjectType',
-	 'alternativeIdentifiers',
-	 'alternativeIdentifierLabels',
-	 'eventActors',
-	 'eventActorHistories',
-	 'eventPlaces',
-	 'culture',
-	 'status']
 	WD_API_ENDPOINT = 'https://www.wikidata.org/w/api.php'
 	WD_SPARQL_ENDPOINT = 'https://query.wikidata.org/sparql'
 	MYSQL_CONNECTION = None
-	LIMIT_FROM = 1850
-	LIMIT_TO = 1946
-	LEVELS_OF_DESCRIPTION = {'htype_001': 'Section', 
-	 'htype_002': 'Appendix', 
-	 'htype_003': 'Contained work', 
-	 'htype_004': 'Annotation', 
-	 'htype_005': 'Address', 
-	 'htype_006': 'Article', 
-	 'htype_007': 'Volume', 
-	 'htype_008': 'Additional', 
-	 'htype_009': 'Intro', 
-	 'htype_010': 'Entry', 
-	 'htype_011': 'Fascicle', 
-	 'htype_012': 'Fragment', 
-	 'htype_013': 'Manuscript', 
-	 'htype_014': 'Issue', 
-	 'htype_015': 'Illustration', 
-	 'htype_016': 'Index', 
-	 'htype_017': 'Table of contents', 
-	 'htype_018': 'Chapter', 
-	 'htype_019': 'Map', 
-	 'htype_020': 'Multivolume work', 
-	 'htype_021': 'Monograph', 
-	 'htype_022': 'Music', 
-	 'htype_023': 'Serial', 
-	 'htype_024': 'Privilege', 
-	 'htype_025': 'Review', 
-	 'htype_026': 'Text', 
-	 'htype_027': 'Verse', 
-	 'htype_028': 'Preface', 
-	 'htype_029': 'Dedication', 
-	 'htype_030': 'Fonds', 
-	 'htype_031': 'Class', 
-	 'htype_032': 'Series', 
-	 'htype_033': 'Subseries', 
-	 'htype_034': 'File', 
-	 'htype_035': 'Item', 
-	 'htype_036': 'Collection', 
-	 'htype_037': '?', 
-	 'htype_038': '?', 
-	 'htype_039': '?', 
-	 'tektonik_collection': 'Tektonik_collection', 
-	 'repository': 'Collection', 
-	 'institution': 'Institution'}
-	ATOM_LOD_FONDS = 227
-	ATOM_LOD_SUBFONDS = 228
-	ATOM_LOD_COLLECTION = 229
-	ATOM_LOD_SERIES = 230
-	ATOM_LOD_SUBSERIES = 231
-	ATOM_LOD_FILE = 232
-	ATOM_LOD_ITEM = 233
-	ATOM_LOD_PART = 290
-	RECURSIVE_LOOP_COUNTER=0
+
+	 
+	#ATOM_LOD_FONDS = 227
+	#ATOM_LOD_SUBFONDS = 228
+	#ATOM_LOD_COLLECTION = 229
+	#ATOM_LOD_SERIES = 230
+	#ATOM_LOD_SUBSERIES = 231
+	#ATOM_LOD_FILE = 232
+	#ATOM_LOD_ITEM = 233
+	#ATOM_LOD_PART = 290
+	
+	#useful during hierarchy_sort, prevents stack overflow
+	RECURSIVE_LOOP_COUNTER=0   
 	RECURSIVE_LOOP_MAX=1000
+	
+	DUMMY_LIST=[]
 
 	def __init__(self, debug=False):
 		self.es = Elasticsearch()
 		self._open_keywords()
+		
 		if not debug:
 			log = None
 		self.MYSQL_CONNECTION = MySQLdb.connect(mysql_opts.mysql_opts['host'], mysql_opts.mysql_opts['user'], mysql_opts.mysql_opts['pass'], mysql_opts.mysql_opts['db'], use_unicode=True, charset='utf8')
@@ -238,12 +106,20 @@ class DataManager(object):
 		pass
 
 	def _open_current_description_identifiers(self):
+		"""
+		opens a list of information descriptions which are alreaday in use.
+		"""
 		if os.path.isfile(self.CURRENT_DESCRIPTION_IDENTIFIERS_FILE):
-			self.CURRENT_DESCRIPTION_IDENTIFIERS = fo.load_once(self.CURRENT_DESCRIPTION_IDENTIFIERS, self.CURRENT_DESCRIPTION_IDENTIFIERS_FILE)
+			self.CURRENT_DESCRIPTION_IDENTIFIERS = fo.load_data_once(self.CURRENT_DESCRIPTION_IDENTIFIERS, self.CURRENT_DESCRIPTION_IDENTIFIERS_FILE)
+			a=input(self.CURRENT_DESCRIPTION_IDENTIFIERS)
 		else:
-			self.CURRENT_DESCRIPTION_IDENTIFIERS=""
+			self.CURRENT_DESCRIPTION_IDENTIFIERS=[]
 
 	def _open_keywords(self):
+		"""
+		opens a json file which contains keywords from the Wikidata corpus.
+		The list can be indexed via self.index_keywords()
+		"""
 		self.KEYWORDS = fo.load_once(self.KEYWORDS, self.KEYWORDS_FILE)
 
 	def _open_institutions(self):
@@ -301,6 +177,7 @@ class DataManager(object):
 	def build_upper_levels(self,l,institution_id,field):
 		"""
 		creates a field in each dict of list with seperate records building upper hierarchy levels
+		OBSOLETE ?
 		"""
 		
 		if l is None:
@@ -394,7 +271,6 @@ class DataManager(object):
 			else:
 				if e['levelOfDescription'] not in ('File', ):
 					new.append(e)
-
 		return new.copy()
 
 
@@ -404,7 +280,6 @@ class DataManager(object):
 		l is a list of tuples where e[0]=id and e[1] = parent_id from atom.information_object
 		"""
 		e=next((x for x in l if x[0]==parent_id),False)
-		#print(return_value)
 		if e:
 			parent_id=e[1] if len(e)>1  else False
 			if parent_id :
@@ -416,10 +291,16 @@ class DataManager(object):
 			return return_value.copy()
 		return return_value.copy()	
 
-		
+	def sort_import(self):
+		"""
+		sorts an import.csv file respectiong the hierarchy
+		"""
+		l = fo.load_data(self.TMP_RESULTS_PATH + 'import.csv')
+		l=self.hierarchy_sort(l)[0]
+		self.write_csv(l, self.TMP_RESULTS_PATH + 'import.csv', 'archival_description')
 		
 
-	def reduce_csv(self, x=False, add_keyword=True, add_access_points=True):
+	def reduce_csv(self, x=False, add_keyword=True, add_access_points=True, timespan=True):
 		"""
 		iterates once again the csv after manual inspection
 		eleminates the marked items (and all children) and writes them into the self.DEF_OUT
@@ -431,12 +312,9 @@ class DataManager(object):
 		new = []
 		out = []
 		incertain = []
+		ap=access_points()
 		print('Reducing ', self.TMP_RESULTS_PATH + 'import.csv\n')
-
-		#print([(x['out'],x['legacyId'],x['parentId']) for x in l])	
-		#q=input("-----------------")		
-		
-		# check for manually confirmed (those parents and children wil also marked with ".")
+		# check for manually confirmed (those parents and children will also be 	marked with ".")
 		for i in range(0,len(l)):
 			e=l[i]
 			sys.stdout.write("\033[F")
@@ -479,7 +357,7 @@ class DataManager(object):
 					e['eventStartDates']=""
 				if not('eventEndDates' in e and e['eventEndDates']!=""):
 					e['eventEndDates']=""			
-			if not self._is_in_time(e['eventStartDates'], e['eventEndDates']):
+			if timespan and not self._is_in_time(e['eventStartDates'], e['eventEndDates']):
 				if e['levelOfDescription'] == 'File':
 					if 'out' in e and e['out']==".":
 						pass
@@ -488,6 +366,9 @@ class DataManager(object):
 						self.RECURSIVE_LOOP_COUNTER=0
 						l = self._write_to_children(l, e['legacyId'], 'out', 'x')
 						self.add_def_out(e['legacyId'])	
+						
+		
+		
 		
 		print("outdates marked \n")
 		#print([(x['out'],x['legacyId'],x['parentId']) for x in l])	
@@ -495,11 +376,8 @@ class DataManager(object):
 		
 		# check for dead end (all above "File" whitout a File child will be marked out="-"
 		
-		l = self._find_dead_ends(l)			
-				
-				
-				
-				
+		##l = self._find_dead_ends(l)			
+	
 		x_id=[x for x in l if x['out']=="x"]
 		p_id=[x for x in l if x['out']=="."]
 		l_id=[x for x in l if x['out']==" " or not 'out' in x ]
@@ -514,43 +392,110 @@ class DataManager(object):
 			else:
 				self.add_def_out(e['legacyId'])
 
+
+		print("import normalized access points \n")
+		#new_ap=ap.get_new_access_points(l)
+		
+		ap_concordance= fo.load_data(self.AP_CONCORDANCE_FILE, "json")
+		print(ap_concordance)
+		stop=input("stop")
+		if add_access_points:
+			ap_concordance.extend(ap.load_access_points_to_concordance())
+			tmp=list(set([tuple(x) for x in ap_concordance]))
+			ap_concordance=list([list(xx) for xx in tmp ])
+			shortcuts={"e":"eventActors","g":"genreAccessPoints","s":"subjectAccessPoints", 
+										"n":"nameAccessPoints", "p":"placeAccessPoints"}
+			
+			for e in new:
+				tmp={}
+				new_tmp={"eventActors":[],"genreAccessPoints":[],"subjectAccessPoints":[], "nameAccessPoints":[], "placeAccessPoints":[]}
+				new_ap_out={"eventActors":[],"genreAccessPoints":[],"subjectAccessPoints":[], "nameAccessPoints":[], "placeAccessPoints":[]}
+				for k in new_tmp.keys():
+					if k in e:
+						tmp[k]=e[k].split("|")
+				if tmp!={}:		
+					for k in tmp.keys():
+						for ee in tmp[k]:
+							t_list= next((x for x in ap_concordance if x[1].strip()==ee.strip()),False)	
+							if not t_list:
+								os.system('clear')
+								print(ee , " is unknown. What could it be?\n--------------------------")
+								m=re.search("\(|\[|\{|\<",ee)
+								if m:
+									default=ee[0:m.end()-1].strip()
+								else:
+									default=ee
+								a= input("?["+ee+"]:") or ee
+								if a=="q":
+									continue
+								else:
+									v=[k,ee,a.strip()]
+									a= input("?["+k+"]:") or k
+									if a=="q":
+										continue
+									else:
+										if a.strip()=="":
+											a=k
+										if a.lower() in shortcuts.keys():
+											a=shortcuts[a.lower()]
+										v[0]=a
+										ap_concordance.append(v.copy())
+										new_tmp[v[0]].append(v[2])
+										new_ap_out[v[0]].append(v[2])
+							else:
+								if t_list[0]!=k and not((t_list[0] and k) in ("eventActors","nameAccessPoints")) and t_list[1]!="":
+									print(t_list[1] , " is ", k, ". True?")
+									a= input("better ?["+t_list[0]+"]:") or t_list[0]
+									if a=="q":
+										continue
+									else:
+										if a.lower() in shortcuts.keys():
+											a=shortcuts[a.lower()]
+									t_list[0]=a
+								new_tmp[t_list[0]].append(t_list[2])
+				for k in new_tmp.keys():
+					if len(new_tmp[k])>0:
+						e[k]="|".join(new_tmp[k])					
+					
+			fo.save_data(ap_concordance,self.AP_CONCORDANCE_FILE)			
+		#stop=input("stop")
 		if add_access_points:
 			new = self._add_access_points(new, True)
 		self.write_csv(new, self.TMP_RESULTS_PATH + 'import.csv', 'archival_description')
 		self.write_csv(l, self.TMP_RESULTS_PATH + 'import_old_modified.csv', 'archival_description')
 		self._post_import(new, '', True, add_keyword)
+		if add_access_points:
+			for k in new_ap_out.keys():
+				print(",".join(list(set(new_ap_out[k]))))
+		
 
 	def _find_dead_ends(self, l):
 		"""
 		marks non file items without children as out='-'
 		"""
 		for e in l:
-			if e['levelOfDescription'] != 'File' and e['out'] == '':
+			if not (e['levelOfDescription'] in g.PHYSICAL_OBJECT_LEVELS) and e['out'] == '':
 				if not next((x for x in l if x['parentId'] == e['legacyId'] and x['out']!="x"), False):
 					e['out'] = '-'
 					l = self._write_to_parents(l, e['legacyId'], 'out', '-')
-
 		return l.copy()
 
 	def _write_to_children(self, l, legacyId, field, value):
 		"""
 		Writes a value into a field in each direct and indirect child of a given item
 		"""
-		#print(legacyId," : ", end='')
 		self.RECURSIVE_LOOP_COUNTER+=1
 		if self.RECURSIVE_LOOP_COUNTER>self.RECURSIVE_LOOP_MAX:
 			raise ValueError('More than '+str(self.RECURSIVE_LOOP_MAX)+' level of children from parent', legacyId)
-		#print(type(l), " - ", legacyId)
 		for item in (x for x in l if x['parentId'] == legacyId):
 			if item :
 				item[field] = value
 				l = self._write_to_children(l, item['legacyId'], field, value)
-
 		return l.copy()
 
 	def _write_to_parents(self, l, legacyId, field, value):
 		"""
-		writes a value into field of all parents of legacyId
+		writes a value into a field of all parents of legacyId
 		"""
 		self.RECURSIVE_LOOP_COUNTER+=1
 		if self.RECURSIVE_LOOP_COUNTER>self.RECURSIVE_LOOP_MAX:
@@ -573,26 +518,13 @@ class DataManager(object):
 		else:
 			return l.copy()
 		return l.copy()
-		"""
-		if item:
-			if item[field] != '':
-				if value == '.':
-					l = self._write_to_parents(l, item['parentId'], field, value)
-				else:
-					return l.copy()
-			else:
-				item[field] = value
-				l = self._write_to_parents(l, item['parentId'], field, value)
-		else:
-			return l.copy()
-		return l.copy()
-		"""
+
 	def get_from_atom(self, item):
 		"""
 		retrieves all information concerning a specific information_object from atom using AtoM's id
 		returns a dict representing an csv entry
 		Parameters:
-		item : the AtoM id of the informtion_object
+		item : the AtoM id of the information_object
 		"""
 		d = {}
 		fields_str = 'extent_and_medium,archival_history,acquisition,scope_and_content,appraisal,accruals,arrangement,access_conditions,reproduction_conditions,physical_characteristics,finding_aids,location_of_originals,location_of_copies, related_units_of_description,rules,sources,revision_history,culture,identifier,level_of_description_id, repository_id ,parent_id ,description_identifier,title,institution_responsible_identifier'
@@ -604,8 +536,6 @@ class DataManager(object):
 			for e in r:
 				d[re.sub('_([a-z])', lambda m: m.group(1).upper(), fields[i])] = e
 				i += 1
-
-		print(d)
 		if 'levelOfDescription' in d:
 			query = 'select name from term_i18n where id=' + str(d['levelOfDescriptionId']) + ';'
 			r = self.get_mysql(query, True)
@@ -696,7 +626,6 @@ class DataManager(object):
 						m = re.search('"([^"]*)"', line[2])
 						if m:
 							scriptOfDescription.append(m.group(1))
-
 			d['languageOfDescription'] = ('|').join(languageOfDescription)
 			d['scriptOfDescription'] = ('|').join(scriptOfDescription)
 			d['alternativeIdentifiers'] = ('|').join(alternativeIdentifiers)
@@ -716,7 +645,6 @@ class DataManager(object):
 					subjectAccessPoints.append(line[1])
 				if line[0] == 'Genre':
 					genreAccessPoints.append(line[1])
-
 			d['subjectAccessPoints'] = ('|').join(subjectAccessPoints)
 			d['placeAccessPoints'] = ('|').join(placeAccessPoints)
 			d['genreAccessPoints'] = ('|').join(genreAccessPoints)
@@ -726,7 +654,6 @@ class DataManager(object):
 			nameAccessPoints = []
 			for line in r:
 				nameAccessPoints.append(line[0])
-
 			d['nameAccessPoints'] = ('|').join(nameAccessPoints)
 		query = 'select  date,start_date,end_date, description from event e join event_i18n ei on e.id=ei.id where e.type_id=111 and e.object_id=' + item + ' ;'
 		r = self.get_mysql(query, True)
@@ -743,14 +670,12 @@ class DataManager(object):
 			rr = r = self.get_mysql(query, True)
 			if rr:
 				d['eventTypes'] = rr[0]
-		print(d)
 
-	def _has_child_file(self, l, legyacId):
-		"""
-		"""
-		pass
 
 	def _add_keyword_info(self, l):
+		"""
+		Creates a new field 'keywordInfo' in each list element which contain information on predicted keywords
+		"""
 		i = 0
 		for e in l:
 			if 'keywordInfo' not in e:
@@ -760,12 +685,11 @@ class DataManager(object):
 					e['keywordInfo'] = self.predict_item(e['title'], e['scopeAndContent'], False, False, True)
 			print(i, ' of ', len(l))
 			i += 1
-
 		return l.copy()
 
 	def _get_entities(self, from_file=False):
 		"""
-		retrieves all related wikidata items from wikidata
+		retrieves all related items of the corpus from wikidata based on the central g.WD_ENTITY_QUERY
 		"""
 		entities = []
 		if from_file:
@@ -775,13 +699,13 @@ class DataManager(object):
 					return entities
 				file.close()
 		else:
-			query=self.WD_ENTITY_QUERY
+			query=g.WD_ENTITY_QUERY
 			l = self._get_from_WDQ(query)
 			if len(l['results']['bindings']) > 0:
 				for line in l['results']['bindings']:
 					entities.append(self._short_entity(line['item']['value']))
 
-			entities.append('Q329618')
+			entities.append(g.WD_CORPUS_ROOT_ELEMENT)
 			return entities
 
 	def _index_keywords(self):
@@ -791,16 +715,12 @@ class DataManager(object):
 		keyword = {}
 		self._open_keywords()
 		entities = self._get_entities(False)
-		#print(entities[0:10] , len(self.KEYWORDS))
-		#a=input(len(entities))
 		i = len(entities)
 		j = 0
 		counter={"created":0,"modified":0,"not modified":0,"entities":0, "empty":[]}
 		for entity in entities:
 			counter['entities']+=1
-			
-			print ("Eintitiy: ", entity, end=" : ")
-			#print('[[ ', i, ' ]]')
+			print ("Entitiy: ", entity, end=" : ")
 			i -= 1
 			j += 1
 			if j == 1000:
@@ -808,31 +728,16 @@ class DataManager(object):
 				j = 0
 				print('stored')
 			keyword.clear()
-			query='SELECT DISTINCT ?item (group_concat(?i;separator="|")  as ?instances)  \
-				(group_concat(?d;separator="|")  as ?description)  \
-				(group_concat(?short;separator="|")  as ?shortLabel)  \
-				(group_concat(?de;separator="|")  as ?label_de) \
-				(group_concat(?itemLabel;separator="|")  as ?Label)  \
-				(group_concat(?itemAltLabel;separator="|")  as ?altLabel) \
-				WHERE {\
-				  bind(wd:'+entity+' as ?item).\
-					   ?item wdt:P31 ?i.\
-					optional{?item rdfs:label ?itemLabel .}\
-				  optional{?item schema:description ?d.  FILTER (lang(?d) = "de" )}\
-				  optional {?item wdt:P1813 ?short.}\
-				  optional{?item skos:altLabel ?itemAltLabel .}\
-				  FILTER (lang(?itemLabel) = "de" || lang(?itemLabel) = "en" || lang(?itemLabel) = "fr" ).\
-				  bind(if(lang(?itemLabel)="de",?itemLabel,"") as ?de).}\
-				  group by ?item '				
+			query=g.WD_RETRIEVE_LABELS_QUERY.replace("#1#",entity)
 			l = self._get_from_WDQ(query)
 			e=next((x for x in self.KEYWORDS if x['item'] == entity.strip()), None)
-			#print("exist?", e)
 			if  e is None:
 				print(entity, " is unknown")
 				if len(l['results']['bindings']) > 0:
-					#print(".. and it has some values.")
 					keyword['item'] = entity
 					keyword['label_de'] = self._get_uniq(l['results']['bindings'][0]['label_de']['value'])[0]
+					keyword['label_en'] = self._get_uniq(l['results']['bindings'][0]['label_en']['value'])[0]
+					keyword['label_fr'] = self._get_uniq(l['results']['bindings'][0]['label_fr']['value'])[0]					
 					keyword['description'] = self._get_uniq(l['results']['bindings'][0]['description']['value'])[0]
 					keyword['label_clean'] = self._clean_label(keyword['label_de'])
 					instances = self._get_uniq(l['results']['bindings'][0]['instances']['value'])
@@ -855,7 +760,6 @@ class DataManager(object):
 						 'limit': 50, 
 						 'format': 'json'}
 						url = self.WD_API_ENDPOINT + '?' + urllib.parse.urlencode(params)
-						#print(url)
 						headers = {}
 						headers['accept'] = 'application/sparql-results+json'
 						req = urllib.request.Request(url, None, headers)
@@ -873,11 +777,21 @@ class DataManager(object):
 			else:
 				if len(l['results']['bindings']) > 0:
 					modified=False
-					label_de= self._get_uniq(l['results']['bindings'][0]['label_de']['value'])[0]
-					if label_de!=e['label_de'] and label_de!='':
-						modified=True
-						e['label_de']=label_de
-						e['label_clean']=self._clean_label(label_de)
+					label={}
+					for lang in ("de","fr","en"):
+						if 'label_'+lang in l['results']['bindings'][0]:
+							label[lang]= self._get_uniq(l['results']['bindings'][0]['label_'+lang]['value'])[0]
+							if 'label_'+lang in e:
+								if label[lang]!=e['label_'+lang] and label[lang]!='':
+									modified=True
+									e['label_'+lang]=label[lang]
+									if lang=="de":
+										e['label_clean']=self._clean_label(label[lang])
+							else:
+								modified=True
+								e['label_'+lang]=label[lang]
+								if lang=="de":
+									e['label_clean']=self._clean_label(label[lang])
 					description=self._get_uniq(l['results']['bindings'][0]['description']['value'])[0]
 					if description!=e['description']:
 						modified=True
@@ -903,10 +817,7 @@ class DataManager(object):
 						print("    ", e['label_de'], " not modified")
 						counter['not modified']+=1
 				else:
-					#print(entity, l)
 					counter['empty'].append(entity)
-					
-			
 		self._store_objects()
 		self._generate_identic_clean_labels()
 		print(counter)
@@ -919,30 +830,22 @@ class DataManager(object):
 		for keyword in self.KEYWORDS:
 			s = keyword['label_clean']
 			keyword['identic_clean_labels'] = sum((1 for d in self.KEYWORDS if d.get('label_clean') == s))
-
 		self._store_objects()
 
 	def predict_item(self,item_str, hierarchy_str="", show_stats=False, authority_data=False, return_related_keywords=False):
 		"""
 		it's the main process to determinate, if an item belongs to the theme or not.
 		Returns a score between -1 and 1 where score = 1 means, that the item fits perfectly.
-		
+	
 		Parameters:
 		- item_str : the string to analyse. It should be composed as a concat of title and scope_and_content
-		- hierarchy_str : a string which contains all the title and scope_and_content information of parent items
+		- hierarchy_str : a string which contains all the title and scope_and_content information of parent items 
 		- show_stats : wheater or not showing the log of the analysis
 		- authority_data : True if a list of retrieved search_terms should be returned
+		- return_related_keywords : True if the related keywords should be returned instead of simple boolean
 		"""
-		profession_switcher={
-			"BEAMTER":["beamter","richter","jurist","verwalter", "assessor","schriftste","regierung", "gouverneur","leiter","zoll"],
-			"MILITAER":["offizier","kommandeur","milit", "hauptmann", "leutnant","major", "ober"],
-			"MISSIONAR":["angehöerig", "mission", "theolog"],
-			"ANGESTELLTER":["heizer", "maurer","schlosser","angestellte", "hilfe","schreiber", "zeichner"],
-			"UNTERNEHMER":["unternehmer","kaufmann","händler", "pionier"],
-			"MEDIZINER":["arzt", "mediziner", "bakterio"],
-			"WISSENSCHAFTLER":["geograph","reisende","geologe","ethnologe","wissenschaft", "backterio","forsch", "archäolog","biolog","zoolog", "ethnograph"]
-			}
-			
+		profession_switcher=g.PROFESSION_CLASSES
+		#weigthing the impact of instances	
 		instance_factors={
 			"Q486972":10,				#settlement
 			"Q5":10,						#human
@@ -960,11 +863,8 @@ class DataManager(object):
 			'Q483394':1,
 			'Q82550':5,
 			'Q2472587':40,
-
 			"Q":0					#other
 			}
-		
-		
 		item_str += hierarchy_str
 		result=[]
 		self._open_keywords()
@@ -975,25 +875,6 @@ class DataManager(object):
 		item_arr_str=" "+" ".join(item_arr)+" "
 		lower_hierarchy=hierarchy_str.lower()
 		hierarchy_arr=re.findall(r'\w+', lower_hierarchy)	
-			
-		#result["label_suffix_found"]=[]
-		#result['clean_label_found']=[] 
-		#result["search_terms_found"]=[]
-		#result['killers_found']=[]
-		#result['clean_label_suffix_found']=[]
-		# All the above fields are subdived by | as follows:
-		# class of finding|moon|earth (or clean label or label_de)|position (absolute or relative in case if moon exists)|frequency|wd item | instance (as wd item)
-		# class of findings:
-		# 0 - containts killer words
-		# 1 - clean label match (without suffix)
-		# 2 - clean label with suffix match
-		# 3 - name near family name
-		# 4 - label match
-		# 5 - label match with suffix near-by
-		
-		#print (item_arr)
-		#print (lower_item)
-	
 		killers=list(set(self.KILLERS).intersection(item_arr))
 		for killer in killers:
 			result.append("0||"+killer+"||||Q")
@@ -1006,17 +887,13 @@ class DataManager(object):
 			# full text search
 			for search_term in keyword['search_terms']:
 				search_term_word_count=len(re.findall("(\S+)", search_term))
-				
 				if len(search_term)>3:
 					if not (search_term_word_count==1 and self._get_instance(keyword)=="Q5"):
 						if item_arr_str.find(" "+search_term.lower().replace("-"," ")+" ")>-1:
 							result.append("4||"+search_term+"||"+str(keyword['frequency'])+"|"+keyword['item']+"|"+self._get_instance(keyword))
-						
-							#print("Found fulltext: ", search_term)				
 			if len(keyword['label_clean'])>3:
 				if item_arr_str.find(" "+keyword['label_clean'].lower()+" ")>-1:
 					result.append("1||"+keyword['label_clean']+"||"+str(keyword['frequency'])+"|"+keyword['item']+"|"+self._get_instance(keyword))
-					#print("Found clean label: ", keyword['label_clean'])
 			# check if human
 			if "Q5" in keyword['instances']:
 				stopped= keyword['label_de'].replace(keyword['label_clean'],'').strip(" ")
@@ -1025,7 +902,6 @@ class DataManager(object):
 					result.append("3|"+stopped+"|"+keyword['label_clean']+"|"+str(relative_position)+"|"+str(keyword['frequency'])+"|"+keyword['item']+"|Q5")
 				if keyword['label_clean']!="":
 					description=keyword["description"].lower()
-					
 					if self._is_noble(keyword):
 						professions.append("ADEL")
 					for k,v in profession_switcher.items():
@@ -1033,7 +909,6 @@ class DataManager(object):
 							if description.find(snippet)!=-1:
 								professions.append(k)
 					if len(professions)>0:
-						
 						for profession in professions:
 							for suffix in self.NAME_SUFFIXES[profession]:
 								if item_str.find(suffix.lower() + " " + keyword['label_clean'].lower())>-1:
@@ -1043,7 +918,6 @@ class DataManager(object):
 				# We'd like to have clean labels if they have only on word 
 				# e=" ".join(re.findall(r'^\w+$', keyword['label_clean']))
 				e=keyword['label_clean']
-				
 				if len(e)>3:
 					s=e.lower()
 					label_clean={}
@@ -1051,7 +925,6 @@ class DataManager(object):
 					if len(idx_list)>0:
 						label_clean=e+"|"+','.join(str(x) for x in idx_list)
 						result.append("1||"+label_clean+"|"+str(keyword['frequency'])+"|"+keyword['item']+"|"+self._get_instance(keyword))
-						#print ("Found: " , e)
 						if "Q5" in keyword['instances']:
 							for profession in professions:
 								for suffix in self.NAME_SUFFIXES[profession]:
@@ -1059,11 +932,6 @@ class DataManager(object):
 									if isinstance(relative_position,int):
 										#print("Found suffix", e,suffix)
 										result.append("2|"+suffix+"|"+e+"|"+str(relative_position)+"|"+str(keyword['frequency'])+"|"+keyword['item']+"|Q5")
-
-
-		#result['search_terms_found']=self._get_uniq(result['search_terms_found'])
-		#result['clean_label_found']=self._get_uniq(result['clean_label_found'])
-		#result['clean_label_suffix_found']=self._get_uniq(result['clean_label_suffix_found'])
 		result=self._get_uniq(result)
 		print(json.dumps(result, indent=2))						
 		last_object=""
@@ -1086,22 +954,18 @@ class DataManager(object):
 					score-=200
 				finding_class=best_class
 				i=-1
-				last_moon_earth=""
+				last_moon_earth=""    #moon and earth are two object turning each around the other
 				while finding_class==best_class:
 					i+=1
-
 					if(i==len(result)):
 						break
-					
 					lst=result[i].split("|")
-					#print (lst, len(lst))
 					if len(lst)==1:
 						score=0
 						break
 					finding_class=int(lst[0])
 					if finding_class!=best_class:
 						break
-
 					if last_moon_earth==lst[1]+" "+lst[2]:
 						continue
 					last_moon_earth=lst[1]+" "+lst[2]
@@ -1118,7 +982,6 @@ class DataManager(object):
 						frequency=int(lst[4])*-1
 					else:
 						frequency=-100
-
 					if lst[3]!="":
 						if lst[1]=="":
 							occ_arr=lst[3].split(",")
@@ -1130,15 +993,12 @@ class DataManager(object):
 					else:
 						position=0
 						occurance=0
-					
 					if lst[5]!=last_object:
 						object_count+=1
-					
 					if lst[6]!="":
 						instance_factor=instance_factors[lst[6]]
 					else:
 						instance_factor=1
-							
 					score+=frequency +occurance + position +earth + moon + (object_count * 30 * best_class)
 					print ("score+=frequency +occurance + position +earth+moon +object_count")
 					print (score,"|",frequency ,occurance , position ,earth,moon, object_count)
@@ -1147,8 +1007,6 @@ class DataManager(object):
 		else:
 			score=0
 		print("-------------------------------------")
-		
-		#print (item_str, score)
 		if authority_data:
 			r_list=[]
 			if len(result)>0:
@@ -1163,10 +1021,7 @@ class DataManager(object):
 										if (r['label_de'],self._get_access_point( lst[6])) not in r_list:
 											r_list.append((r['label_de'],self._get_access_point( lst[6])))
 			return r_list
-						
-		
 		elif return_related_keywords:
-			#print("related keywords")
 			releated_keywords=""			
 			for r in result:
 				lst=r.split("|")
@@ -1186,234 +1041,10 @@ class DataManager(object):
 				
 			return related_keywords
 		else:
-			if score >300:
+			if score > g.PREDICTION_THRESHOLD:
 				return True
 			else:
 				return False
-
-
-
-	def OLDpredict_item(self, item_str, hierarchy_str='', show_stats=False, authority_data=False, return_related_keywords=False):
-		"""
-		it's the main process to determinate, if an item belongs to the theme or not.
-		Returns a score between -1 and 1 where score = 1 means, that the item fits perfectly.
-		
-		Parameters:
-		- item_str : the string to analyse. It should be composed as a concat of title and scope_and_content
-		- hierarchy_str : a string which contains all the title and scope_and_content information of parent items
-		- show_stats : wheater or not showing the log of the analysis
-		- authority_data : True if a list of retrieved search_terms should be returned
-		"""
-		ap = access_points()
-		profession_switcher = {'BEAMTER': ['beamter', 'richter', 'jurist', 'verwalter', 'assessor', 'schriftste', 'regierung', 'gouverneur', 'leiter', 'zoll'], 
-		 'MILITAER': ['offizier', 'kommandeur', 'milit', 'hauptmann', 'leutnant', 'major', 'ober'], 
-		 'MISSIONAR': ['angehoerig', 'mission', 'theolog'], 
-		 'ANGESTELLTER': ['heizer', 'maurer', 'schlosser', 'angestellte', 'hilfe', 'schreiber', 'zeichner'], 
-		 'UNTERNEHMER': ['unternehmer', 'kaufmann', 'handler', 'pionier'], 
-		 'MEDIZINER': ['arzt', 'mediziner', 'bakterio'], 
-		 'WISSENSCHAFTLER': ['geograph', 'reisende', 'geologe', 'ethnologe', 'wissenschaft', 'backterio', 'forsch', 'archaolog', 'biolog', 'zoolog', 'ethnograph']}
-		
-		# estimated frequency of relevant occurrences in percent
-		instance_factors = {'Q486972': 10, 
-		 'Q5': 10, 
-		 'Q327333': 20, 
-		 'Q4830453': 20, 
-		 'Q20746389': 30, 
-		 'Q45295908': 30, 
-		 'Q133156': 100, 
-		 'Q15815670': 50, 
-		 'Q2472587':60,
-		 'Q': 0,
-		 'Q486972':30,
-		'Q2385804':30,
-		'Q48204':30,
-		'Q43229':30,
-		'Q618123':30,
-		'Q483394':1,
-		'Q82550':5,
-		 }
-		 
-
-
-		 
-		 
-		item_str += hierarchy_str
-		result = []
-		self._open_keywords()
-		self._open_killers()
-		self._open_names_suffixes()
-		lower_item = item_str.lower()
-		item_arr = re.findall('\\w+', lower_item)
-		item_arr_str = ' ' + (' ').join(item_arr) + ' '
-		lower_hierarchy = hierarchy_str.lower()
-		hierarchy_arr = re.findall('\\w+', lower_hierarchy)
-		killers = list(set(self.KILLERS).intersection(item_arr))
-		for killer in killers:
-			result.append('0||' + killer + '||||Q')
-
-		for keyword in self.KEYWORDS:
-			if self._blocked_by_description(keyword['description']):
-				continue
-			if 'frequency' not in keyword:
-				keyword['frequency'] = 50
-			professions = []
-			for search_term in keyword['search_terms']:
-				search_term_word_count = len(re.findall('(\\S+)', search_term))
-				if len(search_term) > 3:
-					if search_term_word_count == 1 and self._get_instance(keyword) == 'Q5' or item_arr_str.find(' ' + search_term.lower().replace('-', ' ') + ' ') > -1:
-						result.append('4||' + search_term + '||' + str(keyword['frequency']) + '|' + keyword['item'] + '|' + self._get_instance(keyword))
-
-			if len(keyword['label_clean']) > 3 and item_arr_str.find(' ' + keyword['label_clean'].lower() + ' ') > -1:
-				result.append('1||' + keyword['label_clean'] + '||' + str(keyword['frequency']) + '|' + keyword['item'] + '|' + self._get_instance(keyword))
-			if 'Q5' in keyword['instances']:
-				stopped = keyword['label_de'].replace(keyword['label_clean'], '').strip(' ')
-				relative_position = self._is_near(keyword['label_clean'], stopped, item_arr, [1, 1])
-				if isinstance(relative_position, int):
-					result.append('3|' + stopped + '|' + keyword['label_clean'] + '|' + str(relative_position) + '|' + str(keyword['frequency']) + '|' + keyword['item'] + '|Q5')
-				if keyword['label_clean'] != '':
-					description = keyword['description'].lower()
-					if self._is_noble(keyword):
-						professions.append('ADEL')
-					for k, v in profession_switcher.items():
-						for snippet in v:
-							if description.find(snippet) != -1:
-								professions.append(k)
-
-					if len(professions) > 0:
-						for profession in professions:
-							for suffix in self.NAME_SUFFIXES[profession]:
-								if item_str.find(suffix.lower() + ' ' + keyword['label_clean'].lower()) > -1:
-									result.append('5|' + suffix + '|' + keyword['label_clean'] + '||' + str(keyword['frequency']) + '|' + keyword['item'] + '|' + self._get_instance(keyword))
-
-			if keyword['label_clean'] != '':
-				e = keyword['label_clean']
-				if len(e) > 3:
-					s = e.lower()
-					label_clean = {}
-					idx_list = [i for i, x in enumerate(item_arr) if x == s]
-					if len(idx_list) > 0:
-						label_clean = e + '|' + (',').join((str(x) for x in idx_list))
-						result.append('1||' + label_clean + '|' + str(keyword['frequency']) + '|' + keyword['item'] + '|' + self._get_instance(keyword))
-						if 'Q5' in keyword['instances']:
-							for profession in professions:
-								for suffix in self.NAME_SUFFIXES[profession]:
-									relative_position = self._is_near(e, suffix, item_arr)
-									if isinstance(relative_position, int):
-										result.append('2|' + suffix + '|' + e + '|' + str(relative_position) + '|' + str(keyword['frequency']) + '|' + keyword['item'] + '|Q5')
-
-		result = self._get_uniq(result)
-		last_object = ''
-		object_count = 0
-		score = 0
-		related_keywords = ''
-		if len(result) > 0:
-			if result[0] != '':
-				bc = result[0][0:1]
-				if bc.isnumeric():
-					best_class = int(bc)
-				else:
-					best_class = 1
-				worst_class = int(result[len(result) - 1][0:1])
-				score = best_class * 100
-				if worst_class == 0:
-					score -= 200
-				finding_class = best_class
-				i = -1
-				last_moon_earth = ''
-				while finding_class == best_class:
-					i += 1
-					if i == len(result):
-						break
-					lst = result[i].split('|')
-					if len(lst) == 1:
-						score = 0
-						break
-					finding_class = int(lst[0])
-					if finding_class != best_class:
-						break
-					if last_moon_earth == lst[1] + ' ' + lst[2]:
-						continue
-					last_moon_earth = lst[1] + ' ' + lst[2]
-					if lst[1] != '':
-						moon = 25
-					else:
-						moon = 0
-					if lst[2] != '':
-						earth = len(re.findall('(\\S+)', lst[2])) * 5 + len(lst[2])
-					else:
-						score = 0
-						break
-					if lst[4] != '':
-						frequency = int(lst[4]) * -1
-					else:
-						frequency = -100
-					if lst[3] != '':
-						if lst[1] == '':
-							occ_arr = lst[3].split(',')
-							occurance = (len(item_arr) - int(occ_arr[0])) / len(item_arr) * 20
-							position = 0
-						else:
-							occurance = 0
-							position = (6 - abs(int(lst[3]))) * 4
-					else:
-						position = 0
-						occurance = 0
-					if lst[5] != last_object:
-						object_count += 1
-					if lst[6] != '':
-						instance_factor = instance_factors[lst[6]]
-					else:
-						instance_factor = 1
-					score += frequency + occurance + position + earth + moon + object_count * 30 * best_class
-					if show_stats:
-						print('score+=frequency +occurance + position +earth+moon +object_count')
-						print(score, '|', frequency, occurance, position, earth, moon, object_count)
-				else:
-					score = 0
-
-		else:
-			score = 0
-		print('-------------------------------------')
-		if authority_data:
-			r_list = []
-			if len(result) > 0 and result[0] != '':
-				for e in result:
-					lst = e.split('|')
-					if int(lst[0]) > 2:
-						r = next((item for item in self.KEYWORDS if item['item'] == lst[5]), False)
-						if r and 'label_de' in r and self._get_access_point(lst[6]):
-							if 'Q5' in r['instances']:
-								label = ap._reorder_name(r['label_de'])
-							else:
-								label = r['label_de']
-							if (
-							 label, self._get_access_point(lst[6])) not in r_list:
-								r_list.append((label, self._get_access_point(lst[6])))
-
-			return r_list
-		elif return_related_keywords:
-			releated_keywords = ''
-			for r in result:
-				lst = r.split('|')
-				if lst[0].isnumeric():
-					if show_stats:
-						print(lst, result, int(lst[0]), lst[5])
-					if int(lst[0]) > 1:
-						kw = next((x for x in self.KEYWORDS if x['item'] == lst[5]), False)
-						if kw:
-							if 'description' in kw:
-								related_keywords += lst[0] + '  ' + kw['label_de'] + ' (' + kw['description'] + ')\n'
-							else:
-								related_keywords += lst[0] + '  ' + kw['label_de'] + '\n'
-						else:
-							if show_stats:
-								print('below 2')
-
-			return related_keywords
-		elif score > 300:
-			return True
-		else:
-			return False
 
 	def _ai_predict(self, l):
 		"""
@@ -1423,6 +1054,7 @@ class DataManager(object):
 		ki = ai()
 		sum1 = 0
 		total = 0
+		
 		for e in l:
 			test_str = ''
 			if 'title' in e:
@@ -1435,11 +1067,13 @@ class DataManager(object):
 				e['prediction'] = ki.predict(test_str)
 				total += 1
 				sum1 += e['prediction']
-
 		print('Predicted: ', str(sum1), ' over ', str(total), ' as correct.')
 		return l.copy()
 
 	def _add_access_points(self, l, files_only=True):
+		"""
+		adds values  NameAccessPoints, PlaceAccessPoints, SubjectAccessPoints and GenreAccessPoints field if predicted
+		"""
 		ap = access_points()
 		total = 0
 		sum_subject_ap = 0
@@ -1501,7 +1135,6 @@ class DataManager(object):
 				i = result[0][result[0].rfind('-') + 1:]
 				if i.isnumeric() and int(i) > best:
 					best = int(i)
-
 		else:
 			return phrase
 		return phrase + '-' + str(best + 1)
@@ -1509,38 +1142,42 @@ class DataManager(object):
 	def _get_access_point(self, wdid):
 		"""
 		returns the AtoM event type of an WD item 
-		
 		Parameter:
 		wdid : The Wikidata ID of the keyword
 		"""
 		if wdid != '':
-			return g.ACCESS_POINTS[self._get_instance('', wdid)]
+			if self._get_instance('', wdid) in g.ACCESS_POINTS:
+				return g.ACCESS_POINTS[self._get_instance('', wdid)]
+			else:
+				return False
 		else:
 			return False
 
-	def _get_level_of_description(self, htype):
-		if htype in self.LEVELS_OF_DESCRIPTION:
-			return self.LEVELS_OF_DESCRIPTION[htype]
+	def _get_level_of_description(self, htype,lang="de"):
+		"""
+		returns the leval of description label of a htype value in a given language
+		"""
+		if htype in g.LEVELS_OF_DESCRIPTION[lang]:
+			return g.LEVELS_OF_DESCRIPTION[lang][htype]
 		else:
 			return htype
 
 	def _is_noble(self, keyword):
+		"""
+		checks if keyword label could reperesent a membe of nobility (Currently only vor German)
+		"""
 		is_noble = False
 		arr = re.findall('\\w+', keyword['label_de'])
 		for e in keyword['search_terms']:
 			arr.extend(re.findall('\\w+', e))
-
 		for e in arr:
 			if e in ('von', 'zu'):
 				return True
-
 		return False
 
-	def _is_near(self, earth, moon, lst, distance=[
- 6, 5], position_statement=True):
+	def _is_near(self, earth, moon, lst, distance=[6, 5], position_statement=True):
 		"""
 		Checks if a string (moon) is around another string (earth) within a list of strings.
-		
 		"""
 		earth = earth.lower()
 		moon = moon.lower()
@@ -1556,10 +1193,8 @@ class DataManager(object):
 						for j in range(sub[0], sub[1]):
 							if lst[j] == moon:
 								return i - j
-
 					else:
 						return 'True'
-
 		return 'False'
 
 	def _get_instance(self, keyword='', s=''):
@@ -1569,6 +1204,7 @@ class DataManager(object):
 		Parameters:
 		keyword : if set it represents an object of the self.KEYWORDS list
 		s: if set it represents a string with a wdid 
+		[needs to be generalized]
 		"""
 		if keyword:
 			lst = keyword['instances']
@@ -1576,35 +1212,35 @@ class DataManager(object):
 			lst = [
 			 s]
 		if len(list(set(lst).intersection(['Q5', 'Q1371796', 'Q189290']))) > 0:
-			return 'Q5'
+			return 'Q5'  #human
 		if len(list(set(lst).intersection(['Q2061186', 'Q1384677', 'Q879146', 'Q20746389', 'Q1564373', 'Q384003', 'Q20746389', 'Q732948']))) > 0:
-			return 'Q20746389'
+			return 'Q20746389' #Missionary Society
 		if len(list(set(lst).intersection(['Q4830453', 'Q567521', 'Q740752', 'Q1807108', 'Q188913', 'Q6500733', 'Q50825050', 'Q6881511','Q4830453']))) > 0:
 			return 'Q4830453'
 		if len(list(set(lst).intersection(['Q48074023', 'Q48069095', 'Q362636', 'Q47537097', 'Q33874813', 'Q19298672', 'Q327333', 'Q22687', 'Q1321241', 'Q16239032', 'Q47537101', 'Q47538966', 'Q854140', 'Q854399', 'Q41762668', 'Q334453']))) > 0:
-			return 'Q327333'
+			return 'Q327333' #business
 		if len(list(set(lst).intersection(['Q45295908']))) > 0:
-			return 'Q45295908'
+			return 'Q486972' #military unit
 		if len(list(set(lst).intersection(['Q486972', 'Q3024240', 'Q164142']))) > 0:
-			return 'Q486972'
+			return 'Q486972' #human settlement
 		if len(list(set(lst).intersection(['Q15815670', 'Q41397', 'Q188055', 'Q178561', 'Q124734', 'Q198', 'Q38723', 'Q18564543', 'Q831663']))) > 0:
-			return 'Q15815670'
+			return 'Q15815670' #historical event
 		if len(list(set(lst).intersection(['Q2385804', 'Q31855', 'Q3914', 'Q33506', 'Q50825046']))) > 0:
-			return 'Q2385804'
+			return 'Q2385804' #educational institution
 		if len(list(set(lst).intersection(['Q48204', 'Q847017']))) > 0:
-			return 'Q48204'
+			return 'Q48204' #association
 		if len(list(set(lst).intersection(['Q43229', 'Q108696', 'Q294163', 'Q2385804', 'Q50825057', 'Q4686866', 'Q8425', 'Q719456']))) > 0:
-			return 'Q43229'
+			return 'Q43229' #organization
 		if len(list(set(lst).intersection(['Q2472587', 'Q41710']))) > 0:
-			return 'Q2472587'
+			return 'Q2472587' #people
 		if len(list(set(lst).intersection(['Q133156', 'Q16917', 'Q4260475']))) > 0:
-			return 'Q133156'
+			return 'Q133156' # colony
 		if len(list(set(lst).intersection(['Q618123', 'Q33837', 'Q133156', 'Q486972',  'Q41762037', 'Q6256', 'Q1306755', 'Q618123', 'Q190354', 'Q164142', 'Q7404467', 'Q748149', 'Q112099', 'Q486972', 'Q3624078', 'Q1402592', 'Q250811', 'Q183366', 'Q3024240']))) > 0:
-			return 'Q618123'
+			return 'Q618123' # 	geographical object
 		if len(list(set(lst).intersection(['Q483394']))) > 0:
-			return 'Q483394'
+			return 'Q483394' # 	genre
 		if len(list(set(lst).intersection(['Q82550', 'Q1002697', 'Q93288', 'Q8142', 'Q19832486','Q41298']))) > 0:
-			return 'Q82550'
+			return 'Q82550' #subject
 		return ''
 
 	def _get_wd_from_search_term(self, term, strict=True):
@@ -1623,11 +1259,9 @@ class DataManager(object):
 							result.append(keyword)
 						else:
 							result.append(keyword)
-
 		return result
 
-	def information_object_generator(self, fields=(
- 'ii.title', 'ii.scope_and_content', 'ii.arrangement'), levels=range(0, 1000000), concat=True, culture=('de')):
+	def information_object_generator(self, fields=('ii.title', 'ii.scope_and_content', 'ii.arrangement'), levels=range(0, 1000000), concat=True, culture=('de')):
 		"""
 		generates out AtoM's information_object_i18n table line by line
 		Field names must be noted as ii.field_name (if in atom.information_object_i18n) or i.field_name (if in atom.information_object)
@@ -1653,50 +1287,82 @@ class DataManager(object):
 						
 						yield d.copy()
 
-	def search_term_generator(self, from_term='', without_frequent_names=True, return_keyword_object=False, messages=True, predefined=[]):
-		
+	def search_term_generator(self, **kwargs):
+
 		"""
 		is a generator for search terms to use when query external databases
 		
+		yields (returns) tuples of (search term label, keyword object)
+		
 		Parameters:
 		from_term : Skip all term which come before from_term in keywords.json
+		messages : True if processing should be logged
+		predefined: if 'exclusive' only term from g.PREDEFINED_SEARCH_TERMS will be returned. If a comma seperated list then those terms will be returned
+		last_revision' : {yyyy-mm-dd hh:mm:ss}  Only terms from keywords modifies later will be returned
+		without_frequent_names : if True frequent terms will be excluded
 		"""
-		not_to_provide=["hauses","marianne", "engelberg", "sb"]
-		
-		if predefined !=[]:
-			for e in predefined:
+		if 'predefined_file' in kwargs:
+			l=fo.load_data(kwargs['predefined_file'],"txt",True)
+			print (l[0:10])
+			for e in l:
 				yield (e,"")
 			return
 		
+		args={"from_term":'', "without_frequent_names":True, "return_keyword_object":False,"messages":True, "predefined":[] }
+		kwargs=fuo.get_args(kwargs,args)
+		not_to_provide=g.NOISING_SEARCH_TERMS
+		if 'last_revision' in kwargs:
+			last_revision=kwargs['last_revision']
+		else:
+			last_revision="1970-01-01 00:00:00"
+		if kwargs['predefined'] !=[]:
+			predefined_exclusive=False
+			if kwargs['predefined']=="exclusive":
+				predefined_exclusive=True
+				for e in g.PREDEFINED_SEARCH_TERMS:
+					yield (e,"")
+				return
+			elif isinstance (kwargs['predefined'],str):
+				yield(kwargs['predefined'],"")
+				return
+			else:
+				for e in kwargs['predefined']:
+					yield (e,"")
+			if not predefined_exclusive:
+				return
 		tmp = []
 		ap = access_points()
-		if messages:
-			print('OK, we will start from : ' + from_term)
+		if kwargs['messages']:
+			print('OK, we will start from : ' + kwargs['from_term'])
 		skip = False
-		if from_term != '':
+		if kwargs['from_term'] != '':
 			skip = True
 		self._open_keywords()
 		for keyword in self.KEYWORDS:
 			if keyword['label_clean'] == '':
 				continue
+			print(keyword['timestamp'],last_revision)
+			if 'timestamp' in keyword:
+				if keyword['timestamp']<last_revision:
+					continue
 			if self._blocked_by_description(keyword['description']):
-				if messages:
+				if kwargs['messages']:
 					print(keyword['label_clean'], ' is blocked by description.')
 				continue
-			if without_frequent_names and self.is_frequent_name(keyword['label_de']):
-				if messages:
+			if kwargs['without_frequent_names'] and self.is_frequent_name(keyword['label_de']):
+				if kwargs['messages']:
 					print(keyword['label_de'], ' is a frequent name.')
 				continue
 			for item in keyword['search_terms']:
-				if item == from_term:
+				if item == kwargs['from_term']:
 					skip = False
 				if skip:
-					if messages:
+					if kwargs['messages']:
 						print('skipping ', item)
 					continue
-				if without_frequent_names and not self.is_frequent_name(keyword['label_de']):
+				if kwargs['without_frequent_names'] and not self.is_frequent_name(keyword['label_de']):
 					if item.find(' ') == -1 and self._get_instance(keyword) == 'Q5':
-						if messages:
+						if kwargs['messages']:
 							print(keyword['label_de'], ' has no white space')
 					else:
 						tmp.append((ap._reorder_name(item, self._get_instance(keyword)), self._get_instance(keyword), keyword['item']))
@@ -1704,30 +1370,26 @@ class DataManager(object):
 				else:
 					tmp.append((item, self._get_instance(keyword), keyword['item']))
 
-			if keyword['label_clean'] == from_term:
+			if keyword['label_clean'] == kwargs['from_term']:
 				skip = False
 			if skip:
-				if messages:
+				if kwargs['messages']:
 					print('skipping ', keyword['label_clean'])
 				continue
-			if without_frequent_names and not self.is_frequent_name(keyword['label_de']):
+			if kwargs['without_frequent_names'] and not self.is_frequent_name(keyword['label_de']):
 				if keyword['label_clean'].find(' ') == -1 and self._get_instance(keyword) == 'Q5':
-					if messages:
-						print(keyword['label_de'], ' has no white space')
+					if kwargs['messages']:
+						print(keyword['label_clean'], ' has no white space')
 				else:
 					tmp.append((keyword['label_clean'], self._get_instance(keyword), keyword['item']))
 					tmp.append((ap._reorder_name(keyword['label_clean'], self._get_instance(keyword)), self._get_instance(keyword), keyword['item']))
-					#print((keyword['label_clean'], self._get_instance(keyword), keyword['item']))
 			else:
 				tmp.append((keyword['label_clean'], self._get_instance(keyword), keyword['item']))
-		#print (tmp)
 		tmp = list(set(tmp))
-		#print (tmp)
 		tmp.sort(key=lambda x: x[0])
-
 		for e in tmp:
 			kw = next((x for x in self.KEYWORDS if x['item'] == e[2]), False)
-			if return_keyword_object:
+			if kwargs['return_keyword_object']:
 				if e[0].lower() in not_to_provide or self._is_excluded(e[0],kw):
 					continue
 				kw_obj = {'id': kw['item'], 
@@ -1742,11 +1404,85 @@ class DataManager(object):
 				 }
 				yield (e[0], e[1], kw_obj)
 			else:
-				if e[0].lower() in not_to_provide or self._is_excluded(e[0],kw):
+				if e[0].lower() in g.NOISING_SEARCH_TERMS or self._is_excluded(e[0],kw):
 					continue
 				yield (
 				 e[0], e[1])
 
+
+	def create_sitemaps(self, cultures=("de","en","fr")):
+		"""
+		creates sitemap.xml folowing instructuctions on https://support.google.com/webmasters/answer/183668?hl=en&ref_topic=6080646&rd=1
+		"""
+		sql='select slug, date_format(updated_at,"%Y-%m-%dT%T+00:00") from slug s join object o on s.object_id=o.id where class_name in ("QubitActor","QubitInformationObject");'
+		slugs = self.get_mysql(sql, False, False)
+		slugs=list(slugs)
+		slugs.extend([
+		("map",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("help",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("about",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("community-2",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("font-tool",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("thesaurus",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("wikidata",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("data",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("schrift",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("impressum",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("data-privacy-statement",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("informationobject/browse",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		("links",datetime.now().strftime('%Y-%m-%dT%T+00:00')),
+		])
+		sitemap_elements=[]
+		for slug in slugs:
+			tmp="<url>\n\t<loc>"+g.BASE_URL+slug[0]+"</loc>\n"
+			tmp+='\t\t<lastmod>'+str(slug[1])+'</lastmod>\n'
+			for culture in cultures:
+				tmp+='\t\t<xhtml:link rel="alternate" hreflang="'+culture+'" href="'+g.BASE_URL+slug[0]+'?sf_culture='+culture+'" />\n'
+			tmp+="</url>"	
+			sitemap_elements.append(tmp)
+		
+		i=1
+		sitemap_index='<?xml version="1.0" encoding="UTF-8"?>\n\t<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+		for block in self.sitemap_file_content_generator(sitemap_elements):
+			tmp="\t\t<sitemap>\n\t\t\t<loc>"+g.BASE_URL+"sitemap"+str(i)+".xml.gz</loc>\n"
+			tmp+="\t\t\t<lastmod>"+datetime.now().strftime('%Y-%m-%dT%T+00:00')+"</lastmod>\n\t\t</sitemap>\n"
+			sitemap_index+=tmp
+			tmp='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" \n\
+				xmlns:xhtml="http://www.w3.org/1999/xhtml" \n\
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \n\
+				xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n'
+			tmp+="\n".join(block)
+			tmp+="</urlset>"
+			f=gzip.open("/tmp/sitemap"+str(i)+".xml.gz","w")
+			f.write(tmp.encode())
+			f.close()
+			print("/tmp/sitemap"+str(i)+".xml.gz  created")
+			i+=1
+		sitemap_index+="\t</sitemapindex>"
+		f=open("/tmp/sitemap.xml","w")
+		f.write(sitemap_index)
+		f.close()
+		print("/tmp/sitemap.xml  created")
+		print("Please copy the file into the root directory of the site")
+		
+		
+	def sitemap_file_content_generator(self,sitemap_elements):
+		"""
+		breaks the list of sitemap_elements into groups of 50.000 elements
+		"""
+		end=len(sitemap_elements)
+		start=1
+		while start >0:
+			start=end-50000
+			if start<0:
+				start=0
+			yield sitemap_elements[start:end]
+			end=start
+		
+		
+
+
+		
 
 	def _is_excluded(self, search_term, keyword):
 		"""
@@ -1759,55 +1495,80 @@ class DataManager(object):
 		return False
 
 	def _blocked_by_description(self, s):
-		blocker = [
-		 'eisenbahnverwaltung', 'schreiber', 'heizer', 'polizei', 'polizist']
+		"""
+		checks if a search term is blocked because of a stop word found in his Wikidata description. Stop words are stored in g.BLOCKED_BY_DESCRIPTION
+		"""
+		blocker = g.BLOCKED_BY_DESCRIPTION
 		for block_term in blocker:
 			if s.lower().find(block_term) > -1:
 				return True
-
 		return False
 
-	def imports(self, source,record_type="archival_description", sourcefile='', fromfile='', update=True, from_term="", source_str="", archive_url="", archive_id="",predefined=[]):
+	def imports(self, **kwargs):
 		""" 
-		Imports records into the candidate index.
+		Imports records. 
 		Parameters:
-		- source : One of APE, EADXML, DDB , NDB, KAL..
+		- source : One of APE, EADXML, DDB , NDB, KAL, APE, NAD..
 		- record_type : ElasticSearch _type. Ether 'archival_description' (standard), 'authority_record'
 		- sourcefile : In case of source = EADXML, this indicates the relative file path to the source XML file
 		- fromfile : If not empty, the retrieval of data from external web sites will be skipped and and a former created JSON file used. 
 					 (Useful in case of frequent interruptions)
 		- source_str: url of the metadata source
 
-		Writes the imported data into tmp/export2es.json.
+		Writes the imported data into tmp_results/*.csv.
 		Returns the number of retrieved records
 		"""
+		
+		
+		args={"source":"",'session':"","record_type":"archival_description", "sourcefile":'', "fromfile":'', "update":True, "from_term":"", "source_str":"", "archive_url":"", "archive_id":"","predefined":[],"test":True}
+		print(kwargs)
+		kwargs=fuo.get_args(kwargs,args)
+		print(kwargs)
 		err=[]
 		self._open_out_files()
 		self._init_legacy_ids()
-		print("We will start from : " + from_term)
+		print("We will start from : " + kwargs['from_term'])
 		#try:
 		while True:
 			l={}
 			err=''
-			if fromfile=='':
+			source=kwargs['source'].upper()
+			if kwargs['fromfile']=='':
 				if source == 'APE':
-					proc=ape.ape()
+					##proc=ape.ape()
 					#l=proc.export(0,False,update)
+					from atom.imports import ape
+					proc=ape.APE("/tmp/data.json")
+				if source == 'SCA':	 # scopeArchiv
+					from atom.imports import scope
+					proc=scope.ScopeArchiv("/tmp/data.json")
 				if source == 'EADXML':
 					from atom.imports import eadxml
-					proc=eadxml.eadxml(sourcefile, source_str)
+					proc=eadxml.eadxml(kwargs['sourcefile'], kwargs['source_str'])
 				if source == 'NDB':
 					proc=ndb.ndb()
 					#l=proc.export(0)
 				if source == 'DDB':
 					from atom.imports import ddb
 					proc=ddb.Ddb()
+				if source == 'NAD':
+					from atom.imports import nad
+					proc=nad.Nad()
 				if source == 'FBN':
 					from atom.imports import findbuch
-					proc=findbuch.Findbuch(archive_url,archive_id)
+					proc=findbuch.Findbuch(kwargs['archive_url'],kwargs['archive_id'],kwargs['session'])
 				if source =='KAL':
-					proc=Kalliope()
-				for export in proc.export(g.MIN_EXPORT_LIST_LEN,from_term,predefined):
+					from atom.imports import kalliope
+					proc=kalliope.Kalliope()
+				if source=="DDBHTML":
+					from atom.imports import ddbhtml
+					proc=ddbhtml.Ddbhtml()
+				
+				
+				
+				kwargs['counter']=g.MIN_EXPORT_LIST_LEN
+				print(kwargs)
+				for export in proc.export(**kwargs):
 					l=export
 					print("länge export",len(l))
 					self._add_to_current_identifiers(l)
@@ -1815,11 +1576,12 @@ class DataManager(object):
 					#pprint.pprint(l)
 					pa=self.TMP_RESULTS_PATH+time.strftime("%Y%m%d_%H%M%S")
 					pathlib.Path(pa).mkdir(parents=True, exist_ok=True) 
-					self.write_csv(l,"/tmp/import.csv",record_type)
-					self._post_import(l,pa)
-					self.write_csv(l,pa+"/import.csv",record_type)
+					self.write_csv(l,"/tmp/import.csv",kwargs['record_type'])
+					if not 'nopost' in kwargs:
+						self._post_import(l,pa)
+					self.write_csv(l,pa+"/import.csv",kwargs['record_type'])
 			else:
-				with open(fromfile,'r') as json_in:
+				with open(kwargs['fromfile'],'r') as json_in:
 					l = json.load(json_in)
 					print(len(l))
 				json_in.close
@@ -1857,7 +1619,7 @@ class DataManager(object):
 		if legacyId not in self.LEGACY_IDS:
 			self.LEGACY_IDS.append(legacyId)
 
-	def _post_import(self, l, pname='', sort=True, add_keywords=True, create_parent_entries=False):
+	def _post_import(self, l, pname='', sort=True, add_keywords=True, create_parent_entries=False, timespan=True):
 		"""
 		checks the integrity of the imported data. 
 		It manages also the access points. Original accesspoint will be logged and replecaed by self.KEYWORDS
@@ -1869,6 +1631,8 @@ class DataManager(object):
 		add_keywords: True if default keywords should replaces by keywords from the own keyword list
 		create_parent_entries: True if parent items should be created if not present. This feature tries to use the ISIL from INSTITUTION as well as the order of arrangement
 		"""
+		
+		
 		ap_log = ''
 		added_ap_log = ''
 		errors_log = ''
@@ -1891,13 +1655,15 @@ class DataManager(object):
 		if sort:
 			self.hierarchy_sort(l)[0]
 		for e in l:
-			for fieldname in self.ARCHIVAL_DESCRIPTIONS_FIELDS:
+			for fieldname in g.ARCHIVAL_DESCRIPTIONS_FIELDS:
 				if fieldname not in e:
 					e[fieldname] = ''
 				if not e[fieldname]:
 					e[fieldname] = ''
-
-			indent = rank[self._get_level_of_description(e['levelOfDescription'].capitalize())]
+			if self._get_level_of_description(e['levelOfDescription'].capitalize()) in rank:
+				indent = rank[self._get_level_of_description(e['levelOfDescription'].capitalize())]
+			else:
+				indent=10
 			tree += indent * '  ' + e['legacyId']
 			if e['parentId'] != '':
 				match_tuple = self.is_in_atom(e['parentId'], True, True)
@@ -1936,7 +1702,7 @@ class DataManager(object):
 				if e['legacyId'] == '':
 					errors_log += 'Item ' + e['title'] + ' has no legacyId!\n'
 				if add_keywords and pname != '':
-					for ap in ['subjectAccessPoints', 'placeAccessPoints', 'nameAccessPoints']:
+					for ap in ['subjectAccessPoints', 'placeAccessPoints', 'nameAccessPoints', 'genreAccessPoints']:
 						if ap in e and e[ap] != '':
 							tmp = e[ap].split('|')
 							e[ap] = ''
@@ -1950,6 +1716,7 @@ class DataManager(object):
 						scope = ''
 					ap_list = self.predict_item(e['title'] + ' ' + scope, '', False, True)
 					for keyword in ap_list:
+						
 						added_ap_log += ap + '\t' + e['legacyId'] + '\t' + keyword[0] + '\tadded to\t' + e['title'] + '\n'
 						if keyword[1] in e:
 							if e[keyword[1]] == '':
@@ -1966,13 +1733,17 @@ class DataManager(object):
 			if e['legacyId'] not in seen:
 				r.append(e)
 				seen.add(e['legacyId'])
-
+				e['levelOfDescription']=self.map_level_of_description(e['levelOfDescription'])
 		l = r
 		print(pname)
 		if pname != '':
 			pname += '/'
 		else:
 			pname = self.TMP_RESULTS_PATH
+		
+		
+		
+		
 		with open(pname + 'import_preparation.log', 'w') as (f):
 			f.write('LOG FILE FOR ' + pname + '/import.csv')
 			f.write(str(len(l)))
@@ -1983,6 +1754,18 @@ class DataManager(object):
 			f.write(tree)
 		f.close()
 		return l
+
+
+	def map_level_of_description(self, level):
+		level_cor=level[0:1].upper()+level[1:].lower()
+		if level_cor in g.LEVEL_OF_DESCRIPTION_INDEX:
+			if g.LEVEL_OF_DESCRIPTION_INDEX[level_cor] in g.LEVELS_OF_DESCRIPTION[g.CULTURE]:
+				return g.LEVELS_OF_DESCRIPTION[g.CULTURE][g.LEVEL_OF_DESCRIPTION_INDEX[level_cor]]
+			else:
+				return level
+		else:
+			return level
+
 
 	def _create_parents(self, e, l):
 		"""
@@ -2108,7 +1891,6 @@ class DataManager(object):
 			if 'acquisition' in e:
 				print(e['acquisition'])
 				acquisition = e['acquisition']
-				#parent_list = self.(e['legacyId'])
 				for ee in parent_list:
 					if 'acquisition' not in ee:
 						self.es.update(index='candidates', doc_type=record_type, id=ee['legacyId'], body={'doc': {'acquisition': acquisition}})
@@ -2148,6 +1930,23 @@ class DataManager(object):
 					a = self.get_mysql(str(sql), False, True)
 
 		print(i, ' records modified')
+	
+	def LoD(self,term,toId=False, target_lang=g.CULTURE):
+		"""
+		Trys to translate a given term into a valid LevelOfDescription
+		Gives AtoMs term_id if toId is True
+		"""
+		if term is None:
+			return ""
+		lod=next((x for x in g.LOD if term.lower() in (x['de'].lower(), x['fr'].lower(),x['en'].lower())), False)
+		if lod:
+			if toId:
+				return lod['id']
+			else:
+				return lod[target_lang]
+		else:
+			return term
+	
 
 	def write_csv(self, l, filename, record_type='archival_description'):
 		"""
@@ -2161,8 +1960,68 @@ class DataManager(object):
 		with open(filename, 'w') as (csvfile):
 			if record_type == 'archival_description':
 				fieldnames = [
-				 'search term','prediction', 'out', 'legacyId', 'parentId', 'qubitParentSlug', 'identifier', 'accessionNumber', 'title', 'levelOfDescription', 'extentAndMedium', 'repository', 'archivalHistory', 'acquisition', 'scopeAndContent', 'appraisal', 'accruals', 'arrangement', 'accessConditions', 'reproductionConditions', 'language', 'script', 'languageNote', 'physicalCharacteristics', 'findingAids', 'locationOfOriginals', 'locationOfCopies', 'relatedUnitsOfDescription', 'publicationNote', 'digitalObjectURI', 'generalNote', 'subjectAccessPoints', 'placeAccessPoints', 'nameAccessPoints', 'genreAccessPoints', 'descriptionIdentifier', 'institutionIdentifier', 'rules', 'descriptionStatus', 'levelOfDetail', 'revisionHistory', 'languageOfDescription', 'scriptOfDescription', 'sources', 'archivistNote', 'publicationStatus', 'physicalObjectName', 'physicalObjectLocation', 'physicalObjectType', 'alternativeIdentifiers', 'alternativeIdentifierLabels', 'eventDates', 'eventTypes', 'eventStartDates', 'eventEndDates', 'eventDescriptions', 'eventActors', 'eventActorHistories', 'eventPlaces', 'culture', 'status']
-				fieldnames = self.ARCHIVAL_DESCRIPTIONS_FIELDS
+				 'search term',
+				 'prediction', 
+				 'out', 
+				 'legacyId', 
+				 'parentId', 
+				 'qubitParentSlug', 
+				 'identifier', 
+				 'accessionNumber', 
+				 'title', 
+				 'levelOfDescription', 
+				 'extentAndMedium', 
+				 'repository', 
+				 'archivalHistory', 
+				 'acquisition', 
+				 'scopeAndContent', 
+				 'appraisal', 
+				 'accruals', 
+				 'arrangement', 
+				 'accessConditions', 
+				 'reproductionConditions', 
+				 'language', 
+				 'script', 
+				 'languageNote', 
+				 'physicalCharacteristics', 
+				 'findingAids', 
+				 'locationOfOriginals', 
+				 'locationOfCopies', 
+				 'relatedUnitsOfDescription', 
+				 'publicationNote', 
+				 'digitalObjectURI', 
+				 'generalNote', 
+				 'subjectAccessPoints', 
+				 'placeAccessPoints', 
+				 'nameAccessPoints', 
+				 'genreAccessPoints', 
+				 'descriptionIdentifier', 
+				 'institutionIdentifier',
+				  'rules', 
+				  'descriptionStatus', 
+				  'levelOfDetail', 
+				  'revisionHistory', 
+				  'languageOfDescription', 
+				  'scriptOfDescription', 
+				  'sources', 
+				  'archivistNote', 
+				  'publicationStatus', 
+				  'physicalObjectName', 
+				  'physicalObjectLocation',
+				   'physicalObjectType',
+				    'alternativeIdentifiers', 
+				    'alternativeIdentifierLabels', 
+				    'eventDates', 
+				    'eventTypes', 
+				    'eventStartDates', 
+				    'eventEndDates', 
+				    'eventDescriptions', 
+				    'eventActors', 
+				    'eventActorHistories', 
+				    'eventPlaces', 
+				    'culture', 
+				    'status']
+				fieldnames = g.ARCHIVAL_DESCRIPTIONS_FIELDS
 			if record_type == 'authority_record':
 				fieldnames = [
 				 'culture', 'typeOfEntity', 'authorizedFormOfName', 'corporateBodyIdentifiers', 'datesOfExistence', 'history', 'places', 'legalStatus', 'functions', 'mandates', 'internalStructures', 'generalContext', 'descriptionIdentifier', 'institutionIdentifier', 'rules', 'status', 'levelOfDetail', 'revisionHistory', 'sources', 'maintenanceNotes']
@@ -2248,7 +2107,7 @@ class DataManager(object):
 		"""
 		Returns a list of Fonds which are already included completly 
 		"""
-		return self.jump_fonds
+		return g.jump_fonds
 
 	def drop_empty_eventdates(self, d):
 		"""
@@ -2267,28 +2126,7 @@ class DataManager(object):
 			d.pop('eventEndDates', None)
 		return d
 
-	def lookup_orphans(self, record_type='archival_description', source='DDB'):
-		"""
-		retrieve orphans from the candidate index depending on their source
-		"""
-		d = self.es.search(index='candidates', doc_type=record_type, body={'size': self.max_results, 'query': {'bool': {'must': [{'match': {'_status': 'orphan'}}, {'match': {'_original_from': source}}]}}})
-		return d['hits']['hits']
 
-	def id_in_index(self, legacy_id, field='_id', source='APE', indexstore='candidates', record_type='archival_description'):
-		"""
-		Returns the record source data if a record with given Id was found in the index, else None
-		
-		Parameters:
-		- legacy_id : AtoM's legacyId for the record
-		- source: One of APE,APEXML, DDB, etc
-		- indexstore: The ElasticSearch index. Standard is 'candidates'
-		- doc_type: The ElasticSearch document type
-		"""
-		d = self.es.search(index=indexstore, doc_type=record_type, body={'size': self.max_results, 'query': {'match': {field: legacy_id}}})
-		if d['hits']['total'] > 0:
-			return d['hits']['hits'][0]['_source']
-		else:
-			return
 
 	def prepare_json(self, d):
 		"""
@@ -2331,31 +2169,7 @@ class DataManager(object):
 			print('There is no ISO 639-3 code for language %s ', lang639_3)
 			return ''
 
-	def get_parents(self, r_id):
-		"""
-		Returns a list of dict with all parents of an specific record, which are already part of the index
-		
-		Parameter:
-		- r_id: ID of the child record
-		obsolete
-		"""
-		l = []
-		finish = False
-		while not finish:
-			r = self.id_in_index(r_id)
-			if r:
-				l.append(r)
-				if 'parentId' in r:
-					if r['parentId'] == r['legacyId'] or r['parentId'] == '':
-						finish = True
-					else:
-						r_id = r['parentId']
-				else:
-					finish = True
-			else:
-				finish = True
 
-		return l
 
 	def confirm_parents(self, r_id, record_type='archival_description', indexstore='candidates', status='confirmed'):
 		"""
@@ -2407,19 +2221,25 @@ class DataManager(object):
 			print('merged')
 		return d1.copy()
 
+
+
 	def hierarchy_sort(self, l):
-		print("Starting hierarchy sort\n")
+		print("Begin hierarchy sort\n", len(l))
+		
 		nodes = []
 		forrest = []
 		lst = []
 		startlen = len(l)
 		print('len(l) ', len(l))
+		if len(l)==1:
+			return (l.copy(),[{'l':l[0]['legacyId'],'p':''}])
 		for e in l:
-			if 'legacyId' in e:
+			if 'legacyId' in e and e['legacyId']!="":
 				if 'parentId' in e:
 					nodes.append({'l': e['legacyId'], 'p': e['parentId']})
 				else:
 					nodes.append({'l': e['legacyId'], 'p': ''})
+			
 
 		print("Node count: ", len(nodes))
 		f = open('/tmp/nodex.json', 'w')
@@ -2443,6 +2263,7 @@ class DataManager(object):
 					parent = x['p']
 					legacy = x['l']
 					node = {'l': legacy, 'p': parent}
+					#print(node)
 				else:
 					found = False
 
@@ -2465,7 +2286,7 @@ class DataManager(object):
 		print('-----')
 		l.sort(key=lambda x: ids.index(x['legacyId']))
 		return (
-		 l.copy(), nodes.copy())
+		l.copy(), nodes.copy())
 
 	def _remove_duplicates(self, l, key):
 		"""
@@ -2539,8 +2360,68 @@ class DataManager(object):
 				i += 1
 
 		return -1
+		
+	def create_arrangements(self, repository="", languages=["de","en","fr"]):
+		"""
+		writes the field arrangement on information_object if empty
+		or rewrites the field arrangement of all information_objects related to a specific respository
+		"""
+		sql="select i.id,title,arrangement,culture, repository_id, parent_id from information_object_i18n ii join information_object i on ii.id=i.id where i.id>1;"
+		information_objects=self.get_mysql(sql,False,False)
+		io=information_objects
+		for lang in languages:
+			for information_object in information_objects:
+				print(information_object[2],information_object[4],information_object[3])
+				if (information_object[2] is None or information_object[4]==repository) and information_object[3]==lang :
+					parents=[]
+					parent_id=information_object[5]
+					while parent_id!=1:
+						parent_item=next((x for x in io if x[0]==parent_id and x[3]==lang),False)
+						if parent_item:
+							#print(parent_item[0],parent_item[5], parents)
+							parent_id=parent_item[5]
+							parents.append(parent_item[1])
+						else:
+							parent_id=1
+					print(parents, information_object[0])
+					if len(parents)>0 and parents[0] !=None:
+						sql='update information_object_i18n set arrangement ="'+so.escapeQuotes(" >> ".join(parents[::-1]))+'" where id='+str(information_object[0])+' and culture="'+lang+'";'
+						last_id=self.get_mysql(sql,True, True)
+				else:
+					print("exist -------->>>> ",information_object[1]) 
+						
+						
+						
+						
+	
+		
+		
 
-	def get_mysql(self, sql, one=True, update=False):
+	def fill_repository_id(self):
+		"""
+		fills the field repository_id of information_object depending on parent records
+		"""
+		sql="select id,parent_id,repository_id from information_object"
+		information_objects=self.get_mysql(sql,False,False,True)
+		information_objects=[list(x) for x in information_objects]
+		tmp=[x for x in information_objects if x[2] is None]
+		print(len(information_objects), len(tmp))
+		i=0
+		i+=1
+		print("=============\n=============\n============",i,"\n==========\n===============")
+		for information_object in information_objects:
+			if information_object[2] is None:
+				print(information_object[0])
+				tmp=[x for x in information_objects if x[0]==information_object[1] and not(x[2] is None)]
+				if len(tmp)>0:
+					information_object[2]=tmp[0][2]
+					sql='update information_object set repository_id='+str(tmp[0][2])+' where id='+str(information_object[0])+';'
+					last_id=self.get_mysql(sql,True,True,True)
+
+	
+
+
+	def get_mysql(self, sql, one=True, update=False, output=True):
 		"""
 		Returns the result of a select statement in mysql
 		
@@ -2551,11 +2432,13 @@ class DataManager(object):
 		Return type are tuple or a list of tuple
 		
 		"""
+		if output:
+			print ("-----------------\ntrying: ", sql)
 		cursor = self.MYSQL_CONNECTION.cursor()
 		dummy = cursor.execute(sql)
 		if update:
 			self.MYSQL_CONNECTION.commit()
-			print('updated: ', sql)
+			#print('updated: ', sql)
 			return cursor.lastrowid
 		elif one:
 			return cursor.fetchone()
@@ -2567,6 +2450,7 @@ class DataManager(object):
 		returns True if eventDates are partially within the time frame
 		"""
 		test=True
+		
 		if eventStartDates[0:4].isnumeric():
 			if int(eventStartDates[0:4].strip(" "))>int(g.SEARCH_TO):
 				test=False
@@ -2641,12 +2525,191 @@ class DataManager(object):
 		sql = 'UPDATE status SET status_id=160 WHERE type_id=158 AND object_id <> 1;'
 		r = self.get_mysql(sql, None, True)
 
+
+	def changes_notes(self):
+		"""
+		a unique workaround for a special problem
+		"""
+		sql="select source_id,target_id, n.id from keymap k join note n on k.target_id=n.object_id  where source_id REGEXP '[A-Z0-9]{30}' and n.type_id=125;"
+		notes=self.get_mysql(sql,False, False)
+		for note in notes:
+			sql="update note_i18n set content='{{Data Source}} \"Deutsche Digitale Bibliothek\":https://www.deutsche-digitale-bibliothek.de/item/"+str(note[0])+"' where culture='de' and id="+str(note[2])+";" 
+			last_id=self.get_mysql(sql, True, True)	
+		
+	
+	def add_notes(self,lot,type_id=125, istermid=True):  #125 = generalNote
+		if istermid:
+			new_lot=[]
+			for l in lot:
+				sql='select object_id from object_term_relation where term_id='+str(l[1])+';'
+				r = self.get_mysql(sql, False, False)
+				print(r)
+				for e in r:
+					new_lot.append((l[0],e[0]))
+			lot=new_lot
+			print(lot, len(lot))
+		stop=input("stop")
+		for l in lot:   #d -> (content, object_id or term_id)
+			sql='insert into note (object_id,type_id,source_culture) values ('+str(l[1])+','+str(type_id)+',"de");'
+			last_id=self.get_mysql(sql, True, True)	
+			sql='insert into note_i18n (content,id,culture) values ("'+l[0]+'",'+str(last_id)+',"'+g.CULTURE+'");'
+			last_id=self.get_mysql(sql, True, True)	
+	
+	def normalize_notes(self, type_id):
+		type_id=174  # language note
+		sql='select object_id, count(id) as count, group_concat(id) from note   where type_id='+str(type_id)+' group by object_id having count>1 order by count;'
+		duplicate_notes=self.get_mysql(sql,False, False)
+		#sql='select n.id, n.object_id,ni.content,ni.culture from note n join note_i18n ni on n.id=ni.id where type_id='+str(type_id)+';'
+		#all_notes=self.get_mysql(sql,False, False)
+		#print(all_notes[0:5])
+		for duplicate in duplicate_notes:
+			#tmp_id=duplicate[2].split(",")
+			#tmp_id.sort()
+			#print(tmp_id)
+			sql='select id,content,culture from note_i18n where id in ('+duplicate[2]+') order by id;'
+			#tmp_notes=[x for x in all_notes if x[0] in tmp_id]
+			tmp_notes=self.get_mysql(sql,False, False)
+			first_id=0
+			other_id=[]
+			delete_id_culture=[]
+			content={'de':'','en':'','fr':''}
+			print(tmp_notes)
+			for e in enumerate(tmp_notes):
+				item=e[1]
+				if e[0]==0:
+					first_id=item[0]
+				if content[item[2]]=='' :
+					content[item[2]]=item[1]
+					if item[0]!=first_id:
+						other_id.append(str(item[0]))
+				elif item[1] is None:
+					sql='delete from note_i18n where id='+str(item[0])+' and culture="'+item[2]+'";'
+					#print(sql)
+					last_id=self.get_mysql(sql, True, True)	
+				elif content[item[2]].lower()==item[1].lower():
+					sql='delete from note_i18n where id='+str(item[0])+' and culture="'+item[2]+'";'
+					#print(sql)
+					last_id=self.get_mysql(sql, True, True)
+				else:
+					print(e)
+					raise
+			if len(other_id)>0:
+				sql='update note_i18n set id='+str(first_id)+' where id in ('+",".join(other_id)+');'
+			#print(sql)
+			last_id=self.get_mysql(sql, True, True)	
+			
+			
+	def normalize_level_of_description(self):
+		"""
+		redorder levels of description respecting the order of g.A_LEVEl_OF_DESCRIPTION[]
+		"""
+		sql='select i.id,i.parent_id,i.level_of_description_id,ii.title,s.slug,ti.name\
+			from information_object i join information_object_i18n ii on i.id=ii.id \
+			join term_i18n ti on i.level_of_description_id=ti.id \
+			join slug s on s.object_id=i.id \
+			where ti.culture="de" and \
+			ii.culture = "de";'
+		information_objects=self.get_mysql(sql,False,False)
+		information_objects= [list(x) for x in information_objects]
+		# get parents
+		for item in information_objects:
+			parent_list=(self.parent(item[0],information_objects,""))
+			tmp=[int(x) for x in parent_list[1:].split(",")]
+			item.append(tmp[::-1])
+			item.append(self.levels_of_description(item[6],information_objects))
+			#print(item)
+			
+			
+		# multiple fonds in hierachy	
+		multiple_fonds=[]
+		print("Search Multiples Fonds-Level")
+		for item in information_objects:		
+			if len([x for x in item[7] if x== 227])>1 :  # 227 -> Fonds
+				if item[7].index(227)==0:
+					multiple_fonds.append((item[0],item[4],item[6][item[7].index(227,1)]))
+		print (json.dumps(multiple_fonds, sort_keys=True, indent=2, ensure_ascii=False))		
+	
+	def levels_of_description(self,parent_list,information_objects):
+		tmp=[]
+		#print(parent_list)
+		for e in parent_list:
+			x=next((x for x in information_objects if x[0]==e),False)
+			if x:
+				tmp.append(x[2])
+		return tmp
+	def parent(self,object_id,information_objects,parent_list):
+		#print("id",object_id)
+		for e in information_objects:
+			if e[0]==object_id:
+				#print(e[0],e[1])
+				parent_list+=str(self.parent(e[1],information_objects,parent_list))
+				break
+		return parent_list + "," + str(object_id)
+			
+	
+	def add_creator(self,object_slug,actor_slug):
+		sql='select object_id from slug where slug="'+object_slug+'";'
+		parent_object_id=self.get_mysql(sql,True,False)[0]
+		print(parent_object_id)
+		sql='select object_id from slug where slug="'+actor_slug+'";'
+		actor_id=self.get_mysql(sql,True,False)[0]
+		print(actor_id)
+		sql='select id,type_id,object_id,actor_id from event where actor_id='+str(actor_id)+';'
+		actor_events=self.get_mysql(sql,False,False)
+		sql='select id,parent_id from information_object;'
+		information_objects=self.get_mysql(sql,False,False)
+		
+		children=self.get_children(parent_object_id,information_objects)
+		#children=set(children[1:].split(","))
+
+		#stop=input("stop")
+		for child in children:
+			if len([x for x in actor_events if x[2]==child and x[1]==111])==0:
+				sql = 'insert into object (class_name,created_at,updated_at,serial_number) values ("QubitEvent",Now(),Now(),0);'
+				last_id=self.get_mysql(sql,True,True)
+				sql = 'insert into event (id,type_id,object_id,actor_id,source_culture) values ('+str(last_id)+','+str(111)+','+str(child)+','+str(actor_id)+','+'"de");'
+				last_id=self.get_mysql(sql,True,True)
+	
+	
+	
+	def get_children(self,parent_id, information_objects):
+		tmp=[parent_id]
+		children=[parent_id]
+		for i in range(0,100):
+			print(i, len(children))
+			tmp=[x[0] for x in information_objects if x[1] in tmp]
+			if len(tmp)==0:
+				return children
+			else:
+				children.extend(tmp)
+	
+	def OLD_get_children(self,parent_id, children_list):
+		self.COUNTER+=1
+		print(self.COUNTER, parent_id)
+		#if self.COUNTER>10000:
+			#return children_list+ "," + str(parent_id)
+		#print(parent_id)
+		tmp=[x for x in self.DUMMY_LIST if x[1]==parent_id]
+		#print(children_list,tmp)
+		for e in tmp:
+			#print(e)
+			#children_list+= "," + str(e[0])
+			#if len(e[1])>0:
+			children_list.extend(list(set(self.get_children(e[0],children_list))))
+		children_list.append(parent_id)	
+		return children_list
+	
+	
 	def normalize_authority_data(self, record_type, proceed=True):
+		"""
+		obsolete ??
+		"""
 		sql = 'select a.id, authorized_form_of_name, description_identifier, entity_type_id  \t\tfrom actor a join actor_i18n ai on a.id=ai.id join object o on a.id=o.id \t\twhere  o.class_name="QubitActor" order by description_identifier , entity_type_id;'
 		log = ''
+		coorporate_dist = ('zu', 'von', 'ag', 'a.g.', 'g.m.b.h', 'gmbh', 'd.k.g', 'dkg', 'ohg','mbh', 'm.b.h', 'kg', 'k.g.')
 		self._open_stopwords()
 		stopwords = set(self.STOPWORDS)
-		person_stopwords = stopwords.symmetric_difference(set(self.COORPORATE_DIFFENCES))
+		person_stopwords = stopwords.symmetric_difference(coorporate_dist)
 		l = self.get_mysql(sql, False, False)
 		l_new = []
 		l_old = []
@@ -2662,7 +2725,7 @@ class DataManager(object):
 
 		for e_source in l_new:
 			n_arr = re.findall('\\w+', e_source[1].lower())
-			for e_target in (x for x in l_old if self._check_appearance(x[1], e_source[4])):
+			for e_target in (x for x in l_old if not(x[1] is None) and self._check_appearance(x[1], e_source[4])):
 				sql = 'select subject_id from relation where object_id=' + str(e_source[0]) + ';'
 				r = self.get_mysql(sql, False, False)
 				if r:
@@ -2749,6 +2812,105 @@ class DataManager(object):
 			else:
 				return s
 
+
+	def add_note(self,id_file,note_type, note_content):
+		"""
+		Addings notes related to objects in AtoM
+		
+		"""
+		id_list=fo.load_data(id_file,"txt",True)
+		for note_id in id_list:
+			sql='insert into note (object_id,type_id,source_culture) values ('+str(note_id)+','+str(note_type)+',"de");'
+			last_id = self.get_mysql(sql, False, True)
+			sql='insert into note_i18n (content,id,culture) values ("'+note_content+'",'+str(last_id)+',"de");'
+			last_id = self.get_mysql(sql, False, True)
+	
+	def create_keyword_list(self):
+		tmp=""
+		for term in self.search_term_generator():
+			tmp+=term[0]+"\n"
+		f=open(self.TMP_RESULTS_PATH + "keyword_list.txt","w")
+		f.write(tmp)
+		f.close()
+
+	def replace (self, search_term, replace_term="", culture="de", fields="", words_only=True, ignore_case=True, neighbours=15) :
+		"""
+		search and replace words inside AtoM, mostly inside information_object_i18n
+		"""
+		if fields=="":
+			fields="title, scope_and_content, archival_history"
+		fieldnames=fields.split(",")
+		fieldnames=[x.strip(" ") for x in fieldnames]
+		print("Wordras only ", words_only, "  Ignore case ", ignore_case)
+		sql='select id,'+fields +' from information_object_i18n where (title like "%'+search_term+'%" or scope_and_content like "%'+search_term+'%" or archival_history like "%'+search_term+'%") and culture = "'+culture+'";'
+		information_objects=self.get_mysql(sql,False)
+		t=''.join(''.join([str(element) for tupl in information_objects for element in tupl])).lower()
+		#print(t)
+		print(t.count(search_term.lower()), " occurencies of " , search_term)
+		print(len(information_objects) , " records retrieved")
+		regex_param = re.IGNORECASE if ignore_case else 0
+		id_changed=[]
+		for information_object in information_objects:
+			for field in information_object:
+				if isinstance(field,str):
+					if field=="":
+						continue
+					new_field=""
+					pos=0
+					if words_only:
+						regex_term=re.compile('(\W'+search_term+'\W)')
+						search_term_show=" "+search_term+" "						
+					else:
+						regex_term=re.compile('('+search_term+')')
+					
+					torsos=re.split(regex_term," "+field+" ",regex_param)
+					#print(torsos)
+					if len(torsos)>1:
+						for i in range(0,len(torsos)):
+							torso=torsos[i]
+							if i % 2 == 1:
+								continue
+							if i==len(torsos)-1:
+								new_field+=torso
+								break
+							#print(information_object[0])
+							#print(torso[-1*neighbours:])
+							#print(torsos[i+1])
+							#print(torsos[i+2][0:neighbours])
+							show= "ID: " + str(information_object[0]) + " ----------->\n"+torso[-1*neighbours:] +'\033[91m'+ torsos[i+1]+ '\033[0m' + torsos[i+2][0:neighbours] +"  : ? (y)/n/a " 
+							q=input(show)
+							if q in ("a","A"):							
+								show= "ID: " + str(information_object[0]) + " ----------->\n"+torso +'\033[91m'+  torsos[i+1] + '\033[0m' + torsos[i+2] +" : ? (y)/n/a " 
+								q=input(show)
+							if q in ("n","N"):
+								new_field+=torso+torsos[i+1]
+							else:
+								if words_only:
+									new_field+=torso+ torsos[i+1][0:1]+replace_term+ torsos[i+1][-1:]
+								else:
+									new_field+=torso+replace_term
+									id_changed.append(str(information_object[0]))
+						
+						#print("\n",field,"\n-->",new_field)
+						if new_field !=field and new_field !="":
+							fieldname=fieldnames[information_object.index(field)-1]
+							sql='update information_object_i18n set '+fieldname +'="'+so.escapeQuotes(new_field.strip(" "))+'" where id='+str(information_object[0])+' and culture ="'+culture+'";'
+							#if input(sql) in "yYjJ":
+							#if input(sql) =="":
+							r=self.get_mysql(sql,False,True,False)
+		if len(id_changed)>0:
+			print("\n\n",len(id_changed), " records changed \n\n")
+			sql="select object_id,slug from slug where object_id in ("+",".join(id_changed)+");"
+			slugs=self.get_mysql(sql,False)
+			for slug in slugs:
+				print(slug[0], slug[1])
+			
+	
+
+					
+		
+	
+		
 	def replace_mysql_field(self, table, change_field, id_field, id_value, regex):
 		"""Modify the value of an MySql field using regex
 		
@@ -2772,12 +2934,20 @@ class DataManager(object):
 		print(field_content)
 		print(type(field_content))
 		print(len(field_content))
+		
+		
+
+
 
 	def build_eventDates(self, dates):
 		"""
 		tries to extract eventStartDates and eventEndDates
 		"""
+		if dates is None:
+			return ["",""]
 		dates_arr = re.findall('\\w+|[0-9]+', dates)
+		
+		
 		start_year = ''
 		start_month = ''
 		start_day = ''
@@ -2824,6 +2994,7 @@ class DataManager(object):
 					return (start_year + '-' + start_month + '-' + start_day, start_year + '-' + end_month + '-' + end_day)
 		return (
 		 start_year + '-' + start_month + '-' + start_day, end_year + '-' + end_month + '-' + end_day)
+
 
 	def reduce_x(self, x):
 		"""
@@ -2981,6 +3152,8 @@ class access_points(object):
 	SUBJECT_AP = 35  #predefined by atom' installation routine
 	PLACE_AP = 42
 	GENRE_AP = 78
+	NAME_AP = 999
+	SOURCE_TYPE = 121
 	NEW_RELATION_FILE = 'tmp_results/new_authority_relations.json'
 	RELATION_STORE_FILE = 'atom/data/relation_store.csv'
 	UNWANTED_RELATIONS_FILE = 'atom/data/unwanted_relations.csv'
@@ -2995,14 +3168,19 @@ class access_points(object):
 			from term_i18n ti join term t on ti.id=t.id join object o on t.id=o.id \
 			where t.taxonomy_id in ('+str(self.GENRE_AP)+','+str(self.PLACE_AP)+','+str(self.SUBJECT_AP)+') and ti.culture in ("en","fr","de") order by ti.name;'
 		r = self.dm.get_mysql(sql, False)
-		sql = 'select group_concat(name) as term from other_name o join other_name_i18n oi on o.id=oi.id where object_id=' + str(r[0][0]) + ' group by object_id;'
-		alt_names = self.dm.get_mysql(sql, True)
+
 		counter={'items':0,'not modified':0, 'created':0, 'modified':0}
 		for e in r:
+			sql = 'select group_concat(name) as term from other_name o join other_name_i18n oi on o.id=oi.id where object_id=' + str(e[0]) + ' group by object_id;'
+			alt_names = self.dm.get_mysql(sql, True)
 			counter['items']+=1
 			item = next((x for x in self.ACCESS_POINTS_LIST if x['id'] == e[0]), False)
 			if item:
 				modified=False
+				if e[3]=="de":
+					item['culture_de']=e[2].strip(" ") 
+				if not('culture_de' in item):
+					item['culture_de']=""
 				if e[2].strip(" ")!=item['culture_' + e[3]] if 'culture'+e[3] in item else "" :
 					item['culture_' + e[3]] = e[2].strip(" ")
 					modified=True
@@ -3012,14 +3190,13 @@ class access_points(object):
 				if e[4]!=item['type']:
 					item['type'] = e[4]
 					modified = True
-				
-				
 				if alt_names:
 					if 'indicators' in e:
 						item['indicators'].extend(list(set(item['indicators']).union(set(alt_names[0].split(',')))))
 					else:
 						item['indicators']=alt_names[0].split(',')
 						modified=True
+					
 				if modified:
 					item['last_modified']=datetime.strftime(e[5],'%Y-%m-%d_%H:%M:%S')
 					counter['modified']+=1
@@ -3027,7 +3204,7 @@ class access_points(object):
 					counter['not modified']+=1
 			else:
 				d = {}
-				d['culture_' + e[3]] = e[2]
+				d['culture_' + e[3]] = e[2].strip(" ")
 				d['parent_id'] = e[1]
 				d['type'] = e[4]
 				d['id'] = e[0]
@@ -3036,19 +3213,71 @@ class access_points(object):
 					d['indicators'] = alt_names[0].split(',')
 				self.ACCESS_POINTS_LIST.append(d)
 				counter['created']+=1
-
+			
+		
 		terms_in_atom=[x[0] for x in r]
 		new_ACCESS_POINTS=[]
 		for item in self.ACCESS_POINTS_LIST:
 			if item['id'] in terms_in_atom:
 				new_ACCESS_POINTS.append(item)
+				
+		
+		# add indicators on duplicates
+		for e in new_ACCESS_POINTS:
+			if not('culture_de' in e) or e['culture_de']=="":
+				e['culture_de']=""
+				continue
+			tmp = [x for x in new_ACCESS_POINTS if 'culture_de' in x and e['culture_de']==x['culture_de'] and e['id']!=x['id'] and e['type']==x['type']]	
+			if len(tmp)>0:
+				indicators=[]
+				for ee in tmp:
+					#print(ee)
+					if 'indicators' in ee :
+						if not (ee['indicators'] is None):
+							indicators.extend(ee['indicators'])
+				if 'indicators' in e:
+					if not (e['indicators'] is None):
+						indicators.extend(e['indicators'])
+				
+				indicators=list(set(indicators))
+				if len(indicators) >0:
+					e['indicators']=indicators.copy()
+				for ee in tmp:
+					item=next((x for x in new_ACCESS_POINTS if x['id']==ee['id']),False)
+					if item:
+						item['indicators']=indicators.copy()
+			if 'indicators' in e:
+				e['indicators']=list(set(e['indicators']))
 		
 		print (len(self.ACCESS_POINTS_LIST) - len(new_ACCESS_POINTS), " access points have been deleted from the list because they no longer exists in AtoM")
-
+		
+		new_ACCESS_POINTS = sorted(new_ACCESS_POINTS, key=lambda k: k['culture_de']) 
 
 		fo.save_data(new_ACCESS_POINTS, self.ACCESS_POINTS_LIST_FILE)
 		print("done ",  counter)
 
+
+	def load_access_points_to_concordance(self):
+		"""
+		returns names of access points inside l but not in AtoM
+		"""
+		ap={"eventActors":[],"placeAccessPoints":[],"genreAccessPoints":[],"subjectAccessPoints":[],"nameAccessPoints":[]}
+		concordance=[]
+		for k in ap.keys():
+			if k == "placeAccessPoints":
+				sql='select name from term_i18n ti join term t on ti.id=t.id where culture="'+g.CULTURE+'" and taxonomy_id=' +str(self.PLACE_AP)+';'
+			elif k=="genreAccessPoints":
+				sql='select name from term_i18n ti join term t on ti.id=t.id where culture="'+g.CULTURE+'" and taxonomy_id=' +str(self.GENRE_AP)+';'
+			elif k=="subjectAccessPoints":
+				sql='select name from term_i18n ti join term t on ti.id=t.id where culture="'+g.CULTURE+'" and taxonomy_id=' +str(self.SUBJECT_AP)+';'
+			else:
+				sql='select authorized_form_of_name from actor_i18n ai join actor a on ai.id=a.id where culture="'+g.CULTURE+'";'
+
+			r=self.dm.get_mysql(sql,False,False)
+			r_list=[x[0] for x in r]
+			concordance.extend([[k,x.strip(),x.strip()] for x in r_list if x is not None])
+		
+		return concordance.copy()
 
 	def find_other_access_points(self, proceed=True):
 		"""
@@ -3122,6 +3351,9 @@ class access_points(object):
 
 		return tmp
 
+
+
+
 	def _normalize_instance(self, instance):
 		"""
 		returns an AtoM entitiy_type_id which is needed for name access points
@@ -3140,60 +3372,21 @@ class access_points(object):
 
 			return 0
 
-	def find_name_access_points(self, proceed=True):
-		"""
-		Looks if some label from autority data are present in a specific information object.
-		proceed: False if changes in database should be avoided 
-		(DEPRECIATED)
-		"""
-		self.update_access_points_list()
-		self.dm._open_names_suffixes()
-		suffixes = []
-		common_names = []
-		for e in self.dm.NAME_SUFFIXES.values():
-			suffixes.extend(e)
 
-		suffixes = [x.lower() for x in suffixes]
-		self.dm._open_stopwords()
-		stopwords = set(self.dm.STOPWORDS)
-		person_stopwords = stopwords.symmetric_difference(set(self.dm.COORPORATE_DIFFENCES))
-		sql = 'select oi.id, title, scope_and_content,slug from information_object_i18n oi join slug s on oi.id=s.object_id ;'
-		information_objects = self.dm.get_mysql(sql, False, False)
-		sql = 'select a.id,a.entity_type_id, authorized_form_of_name, a.description_identifier,ai.functions from actor_i18n ai join actor a on a.id=ai.id \t\twhere a.entity_type_id in (' + (',').join(["'" + str(x) + "'" for x in g.A_ENTITY_TYPES.values()]) + ') ;'
-		authority_data = self.dm.get_mysql(sql, False, False)
-		sql = 'select id,subject_id, object_id from relation r where type_id=' + str(g.A_RELATION_TYPE_NAME_ACCESS_POINTS) + ' ;'
-		relations = list(self.dm.get_mysql(sql, False, False))
-		new_relations = []
-		r = self.find_name_access_points_in_text()
-		if append:
-			d = {}
-			d['append'] = True
-			d['url'] = self.dm.BASE_URL + information_object[3]
-			d['functions'] = authority_data_item[4]
-			d['subject_id'] = information_object[0]
-			d['object_id'] = authority_data_item[0]
-			d['title'] = test_text
-			d['authority'] = authority_data_item[2]
-			d['description_identifier'] = authority_data_item[3]
-			new_relations.append(d)
-			print('%s added to id: %d, %s' % (authority_data_item[2], information_object[0], information_object[1]))
-		with open(self.NEW_RELATION_FILE, 'w') as (file):
-			file.write(json.dumps(new_relations, sort_keys=True, indent=4, ensure_ascii=False))
-		file.close()
-		if proceed:
-			for e in new_relations:
-				if not e[0]:
-					sql = 'insert into object (class_name,created_at,updated_at,serial_number) value ("QubitRelation",Now(),Now(),0)'
-					last_id = self.dm.get_mysql(sql, False, True)
-					sql = 'insert into relation (id, subject_id,object_id,type_id,source_culture) value (' + str(last_id) + ',' + str(e["subject_id"]) + ',' + str(e["object_id"]) + ',' + str(g.A_RELATION_TYPE_NAME_ACCESS_POINTS) + ',"' + g.CULTURE + '");'
-					r = self.dm.get_mysql(sql, False, True)
 
 	def access_points_generator(self, culture):
 		"""
 		iterates over self.ACCESS_POINTS_LIST and actors with object relation
 		"""
 		#self.update_access_points_list()
+		#print(self.ACCESS_POINTS_LIST[0:10])
 		for access_point in self.ACCESS_POINTS_LIST:
+			if not ('taxonomy_id' in access_point):
+				access_point['taxonomy_id']=access_point['type']
+			if not ('label' in access_point):
+				if not ('culture_de') in access_point:
+					continue
+				access_point['label']=access_point['culture_de']			
 			if 'culture_' + culture in access_point:
 				yield (
 				 access_point['culture_' + culture], access_point['type'],
@@ -3207,7 +3400,9 @@ class access_points(object):
 				  'description': '',
 				   'last_modified':access_point['last_modified'] if 'last_modified' in access_point else '2000-01-01 00:00:00'})
 			if 'indicators' in access_point:
+				#print(access_point)
 				for e in access_point['indicators']:
+					
 					yield (
 					 e, access_point['taxonomy_id'], access_point)
 
@@ -3243,6 +3438,14 @@ class access_points(object):
 					  'description': '',
 					  'last_modified':e[5].strftime('%Y-%m-%d %H:%M:%S')})
 
+	
+	def rebuild_nested(self):
+		pw=getpass.getpass(prompt="\n...\nWell, let's do this now. But we need the sudo password :", stream=None)
+		bsh="sudo php /usr/share/nginx/atom/symfony propel:build-nested-set"
+		oo.sudo_exec(bsh,pw)
+		print("process started")
+	
+
 	def find_access_points_in_atom(self, ap_iterator_name, last_revision=""):
 		self.update_access_points_list()
 		#r=self.dm._index_keywords()
@@ -3267,28 +3470,38 @@ class access_points(object):
 		for e in unwanted_relations:
 			f.write = e[0] + ',' + e[1] + '\n'
 		f.close()
-		if last_revision in ("now", "", "all"):
+		print("before:", last_revision)
+		if last_revision in ("now", "all"):
 			#last_revision=datetime.now()
 			last_revision=datetime(1900, 1, 1)
 			#print (last_revision)
+		elif last_revision in (""):
+			from datetime import timedelta
+			last_revision=datetime.now()- timedelta(days=90)
 		else:
 			last_revision=datetime.strptime(last_revision.replace("_"," "),'%Y-%m-%d %H:%M:%S')
-			
+		print("from:", last_revision)
+		#stop=input("stop")
 		if ap_iterator_name == 'wd':
-			ap_iterator = self.dm.search_term_generator('', True, True, False)
+			
+			#ap_iterator = self.dm.search_term_generator('', True, True, False)
+			#kwargs['last_revision']=last_revision
+			ap_iterator = self.dm.search_term_generator(return_keyword_object=True,last_revision=datetime.strftime(last_revision,'%Y-%m-%d %H:%M:%S'))
+
 		else:
 			ap_iterator = self.access_points_generator(g.CULTURE)
-		print(last_revision)
+		print("last revision",last_revision)
 		
 		# generate list of new ap
 		for ap in ap_iterator:
 			#print(datetime.strptime(ap[2]['last_modified'],'%Y-%m-%d %H:%M:%S'), last_revision)
-			
+			if  not ('last_modified' in ap[2]):
+				ap[2]['last_modified']="2017-01-01_00:00:00"
 			if datetime.strptime( ap[2]['last_modified'].replace("_"," "),'%Y-%m-%d %H:%M:%S') <last_revision:
 				continue
 			self.FROM_AP_ITERATOR.append(ap)
 		print(len(self.FROM_AP_ITERATOR), " new access points")
-
+		#stop=input("stop")
 		# generate list of new information objects
 		for information_object in self.dm.information_object_generator():
 			#print(information_object)
@@ -3297,7 +3510,7 @@ class access_points(object):
 				continue
 			self.FROM_IO_ITERATOR.append(information_object)
 		print(len(self.FROM_IO_ITERATOR), " new information_objects")
-		#b=input("---")
+		#b=input("stop")
 		# check all information objects against new ap
 		for information_object in self.dm.information_object_generator():
 			counter['information_objects']+=1
@@ -3324,20 +3537,14 @@ class access_points(object):
 		print('\nDone\n', counter)
 		print("-----------------------\nDon't forget to rebuild the nested set via >> sudo php symfony propel:build-nested-set\n---------------------------")
 
-
 		### we still need to write relation to file
 	
-	
-	def rebuild_nested(self):
-		pw=getpass.getpass(prompt="\n...\nWell, let's do this now. But we need the sudo password :", stream=None)
-		bsh="sudo php /usr/share/nginx/atom/symfony propel:build-nested-set"
-		oo.sudo_exec(bsh,pw)
-		print("process started")
-	
+
 	
 	def analyze_ap_result(self,result, counter, unwanted_relations, information_object):
 		actor_id = 0
 		term_id = 0
+		#print("result",result)
 		print("\n----------------------\nCounter ---> ",counter)
 		for e in result['actors']:
 			if not isinstance(e['id'], int):  # using wd keywords the id is a Qxxxx string, so we ned to check if an actor with this id or name is already in atom.actor
@@ -3359,7 +3566,7 @@ class access_points(object):
 					r = self.dm.get_mysql(sql, True, False)
 					lft = 0
 					rgt =0
-					sql = 'insert into actor (id,entity_type_id,description_identifier, parent_id, lft,rgt) value (' + str(last_id) + ',' + str(self._normalize_instance(e['entity_type'])) + ',"' + (e['description_identifier'] or '') + '",' + '3' + ',' + str(lft) + ',' + str(rgt) + ');'
+					sql = 'insert into actor (id,entity_type_id,description_identifier, parent_id, lft,rgt, source_culture) value (' + str(last_id) + ',' + str(self._normalize_instance(e['entity_type'])) + ',"' + (e['description_identifier'] or '') + '",' + '3' + ',' + str(lft) + ',' + str(rgt) + ',"'+g.CULTURE+'");'
 					print(sql)
 					r = self.dm.get_mysql(sql, True, True)
 					if self._normalize_instance(e['entity_type']) == g.A_ENTITY_TYPES['HUMAN']:
@@ -3408,7 +3615,11 @@ class access_points(object):
 					counter['terms'] += 1
 					sql = 'insert into object (class_name,created_at,updated_at,serial_number) value ("QubitTerm",Now(),Now(),0);'
 					last_id = self.dm.get_mysql(sql, True, True)
-					sql = 'insert into term (id,taxonomy_id,code,parent_id,source_culture) value (' + str(last_id) + ',' + str(e[1]) + ',"' + e[0]['description_identifier'] + '",' + str(110) + ',"' + str(g.CULTURE) + '");'
+					if 'description_identifier' in e[0]:
+						description_identifier=e[0]['description_identifier']
+					else:
+						description_identifier=""
+					sql = 'insert into term (id,taxonomy_id,code,parent_id,source_culture) value (' + str(last_id) + ',' + str(e[1]) + ',"' + description_identifier + '",' + str(110) + ',"' + str(g.CULTURE) + '");'
 					r = self.dm.get_mysql(sql, True, True)
 					sql = 'insert into term_i18n (id,name,culture) value (' + str(last_id) + ',"' + e[0]['label'] + '","' + g.CULTURE + '");'
 					r = self.dm.get_mysql(sql, True, True)
@@ -3416,9 +3627,9 @@ class access_points(object):
 					r = self.dm.get_mysql(sql, True, True)
 					term_id=last_id
 					sql='insert into note (object_id, type_id,source_culture,serial_number) \
-						alues ('+str(last_id)+','+str(g.A_SOURCE_NOTE)+',"'+g.CULTURE+'",0);'
+						values ('+str(last_id)+','+str(g.A_SOURCE_NOTE)+',"'+g.CULTURE+'",0);'
 					last_id=self.dm.get_mysql(sql,True,True)
-					sql='insert into note_i18n (content, id, culture) values ("'+e[0]['description_identifier']+'",'+str(last_id)+',"'+g.CULTURE+'");'
+					sql='insert into note_i18n (content, id, culture) values ("'+description_identifier+'",'+str(last_id)+',"'+g.CULTURE+'");'
 					r=self.dm.get_mysql(sql,True,True)
 					
 			else:
@@ -3456,7 +3667,7 @@ class access_points(object):
 		ap_iterator: generator function where each yield send back a tuple (search_term_name,search_term_instance,search_term_object)
 		"""
 		if last_revision=="":
-			last_revision=datetime.now()
+			last_revision=datetime.now()- timedelta(days=90)
 		text = ' ' + so.clean_text(text) + ' '
 		tmp = {'actors': [], self.SUBJECT_AP: [], self.PLACE_AP: [], self.GENRE_AP: []}
 		i = 0
@@ -3465,6 +3676,8 @@ class access_points(object):
 			i += 1
 			if not isinstance(term[0], str):
 				print(term[0], " has no instance ", term)
+				continue
+			if len(term[0])<3:
 				continue
 			if term[0] in '[]':
 				print("Term is empty ", term)
@@ -3492,11 +3705,18 @@ class access_points(object):
 							#print(instance, key, '<<<<<<<<<<<<<<<', term[0])
 				if 'exclusions' in term[2]:
 					for exclusion in term[2]['exclusions']:
-						pattern = re.compile('\\W' + so.clean_text_re(exclusion) + '\\W', re.IGNORECASE)
+						pattern=so.clean_text_re(exclusion)
+						#print(pattern)
+						pattern = re.compile('\\W' + pattern + '\\W', re.IGNORECASE)
 						if re.search(pattern, ' ' + text + ' '):
 							continue
 
-			pattern = re.compile('\\W' + so.clean_text_re(term[0]) + '\\W', re.IGNORECASE)
+			pattern=so.clean_text_re(term[0])
+			#print("term[0]",pattern)
+			if len(pattern)>3:
+				pattern = re.compile('\\W' + pattern  + '[erins]*\\W', re.IGNORECASE)
+			else:
+				pattern = re.compile('\\W' + pattern  +'\\W',re.IGNORECASE)
 			#print(pattern)
 			if re.search(pattern, ' ' + so.clean_text(text) + ' '):
 
@@ -3546,7 +3766,7 @@ class access_points(object):
 					if append:
 						d = {}
 						d['append'] = True
-						d['url'] = self.dm.BASE_URL + information_object[3]
+						d['url'] = g.BASE_URL + information_object[3]
 						d['functions'] = authority_data_item[4]
 						d['object_id'] = information_object[0]
 						d['subject_id'] = authority_data_item[0]
@@ -3572,6 +3792,28 @@ class access_points(object):
 				print('to ---> ' + identifier[1])
 				sql = 'update actor set description_identifier = "' + identifier[1] + '" where id= ' + str(identifier[0]) + ';'
 				r = self.dm.get_mysql(sql, False, True)
+
+	def add_other_names(self):
+		sql='select n.object_id,ni.content from note n join note_i18n ni on n.id=ni.id  where content like "%wikidata%";'
+		items=self.dm.get_mysql(sql, False, False)
+		for item in items:
+			query='	select ?itemAltLabel\
+					where{\
+					BIND(<'+item[1]+'> AS ?item) .\
+					?item skos:altLabel ?itemAltLabel.}'
+					#SERVICE wikibase:label { bd:serviceParam wikibase:language "'+lang+'". }}'
+			print(query)
+			r=self.dm._get_from_WDQ(query)
+			#print("r",r)
+			if len(r['results']['bindings'])==0:
+				continue
+			print(r)
+			
+			alt_labels=r['results']['bindings']
+			for alt_label in alt_labels:
+				if alt_label['itemAltLabel']['xml:lang'] in ("de","fr","en"):
+					self._add_other_forms_of_name(item[0], g.A_TYPE_OTHER_FORM_OF_NAME, alt_label['itemAltLabel']['value'], alt_label['itemAltLabel']['xml:lang'])
+
 
 	def remove_duplicate_relations(self):
 		"""
@@ -3630,6 +3872,7 @@ class access_points(object):
 			sql = 'delete from object where id=' + str(relation[0]) + ';'
 			x = self.dm.get_mysql(sql, False, True)			
 		print (len(object_term_relation_to_delete), " actor relations deleted")
+		
 	def _is_in_relation(self, subject_id, object_id, relations, new_relations):
 		"""
 		Returns true if at least one pair of subject_id - object_id is found in relations
@@ -3643,13 +3886,13 @@ class access_points(object):
 				return True
 			return False
 
-	def _add_other_forms_of_name(self, object_id, type_id, name, start_date='', end_date='', note='', dates=''):
+	def _add_other_forms_of_name(self, object_id, type_id, name, culture=g.CULTURE, start_date='', end_date='', note='', dates=''):
 		"""
 		Adds parallel or other form of name to an authorithy entry.
 		Checks if already present
 		
 		Parameter:
-		object_id: AtoM's id of the authorithy item
+		object_id: AtoM's id of the authority item
 		type_id : AtoM's id for other_form_of_name or parallel_form_of_name
 		name: string value
 		start_date : Optional  (in sql format)
@@ -3664,16 +3907,264 @@ class access_points(object):
 				if e[0].lower() == name.lower():
 					return False
 
-		sql = 'insert into other_name (object_id, type_id, start_date, end_date, source_culture) values (' + str(object_id) + ',' + str(type_id) + ',"' + start_date + '","' + end_date + '","' + g.CULTURE + '");'
+		sql = 'insert into other_name (object_id, type_id, start_date, end_date, source_culture) values (' + str(object_id) + ',' + str(type_id) + ',"' + start_date + '","' + end_date + '","' + culture + '");'
 		increment = self.dm.get_mysql(sql, False, True)
 		if increment:
-			sql = 'insert into other_name_i18n (name,note,dates,id,culture) values ("' + name + '","' + note + '","' + dates + '",' + str(increment) + ',"' + g.CULTURE + '");'
+			sql = 'insert into other_name_i18n (name,note,dates,id,culture) values ("' + name + '","' + note + '","' + dates + '",' + str(increment) + ',"' + culture + '");'
 			r = self.dm.get_mysql(sql, False, True)
+			#stop=input("stop")
 			return True
 
-	def normalize_other_access_points(self):
+	
+
+	def add_wd_identifier2actor(self):
 		"""
-		a) write code field to source_note if description identifier
+		add Wikidata identifier to actors if not exist
+		"""
+		
+		order=input("How to order items during wikiidata syncronisationprocess? (Random = r | latest first = l)")
+		if order.lower() =="r":
+			order="rand()"
+		else:
+			order="a.id desc"
+		
+		vs=[]
+		for k,v in g.A_ENTITY_TYPES.items():
+			print(k,v)
+			vs.append(str(v))
+		special_entity=input("Should the action be limited to object o a certain entity_type? ('enter' or name of number of entity_type) :")
+		if  special_entity in vs:
+			s_special_entity=" and entity_type_id="+str(special_entity)
+		else:
+			s_special_entity=""
+		print(special_entity, s_special_entity,vs)
+		stopper=input("Should we ask for every actor? (y/n)")
+		if stopper.lower()=="n":
+			stopper=False
+		else:
+			stopper=True
+		
+		
+		
+		from atom.helpers import wikidata
+		wd=wikidata.wikidata()
+		sql= 'select a.id, authorized_form_of_name, entity_type_id, description_identifier \
+		from actor a join actor_i18n ai on a.id=ai.id  \
+		where description_identifier is null '+s_special_entity+'\
+		 order by '+order+';'
+		
+		non_identified_data = list(self.dm.get_mysql(sql, False, False))
+		
+		for e in enumerate(non_identified_data):
+			item=e[1]
+			input_text=""
+			os.system('clear')
+			if item[2] == 132 :
+				search_term = self._reorder_name(item[1])
+			else:
+				search_term = item[1]		
+			
+				
+			print(search_term, e[0],"/",len(non_identified_data),"\n")
+			print(search_term, e[1],"\n---------------------------")
+			
+			if search_term is None:
+				continue
+			tmp_search_term=search_term.replace(','," ")
+			temp_search_term=" ".join([so.decode_abbreviation(x) for x in search_term.split(" ")])
+			tmp_search_term=tmp_search_term.replace('.'," ")
+			wd_items=wd.search_query(tmp_search_term)	
+
+			if len(wd_items)==0 and item[2] == 132 :
+				tmp_search_term=" ".join(tmp_search_term.split(" ")[-1:])
+				wd_items=wd.search_query(tmp_search_term)
+			if len(wd_items)==0 and tmp_search_term!=tmp_search_term.replace('-'," "):
+				tmp_search_term=tmp_search_term.replace('-'," ")
+				wd_items=wd.search_query(tmp_search_term)
+			if len(wd_items)==0:
+				tmp=tmp_search_term.split(" ")
+				if len(tmp)==2:
+					if len(tmp[0])>len(tmp[1]):
+						wd_items=wd.search_query(tmp[0])
+					else:
+						wd_items=wd.search_query(tmp[1])
+				if len(tmp)>2:
+					tmp.sort(key = lambda s: len(s))
+					wd_items=wd.search_query(" ".join(tmp[-2:]))
+				
+				
+			#print(len(wd_items))
+			input_str=""
+			if stopper:
+				input_text=" "
+			else:
+				input_text=""
+			for ee in enumerate(wd_items):
+				
+				#print(ee)
+				#input_text+=str(ee[0]) +"  " + e[1][2] + g.OLIV +"\n    " + e[1][3][0:50] + "  (" + e[1][0]+")" +g.CEND
+				input_text+=str(ee[0]) +g.OLIV +"  " + ee[1][2]+g.CEND + "\n   " + ee[1][3][0:50] + "  (" + ee[1][0]+")"  +"\n"
+			if input_text!="":
+				input_str=input(input_text)
+				if input_str=="q":
+					print("return")
+					return
+				if input_str[0:1]=="Q" and input_str[1:].isnumeric():
+					sql='update actor set description_identifier="http://www.wikidata.org/entity/'+ input_str +'" where id=' +str(item[0])+';'
+					last_id = self.dm.get_mysql(sql, False, True)
+				if input_str.isnumeric():
+					if int(input_str) in range(-1, len(wd_items) - 1) or input_str.strip()=="0":
+						sql='update actor set description_identifier="'+ wd_items[int(input_str)][1] +'" where id=' +str(item[0])+';'
+						#print (sql)
+						last_id = self.dm.get_mysql(sql, False, True)
+						#stop=input("stop")
+						print (input_str ,"|")
+						stop=input("confirm")
+						
+
+					else:
+						sql='update actor set description_identifier="?" where id=' +str(item[0])+';'
+						last_id = self.dm.get_mysql(sql, False, True)
+						continue
+	
+
+
+	def add_wd_identifier2term(self):
+		"""
+		add Wikidata identifier to actors if not exist
+		"""
+		from atom.helpers import wikidata
+		wd=wikidata.wikidata()
+		sql='select t.id, ti.name,t.taxonomy_id from term t join term_i18n ti on t.id=ti.id where t.taxonomy_id in ('+str(self.PLACE_AP)+','+str(self.SUBJECT_AP)+') order by rand();'
+		terms=list(self.dm.get_mysql(sql, False, False))
+		sql='select n.id, n.object_id,n.type_id,ni.content from note n join note_i18n ni on n.id=ni.id where type_id='+str(self.SOURCE_TYPE)+';'
+		notes=list(self.dm.get_mysql(sql, False, False))
+		#sql= 'select a.id, authorized_form_of_name, entity_type_id, description_identifier from actor a join actor_i18n ai on a.id=ai.id  where description_identifier is null order by rand();'
+		#non_identified_data = list(self.dm.get_mysql(sql, False, False))
+		
+		for e in enumerate(terms):
+			item=e[1]
+			if next((x for x in notes if x[1]==item[0] and x[3].find('wikidata')>-1),False):
+				print(item[1], " has identifier")
+				continue
+			input_text=""
+			os.system('clear')
+			search_term=item[1]
+			print(search_term, e[0],"/",len(terms),"\n")
+			print(search_term, e[1],"\n---------------------------")
+			wd_items=wd.search_query(search_term)
+			#print(len(wd_items))
+			input_str=""
+			input_text=""
+			for ee in enumerate(wd_items):
+				
+				#print(ee)
+				#input_text+=str(ee[0]) +"  " + e[1][2] + g.OLIV +"\n    " + e[1][3][0:50] + "  (" + e[1][0]+")" +g.CEND
+				input_text+=str(ee[0]) +g.OLIV +"  " + ee[1][2]+g.CEND + "\n   " + ee[1][3][0:80] + "  (" + ee[1][0]+")"  +"\n"
+			if input_text!="":
+				input_str=input(input_text)
+				if input_str[0:1].lower()=="q" and input_str.isnumeric():
+					identifier_url="http://www.wikidata.org/entity/"+input_str.upper()
+					input_str="Q"
+				if input_str.isnumeric():
+					if int(input_str) in range(-1, len(wd_items)+1) or input_str=="Q":
+						if int(input_str) in range (-1, len(wd_items)+1):
+							identifier_url=wd_items[int(input_str)][1]
+						sql='insert into note (object_id,type_id) values ('+str(item[0])+','+str(self.SOURCE_TYPE)+');'
+						last_id = self.dm.get_mysql(sql, False, True)
+						sql='insert into note_i18n(id,content,culture) values('+str(last_id)+',"'+identifier_url+'","de");'
+						last_id = self.dm.get_mysql(sql, False, True)
+						for lang in ("fr","en"):
+							query='	select ?itemLabel\
+									where{\
+									BIND(<'+identifier_url+'> AS ?item) .\
+									SERVICE wikibase:label { bd:serviceParam wikibase:language "'+lang+'". }}'
+							r=self.dm._get_from_WDQ(query)
+							#print("r",r)
+							translated_term=r['results']['bindings'][0]['itemLabel']['value']
+							if translated_term[0:1]=="Q" and translated_term[1:].isnumeric():
+								continue
+							else:
+								
+								if translated_term.lower()!=search_term.lower():
+									sql='insert into term_i18n(id,name,culture) values('+str(item[0])+',"'+translated_term+'","'+lang+'");'
+									last_id = self.dm.get_mysql(sql, False, True)
+						
+					elif input_str=="q":
+						return
+					else:
+						continue
+		
+
+
+
+
+
+	def change_taxonomy(self,taxonomy_from,taxonomy_to):
+		"""
+		Shifts terms from one taxonomy to another if there is already a similar term
+		
+		SUBJECT_AP = 35  #predefined by atom' installation routine
+		PLACE_AP = 42
+		GENRE_AP = 78
+		NAME_AP=999
+		"""
+		
+		if taxonomy_to==self.NAME_AP:
+			sql='select a.id, ai.authorized_form_of_name from actor a join actor_i18n ai on a.id=ai.id where ai.culture="de";'
+		elif taxonomy_to in (self.SUBJECT_AP,self.PLACE_AP,self.GENRE_AP):
+			sql='select t.id, ti.name from term t join term_i18n ti on t.id=ti.id where ti.culture="de" and t.taxonomy_id='+str(taxonomy_to)+';'
+		else:
+			print("wrong taxonomy_to")
+			return
+		tos=self.dm.get_mysql(sql,False,False)
+
+		if taxonomy_from==self.NAME_AP:
+			sql='select a.id, ai.authorized_form_of_name from actor a join actor_i18n ai on a.id=ai.id where ai.culture="de";'
+		elif taxonomy_from in (self.SUBJECT_AP,self.PLACE_AP,self.GENRE_AP):
+			sql='select t.id, ti.name from term t join term_i18n ti on t.id=ti.id where ti.culture="de" and t.taxonomy_id='+str(taxonomy_from)+';'
+		else:
+			print("wrong taxonomy_from")
+			return
+		froms=self.dm.get_mysql(sql,False,False)		
+		
+		for item in froms:
+			if not(item[1] is None):
+				e=next((x for x in tos if not(x[1] is None) and item[1].lower()==x[1].lower()),False)
+				if e:
+					print("found ", e[1] )
+					if taxonomy_from in (self.SUBJECT_AP,self.PLACE_AP,self.GENRE_AP) and taxonomy_to in (self.SUBJECT_AP,self.PLACE_AP,self.GENRE_AP):
+						sql='update object_term_relation set term_id='+str(e[0])+' where term_id='+str(item[0])+';'
+						last_id=self.dm.get_mysql(sql,True,True)
+						sql='delete from object where id= '+str(item[0])+';'
+						last_id=self.dm.get_mysql(sql,True,True)
+					
+		#to do : same for nameAccessPoints		
+			
+
+	def normalize_other_access_points(self):
+		
+		self.normalize_authority_data_identifier()
+		
+		"""
+		a) dedup object-term-relations
+		
+		"""
+		sql='select group_concat(id), max(id) from object_term_relation group by term_id, object_id having count(id)>1 ;'
+		relations=self.dm.get_mysql(sql,False,False)
+		for relation in relations:
+			id_list=relation[0].split(",")[1:]
+			for i in id_list:
+				sql="delete from object where id="+i+";"
+				last_id=self.dm.get_mysql(sql,True,True)
+		
+		"""
+		a) Update access points list
+		"""
+		self.update_access_points_list()
+		
+		"""
+		b) write code field to source_note if description identifier
 		
 		"""
 		sql='select t.id, t.taxonomy_id, n.type_id,n.id, ni.content from term t  join note n on t.id=n.object_id join note_i18n ni on n.id=ni.id where t.taxonomy_id in (35,42,78) and type_id='+str(g.A_SOURCE_NOTE)+';'
@@ -3681,6 +4172,7 @@ class access_points(object):
 		sql='select id, code, source_culture from term where taxonomy_id in (35,42,78);'
 		terms=self.dm.get_mysql(sql,False,False)
 		for term in terms:
+			
 			if not (term[1] is None):
 				if not(next((x for x in existing_notes if x[0]==term[0]),False)):
 					sql='insert into note (object_id, type_id,source_culture,serial_number) \
@@ -3690,29 +4182,126 @@ class access_points(object):
 					r=self.dm.get_mysql(sql,True,True)
 					sql='update term set code = NULL where id='+str(term[0])+';'
 					r=self.dm.get_mysql(sql,True,True)
-					
+	
 		
+		"""
+		c) Update name in Atom if modified in self.ACCESS_POINTS
+		"""
+		sql='select t.id, code, source_culture, name,culture from term t join term_i18n ti on t.id=ti.id where taxonomy_id in (35,42,78) and ti.culture="'+g.CULTURE+'";'
+		terms=self.dm.get_mysql(sql,False,False)
+		for term in terms:
+			ap=next((x for x in self.ACCESS_POINTS_LIST if x['id']==term[0] and x['culture_'+g.CULTURE].strip(" ") !=term[3].strip(" ")),False)
+			if ap:
+				sql='update term_i18n set name="'+so.escapeQuotes(ap['culture_'+g.CULTURE])+'" where culture="'+g.CULTURE+'" and id='+str(ap['id'])+';'
+				self.dm.get_mysql(sql,True, True)
+				if 'indicators' in ap and not(ap['indicators'] is None):
+					#print("ap",ap['indicators'],term[3])
+					ap['indicators'].append(term[3])
+				else:
+					#print("ap", term[3])
+					ap['indicators']=[term[3]]
 
+				for e in [x for x in self.ACCESS_POINTS_LIST if 'culture_'+g.CULTURE in x and x['culture_'+g.CULTURE].strip(" ") == ap['culture_'+g.CULTURE].strip(" ") ]:
+					
+					if 'indicators' in e and not(e['indicators'] is None):
+						#print([x for x in self.ACCESS_POINTS_LIST if x['id']==e['id'] ])
+						#print("ee", e['indicators'],term[3])
+						e['indicators'].append(term[3])
+						#print([x for x in self.ACCESS_POINTS_LIST if x['id']==e['id'] ])
+					else:
+						#print("ee", term[3])
+						e['indicators']=[term[3]]
+						
+		#stop=input("stop")
+		"""
+		d) Move some subjects to places
+		"""
+
+		self.change_taxonomy(self.SUBJECT_AP,self.PLACE_AP)
+		self.change_taxonomy(self.SUBJECT_AP,self.NAME_AP)
+
+		"""
+		e) dedup term with same identifier
+		"""
+		sql='select distinct count(n.object_id) as count, group_concat(n.object_id), ni.content, group_concat(ti.name) \
+			from note n join note_i18n ni on n.id=ni.id join term_i18n ti on n.object_id=ti.id \
+			where content like "%wikidata%" and ti.culture="de" \
+			group by ni.content having count>1 order by n.id;'
+		duplicate_terms=self.dm.get_mysql(sql,False,False)
+		for duplicate_term in duplicate_terms:
+			tmp=duplicate_term[1].split(",")
+			name=duplicate_term[3].split(",")[0]
+			for ee in tmp:
+				sql='update term_i18n set name="'+name+'" where culture="de" and id="'+ee+'";'
+				self.dm.get_mysql(sql,True, True)
+		
+		"""
+		f) dedup
+		"""
+		sql='select distinct count(t.id) as count,  group_concat(t.id), t.taxonomy_id,ti.name, ti.culture \
+		from term t  \
+		join term_i18n ti on t.id=ti.id \
+		where t.taxonomy_id in (35,42,78) and ti.culture="de" group by trim(name), culture, taxonomy_id  having count > 1 order by t.id;'
+		duplicate_terms=self.dm.get_mysql(sql,False,False)
+		for duplicate_term in duplicate_terms:
+			tmp=duplicate_term[1].split(",")
+			arr=[int(x) for x in tmp]
+			arr.sort()
+			for term_id in arr[1:]:
+				if arr[0]!=term_id:
+					print("Duplicate: " , duplicate_term[3], " ", duplicate_term[4])
+					sql='update object_term_relation set term_id = '+ str(arr[0]) +' where term_id='+str(term_id)+';'
+					self.dm.get_mysql(sql,True, True)
+					sql='update term set parent_id='+str(arr[0])+' where parent_id='+str(term_id)+';'
+					self.dm.get_mysql(sql,False, True)
+					sql='delete from object where id='+str(term_id)+';'
+					self.dm.get_mysql(sql,True, True)
+			
+		
+		"""
+		g) Update access points list
+		"""
+		self.update_access_points_list()
+		
+		
 
 	def normalize_name_access_points(self):
 		"""
+		
+				
+		
+
 		a) checks for name authority data without entity_type:_id
 		b) tries to find out if orphan authority data could be a person
 		c) ask for the entitiy type of remaining orphan authority data
-		d) dedup and merge authority data entries and relations
-		e) Reorder the names of humans
-		
+		d) wd-identifier to access_points
+		e) dedup and merge authority data entries and relations based on wdid
+		#f) Reorder the names of humans
+		f) Remove actors without relations or description_identifiers
+		g) Complete labels in en,fr if actor is described by wikidata
+		e) AtoM's actor description with data from Wikidata
 		"""
+		
+		
+		
+		
+		self.normalize_authority_data_identifier()
+		
 		#a)
-		sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id join relation r on a.id=r.object_id where entity_type_id is NULL and r.type_id=161 and ai.culture="' + g.CULTURE + '" group by a.id;'
+		#sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id join relation r on a.id=r.object_id where entity_type_id is NULL and r.type_id=161 and ai.culture="' + g.CULTURE + '" group by a.id;'
+		sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id  where entity_type_id is NULL  and ai.culture="' + g.CULTURE + '" and ai.authorized_form_of_name is not NULL group by a.id;'
+
 		orphan_authority_data = list(self.dm.get_mysql(sql, False, False))
 		orphan_authority_data = [list(x) for x in orphan_authority_data]
 		print(len(orphan_authority_data), ' orphans found')
-		sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id  join relation r on a.id=r.object_id where entity_type_id is not NULL and r.type_id=161 and ai.culture="' + g.CULTURE + '" group by a.id;'
+		#sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id  join relation r on a.id=r.object_id where entity_type_id is not NULL and r.type_id=161 and ai.culture="' + g.CULTURE + '" group by a.id;'
+		sql = 'select a.id, ai.authorized_form_of_name, a.entity_type_id from actor a join actor_i18n ai on a.id=ai.id   where entity_type_id is not NULL  and ai.culture="' + g.CULTURE + '" and ai.authorized_form_of_name is not NULL  group by a.id;'
 		confirmed_authority_data = self.dm.get_mysql(sql, False, False)
 		print(len(confirmed_authority_data), ' confirmed name access points found')
 		c = 0
 		#b)
+		print(orphan_authority_data,len(orphan_authority_data))
+		#stop=input("")
 		for orphan in orphan_authority_data:
 			e = next((x for x in confirmed_authority_data if x[1].lower().strip(' ') == self._reorder_name(orphan[1]).lower().strip(' ')), False)
 			if not e:
@@ -3736,13 +4325,21 @@ class access_points(object):
 				for i, label in enumerate(entity_type_labels):
 					print(i, label)
 
-				input_str = input('Please select an entity type for ' + orphan[1] + ': ')
+				input_str = input(str(c)+ "/" + str(len(orphan_authority_data))+'  Please select an entity type for ' + orphan[1] + ': ')
 				if input_str.isnumeric():
-					if int(input_str) in range(0, len(entity_type_labels) - 1):
+					if int(input_str) in range(0, len(entity_type_labels)):
 						orphan[2] = g.A_ENTITY_TYPES[entity_type_labels[int(input_str)]]
 						c += 1
 						if entity_type_labels[int(input_str)] == 'HUMAN' and orphan[1].find(',') == -1:
 							orphan[1] = self._reorder_name(orphan[1])
+
+						if orphan[2]:
+							sql = 'update actor set entity_type_id=' + str(orphan[2]) + ' where id= ' + str(orphan[0]) + ';'
+							last_id = self.dm.get_mysql(sql, False, True)
+						if orphan[1]:
+							sql = "update actor_i18n set authorized_form_of_name='" + so.escapeQuotes(orphan[1]) + "' where id= " + str(orphan[0]) + " and culture='" + g.CULTURE + "';"
+							last_id = self.dm.get_mysql(sql, False, True)							
+							
 				else:
 					break
 			else:
@@ -3750,16 +4347,40 @@ class access_points(object):
 
 		print(c, ' items defined')
 		print(len([x for x in orphan_authority_data if x[2] is None]), ' name_access_points still to define')
-		for orphan in orphan_authority_data:
+		"""for orphan in orphan_authority_data:
 			if orphan[2]:
 				sql = 'update actor set entity_type_id=' + str(orphan[2]) + ' where id= ' + str(orphan[0]) + ';'
 				last_id = self.dm.get_mysql(sql, False, True)
 			if orphan[1]:
 				sql = "update actor_i18n set authorized_form_of_name='" + str(orphan[1]) + "' where id= " + str(orphan[0]) + " and culture='" + g.CULTURE + "';"
 				last_id = self.dm.get_mysql(sql, False, True)
-
+		"""
 		done = []
-		# d)
+		
+		#d)
+		self.add_wd_identifier2actor()
+		"""
+		#e)
+
+			
+		sql='SELECT description_identifier, COUNT(*) c, authorized_form_of_name \
+			FROM actor a join actor_i18n ai on a.id=ai.id \
+			where description_identifier like "%wikidata%" \
+			GROUP BY description_identifier HAVING c > 1;'
+			
+		duplicate_identifiers=self.dm.get_mysql(sql, False, False)
+		for identifier in duplicate_identifiers:
+			sql='select a.id, ai.authorized_form_of_name from actor a join actor_i18n ai on a.id=ai.id where ai.culture="de" and a.description_identifier="'+identifier[0]+'" order by a.id;'
+			tmp=self.dm.get_mysql(sql, False, False)
+			for actor in enumerate(tmp):
+				if actor[0]==0:
+					name=actor[1][1]
+					print(name)
+					continue
+				print("<--" , actor[1][1])
+				sql='update actor_i18n set authorized_form_of_name ="'+name+'" where culture="de" and id='+str(actor[1][0])+';'
+				last_id = self.dm.get_mysql(sql, False, True)
+				
 		#sql='select a.id, ai.authorized_form_of_name, a.entity_type_id , a.description_identifier from actor a join actor_i18n ai on a.id=ai.id join relation r on a.id=r.object_id where  r.type_id=161 and ai.culture="'+g.CULTURE+'" group by a.id;'
 		#sql='select a.id, ai.authorized_form_of_name, a.entity_type_id , a.description_identifier, ai.dates_of_existence, ai.history from actor a join actor_i18n ai on a.id=ai.id left join relation r on a.id=r.object_id where ( r.type_id is null or r.type_id=161) and ai.culture="'+g.CULTURE+'"  group by a.id order by authorized_form_of_name;'
 		sql='select a.id, ai.authorized_form_of_name, a.entity_type_id , a.description_identifier , ai.dates_of_existence, ai.history \
@@ -3803,10 +4424,10 @@ class access_points(object):
 							sql='update actor set description_identifier="'+remove_di+'" where id='+str(keep)+';'
 							r= self.dm.get_mysql(sql, False, True)
 					if not(remove_de is None) and keep_de !=remove_de:
-						sql='update actor set dates_of_existence="'+remove_de+'" where id='+str(keep)+';'
+						sql='update actor_i18n set dates_of_existence="'+remove_de+'" where id='+str(keep)+ 'and culture="'+g.CULTURE+'";'
 						r= self.dm.get_mysql(sql, False, True)
 					if not(remove_hi is None) and keep_hi !=remove_hi:
-						sql='update actor set history="'+remove_hi+'" where id='+str(keep)+';'
+						sql='update actor_i18n set history="'+remove_hi+'" where id='+str(keep)+'and culture="'+g.CULTURE+'";'
 						r= self.dm.get_mysql(sql, False, True)
 									
 						
@@ -3822,8 +4443,81 @@ class access_points(object):
 					lastId = self.dm.get_mysql(sql, False, True)
 
 		self.remove_duplicate_relations()
+		"""
+
+		#f)
+		sql='select actor_id from contact_information union \
+		select id from user union \
+		select rights_holder_id from rights union \
+		select actor_id from contact_information union \
+		select id from donor union \
+		select id from rights_holder \
+		union select id from repository union \
+		select actor_id from event union \
+		select object_id from relation union \
+		select id from actor where description_identifier is not null;'
+		used_actors=self.dm.get_mysql(sql, False, False)
+		sql='select a.id, ai.authorized_form_of_name from actor a join actor_i18n ai on a.id=ai.id where ai.culture="de";'
+		all_actors=self.dm.get_mysql(sql, False, False)
+		for actor in all_actors:
+			if not (actor[1] is	 None):
+				if not (next((x for x in used_actors if actor[0]==x[0]), False)):
+					sql = 'delete from object where id=' + str(actor[0]) + ';'
+					lastId = self.dm.get_mysql(sql, False, True)
+		
+		#g)
+		
+		sql='select a.id, a.description_identifier,a.entity_type_id, ai.authorized_form_of_name, group_concat(ai.culture) \
+		from actor a join actor_i18n ai on a.id=ai.id where a.description_identifier like "%wikidata%"  group by description_identifier;'
+		self.dm._open_keywords()
+		wd_actors=self.dm.get_mysql(sql, False, False)		
+		for item in wd_actors:
+			tmp=item[4].split(",")
+			if len(tmp)<3:
+				needed_lang=[x for x in ('de','fr','en') if x not in tmp]
+				entity=item[1][item[1].rfind("Q"):]
+				keyword=next((x for x in self.dm.KEYWORDS if x['item'] == entity.strip()), False)
+				
+				query='SELECT DISTINCT ?item  \
+						(group_concat(?de) as ?label_de)\
+						(group_concat(?fr) as ?label_fr)\
+						(group_concat(?en) as ?label_en)\
+						WHERE {\
+						  bind(<'+item[1]+'> as ?item).\
+						  optional{?item rdfs:label ?itemLabel .}\
+						  FILTER (lang(?itemLabel) = "de" || lang(?itemLabel) = "en" || lang(?itemLabel) = "fr" ).\
+						  bind(if(lang(?itemLabel)="de",?itemLabel,"") as ?de).\
+						  bind(if(lang(?itemLabel)="en",?itemLabel,"") as ?en).\
+						  bind(if(lang(?itemLabel)="fr",?itemLabel,"") as ?fr).}\
+						group by ?item'
+				l = self.dm._get_from_WDQ(query)
+				if len(l['results']['bindings']) > 0:
+					for e in needed_lang:
+						label= self.dm._get_uniq(l['results']['bindings'][0]['label_'+e]['value'])[0].strip(" ")
+						if label.strip()!="":
+							if item[2]==g.A_ENTITY_TYPES['HUMAN']:
+								qlabel=self._reorder_name(label)
+							else:
+								qlabel=label
+							tmp=qlabel.strip()
+							tmp=tmp.replace('"','\\"') 
+							print(tmp)
+							sql='insert into actor_i18n (id,authorized_form_of_name,culture) \
+							values ('+str(item[0])+',"'+tmp+'","'+e+'");'
+							lastId = self.dm.get_mysql(sql, False, True)
+							if keyword:
+								if not('label_'+e in keyword):
+									keyword['label_'+e]=label.strip()
+									keyword['timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S')
+		self.dm._store_objects()
+
+
+
 
 	def _reorder_name(self, s, wd_type='Q5'):
+		"""
+		change the position of surname
+		"""
 		if wd_type == 'Q5':
 			if s.find(",")>-1:
 				return  (s[s.find(",")+1:]+" "+ s[0:s.find(",")]).strip(" ")

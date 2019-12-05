@@ -1,0 +1,17 @@
+atom/config/**
+atom/data/trai*
+atom/data/ai_train_files.txt
+atom/data/stoppworte.txt
+log/**
+trash/**
+docs/**
+trash/**
+/search_history
+tmp_results/**
+/atomd_project
+/nodex.json
+/tmp_forrest.json
+atom/data/raw_sorted.txt
+atom/data/test.txt 
+atom/helpers/access_points.py
+atom/data/*~

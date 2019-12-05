@@ -42,7 +42,8 @@ class deepl(object):
 								"protected areas":"protectorates",
 								"Conversation areas":"protectorates",
 								"stock creation": "holdings"
-								}}
+								},
+							"fr":{"de l'aire protégée":"du protectorat"}}
 
 	def translate_information_objects(self, target_lang,from_lang="DE"):
 		dm=data_manager.DataManager()
@@ -50,10 +51,10 @@ class deepl(object):
 
 		sql='select i.id,i.repository_id,io.title,io.scope_and_content,io.archival_history,io.culture from information_object i join information_object_i18n io on i.id=io.id ;'
 		information_objects=dm.get_mysql(sql,False, False)
-		#sql='select n.id,ni.content,ni.culture from note n  join note_i18n ni on n.id=ni.id where n.type_id='+str(g.A_LANGUAGE_NOTE_ID)+';'
-		sql='select n.id,ni.content,ni.culture, n.type_id, n.object_id from note n  join note_i18n ni on n.id=ni.id ;'
+		
 		notes=dm.get_mysql(sql,False, False)
 		# create a corpus of existing translations
+		print("Creating a corpus of sentences which has been already translated")
 		for e in information_objects:
 			#print(len(done))
 			if e[5].upper()==target_lang:
@@ -66,7 +67,8 @@ class deepl(object):
 								done.append((de_item[i],e[i]))
 		for e in notes:
 			if e[3]!=g.A_LANGUAGE_NOTE_ID:
-				if e[2].upper()==target_lang:
+				
+				if not(e[2] is None) and e[2].upper()==target_lang:
 					de_item=next((x for x in notes if x[0]==e[0] and x[2]=="de"),False)
 					if de_item:
 						if not(de_item[1] is None):
@@ -78,8 +80,9 @@ class deepl(object):
 		##a=input("STOP")
 		# start iterating
 		k=0
+		to_translate=self.number_to_translate(target_lang,from_lang)
 		for e in information_objects:
-			print("---- ",k ,"/" , len(information_objects) )
+			
 			if e[1]==124547:
 				continue
 			title=""
@@ -91,9 +94,10 @@ class deepl(object):
 				if not(e[2]is None):
 					r=next((x for x in done if x[0]==e[2]),False)
 					if r:
-						title=r[1]
-						print("known ", title[0:40])
+						title=so.escapeQuotes(r[1])
+						#print("known ", title[0:40])
 					else:
+						print("----> ",k ,"/" , to_translate )
 						print("unknown ", e[2][0:40])
 						title=so.escapeQuotes(self.translate_once(e[2],target_lang))
 						if title is None:
@@ -105,7 +109,7 @@ class deepl(object):
 				if not(e[3] is None):
 					r=next((x for x in done if x[0]==e[3]),False)
 					if r:
-						scope_and_content=r[1]
+						scope_and_content=so.escapeQuotes(r[1])
 						print("known ", scope_and_content[0:40])
 					else:
 						print("unknown ", e[3][0:40])
@@ -119,7 +123,7 @@ class deepl(object):
 				if not(e[4] is None):
 					r=next((x for x in done if x[0]==e[4]),False)
 					if r:
-						archival_history=r[1]
+						archival_history=so.escapeQuotes(r[1])
 						print("known ", archival_history[0:40])
 					else:
 						print("unknown ", e[4][0:40])
@@ -144,8 +148,8 @@ class deepl(object):
 					print(sql)
 					r=dm.get_mysql(sql,True,True)
 					k+=1
-					if k>4000:
-						break
+					#if k>4000:
+						#break
 				else:
 					continue
 				add_lang_note=True
@@ -208,6 +212,7 @@ class deepl(object):
 			return ""
 		quota=True
 		try:
+		#while True:
 			url = 'https://api.deepl.com/v1/translate'
 			data="auth_key="+api_keys.API_KEYS['DeepL']+"&target_lang="+target_lang+"&text="+text
 			data = data.encode('utf-8')
@@ -217,23 +222,51 @@ class deepl(object):
 			resp = urllib.request.urlopen(req)
 			respData = resp.read()
 			r=respData.decode('utf-8')
+			
 			if r.find("uota exeeded")>-1:
 				quota=False
 				raise ValueError('A very specific bad thing happened')
 			r=json.loads(r)
-			print("translated ", r['translations'][0]['text'][0:30])
-			return self.correct(r['translations'][0]['text'],target_lang)
+			translation=r['translations'][0]['text']
 			
+			print("translated ", translation[0:30])
+			return self.correct(translation,target_lang)
+		#else:
 		except Exception as e:
 			if not quota:
 				raise ValueError('Not enough deepl quota!!!!')
 			print ("Error")
 			print(str(e))
+			print(e.code)
+			print(e.read())
 			return ""
 
 
 	def correct(self,text,target_lang):
+		#print(text,target_lang)
 		for key in self.CORRECTION[target_lang.lower()].keys():
+			#print(key)
 			if text.find(key)>-1:
-				text.replace(key,self.CORRECTION[key])
+				text=text.replace(key,self.CORRECTION[target_lang.lower()][key])
 		return text
+		
+	
+	def number_to_translate(self,target_lang, from_lang="de", data_type="archival description"):
+		"""
+		returns the number of records still to translate
+		"""
+		dm=data_manager.DataManager()
+		sql=""
+		if data_type=="archival description":
+			sql='select count(id),culture from information_object_i18n where culture in ("'+from_lang.lower()+'","'+target_lang.lower()+'") group by culture;'
+		
+		if sql!="":
+			r=dm.get_mysql(sql,False,False)
+			if r:
+				if len(r)==2:
+					return abs(r[0][0] - r[1][0])
+				elif len(r)==1:
+					return r[0][0]
+				else:
+					return 0
+				

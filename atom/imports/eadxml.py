@@ -85,7 +85,8 @@ class eadxml(object):
 			print("Couldn't open source File ")
 	
 	"""
-	def export (self,counter, from_term):
+	#def export (self,counter, from_term):
+	def export(self,**kwargs):
 		yield self.transform()
 
 		
@@ -162,12 +163,23 @@ class eadxml(object):
 											self.meta['repository']=rep.text
 										if rep.tag==self.ns+"extref":
 											sel.meta['findingAids'] = rep.attrib['{http://www.w3.org/1999/xlink}href']
-
+							if did.tag==self.ns+"abstract":
+								if 'scopeAndContent' in self.meta:
+									self.meta['scopeAnContent']+=did.text
+								else:
+									self.meta['scopeAnContent']=did.text
+							if did.tag==self.ns+'odd':
+								for p in did:
+									if p.tag=='p':
+										self.meta['title']+= " - " + p.text
 				
 					if sub_child.tag==self.ns+"dsc":
 						self.meta['arrangement']= self.meta['title']
 						self.get_c(sub_child,None,None,self.meta['legacyId'], self.meta['repository'],self.meta['title'])
 						#print(json.dumps(self.ead_data, indent=2))		
+		if not('culture' in self.meta) :
+			self.meta['culture']=g.CULTURE
+		
 		self.ead_data.append(self.meta.copy())	
 		#self.ead_data=self.ead_data[::-1]
 		#print(json.dumps(self.ead_data, indent=2))	
@@ -188,7 +200,7 @@ class eadxml(object):
 			for k,v in e.items():
 				if k in ['legacyId','repository','levelOfDescription']:
 					continue
-				test_str+=v
+				test_str+=str(v)
 			if test_str.strip(" ")=="":
 				empty=i
 		if empty  is None:
@@ -267,6 +279,17 @@ class eadxml(object):
 								d['languageOfDescription']=d['language']
 								d['script']=lmt.attrib['scriptcode']
 								d['languageNote']=lmt.text
+								
+								
+					if did.tag==self.ns+"abstract":
+						if 'scopeAndContent' in d:
+							d['scopeAndContent']+=did.text
+						else:
+							d['scopeAndContent']=did.text
+					if did.tag==self.ns+'odd':
+						for p in did:
+							if p.tag=='p':
+								d['title']+= " - " + p.text
 
 			if child.tag==self.ns+"scopecontent":
 				#d['scopeAndContent']=" ".join([x.text for x in child ])
@@ -301,6 +324,8 @@ class eadxml(object):
 					self.get_c(child,levelOfDescription,l_id,d['legacyId'],d['arrangement'],d['title'])	
 				
 		d['repository']=self.meta['repository']
+		if not('culture' in d):
+			d['culture']=g.CULTURE
 		if d['legacyId']!="":
 			if not d['title']:
 				d['title']=""

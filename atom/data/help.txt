@@ -1,0 +1,20 @@
+\n\nHelp\n\
+			              ====\n\
+			         -m  -  maintenance\n\
+			           action=\n\
+			             index-wd-keywords  - reindex the corpus based on the central Wikidata query\n\
+			             \n\
+			         -i  -  import\n\
+			           source=\n\
+			             ddb  - Deutsche-Digitale-Bibliothek.de\n\
+			             fbn  - Findbuch.net\n\
+			             kal  - kalliope-verbund.de\n\
+			             eadxml  - EAD-XML file\n\
+			             ddbhtml  - Deutsche-Digitale-Bibliothek (Special query)\n\
+			             \n\
+			             from_term=    -  starts from {term}\n\
+			             predefined=   - csv-list with search terms\n\
+			             method=list   - retrieving all files from one Fonds or Class (fbn only)\n\
+			             archive-url   - subdomain of archive URL (fbn only)\n\
+			             archive-id     - internal archive_id  (fbn only)\n\
+			             \n\

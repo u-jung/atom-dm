@@ -17,6 +17,7 @@ Frank
 Franke
 Friedrich
 Fuchs
+Gärtner
 Graf
 Groß
 Günther
@@ -32,6 +33,7 @@ Huber
 Jäger
 Jung
 Kaiser
+Kaufmann
 Keller
 Klein
 Koch
@@ -50,6 +52,7 @@ Lorenz
 Ludwig
 Maier
 Martin
+Maurer
 Mayer
 Meier
 Meyer
@@ -157,3 +160,4 @@ Thomas
 Walter
 Wilhelm
 Willy
+
