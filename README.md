@@ -1,6 +1,6 @@
 [https://github.com/u-jung/atom-dm]
   
-### :red_circle: This should be still work in progress. But it has now become the final release as the project ended. Thanks (5.12.2019)###
+### :red_circle: This should be still work in progress. But it has now become the final release as the project ended. Thanks (5.12.2019) ###
 
 # atom-dm #
 
@@ -57,17 +57,17 @@ Go to the unpacked directory and try:
 
 **Disclaimer**: This piece of work comes without any warranty. Please make sure you have always a backup copy of your data before trying out
 
-#### Task group option####
+#### Task group option ####
 
 Task group option can be:
 `-i ` (for import tasks)
 `-m ` (for maintenance tasks)
 `-h ` (to show this help file as raw text)
 
-### Import tasks###
+### Import tasks ###
 
 
-#### The search term generator####
+#### The search term generator ####
 For import tasks a list of search terms will be generated from different sources. You can use the following options in combination with every import task:
 
 If you want to pass smaller predefined list of search terms, use predefined argument followed by a comma seperated list of keywords. e.g.
@@ -130,7 +130,7 @@ Try:
 
 
 
-#### Dealing with imported data####
+#### Dealing with imported data ####
 
 The imported data are stored in chunks of around 100 records as *import.csv* subfolders of *atom/tmp_results*. 
 At the end of the process they will be all joined into *atom/tmp_results/import.csv*
@@ -142,7 +142,7 @@ Note! It is usefull to not differ the names of different import.csv files. AtoM 
 During the task the tools checks also which one of the wikidata keywords will fit the retrieved items. 
 
 
-###Maintenance tasks###
+###Maintenance tasks ###
 
 **Important**: Most of the maintenance tasks are working direktly inside the mysql database. Please make sure you have a backup copy of youre database. Secondly you usually need to repopulate the search index after executing the task. This can be done by trying `sudo php /usr/share/nginx/atom/symfony search:populate` (if your installed AtoM on Linux and Nginx) .
 You can execute more than one maintenance task before recreating the AtoM search index.
@@ -179,7 +179,7 @@ You can change the configuration easily by modifying atom/helper/deepl.py
 Examples for the ISO-639 code are *en* or *fr*
 
 
-#### Search & Replace words in archival description####
+#### Search & Replace words in archival descriptio ####
 
 This task could be necessary if you get some systematic errors during the automatic translation, e.g. *Protected area* for *Schutzgebiet* instead of *Protectorate*
 Currently replacements can only made inside the title, scope_and_content and archival_history fields of information_objects. The replacements will applied directly to the mysql database. 
@@ -197,7 +197,7 @@ You will then need to answer to some questions popping up:
   * Words only? - *Enter* if the search should include include entire words, anything else if the search term could als be part of a word.
 
 
-#### Adding a creator to all child of a record####
+#### Adding a creator to all child of a record ####
 For this task you need the slug of the already existing actor as well as the slug of the parent information object.
 A slug is the last part of the path name inside the url (after the last "/")
 
@@ -205,12 +205,12 @@ Try:
 `./atom-dm -m action=add-creator oslug={slug of the parent information object} aslug={slug of the actor} `
 
 
-#### Update all draft archival descriptions to published####
+#### Update all draft archival descriptions to published ####
 Try: 
 `./atom-dm -m action=publish `
 
 
-#### Finding more access points####
+#### Finding more access points ####
 AtoM uses four types of access points from which places, subjects and genres where handled as taxonomy terms. On the other hand there are name access points which are stored as actors. Actors are also used to describe creators, repositories, right holders etc. Here we are just dealing with actors as name access points.
 
 The basic approach of this task is to look inside information objects if certains keywords do match. In this case a relation between the information object and the actor (or the taxonomy term) will be created. The task will look only inside the fields *title* and *scope_and_content*. 
@@ -231,7 +231,7 @@ Try:
 At the end of the task the tool will delete relation between access points and information objects if the same access point have already a relationship with an information object at a higher hierarchy level. 
 It will also try to normalize the newly found access points. 
 
-#### Normalizing access points####
+#### Normalizing access points ####
 
 This task is also executed automatically at the end of the *find-access-points-in-atom* task .
 
@@ -273,9 +273,9 @@ After the execution of this task nested sets have to be rebuild.
 Try:
 `sudo php /usr/share/nginx/atom/symfony propel:build-nested-set` 
 
-### Other aspects###
+### Other aspects ###
 
-#### Geografical data index####
+#### Geografical data index ####
 One part of the project site is a map browsing tool using OpenLayer and historical maps. Some of the maps come with their own name index. Those indexes where scanned and had to be inserted into a ElasticSearch index to become searchable.  
 A special task has been created to populate the ElasticSearch index with data from `atom/data/atom_geo.csv`. The file is a tab seperated table without header and the following fields:
 * id
@@ -295,12 +295,12 @@ To start to populate the index try:
 
 
 
-#### Binary Classification of imported records using the torch ai framework####
+#### Binary Classification of imported records using the torch ai framework ####
 It was tried to use a binary classification tool based on a neuronal network to determine if a imported record belongs to the general subject (here: German colonial history) or not. A bag of words where created.
 Honestly spoken the try did not lead to the espected results. The error rate did not permit to use the results without verification. Specially the false negative error was rated to high. In consequence to much "good" records would be classified as "bad". The basic problem behind is that of incomplete information if using just archival descriptions instead of hypotetical full text information.
 You will find the condensed efforts inside `atom/helper/ai.py` 
 
-#### Binary Classification of imported records using a corpus based algorithm####
+#### Binary Classification of imported records using a corpus based algorithm ####
 Better classification results are obtained when using an algorithm which uses the existing Wikidata corpus.
 
 Main presumtions are:
@@ -329,7 +329,7 @@ SELECT distinct ?isil ?item ?itemLabel  WHERE {
 }
 Order by ?isil
 ```
-### Phyton Libraries used###
+### Phyton Libraries used ###
 
 Among others:
   * slugify
