@@ -2,7 +2,7 @@
   
 ### :red_circle: This should be still work in progress. But it has now become the final release as the project ended. Thanks (5.12.2019) ###
 
-### Please visit to https://github.com/u-jung/PyArchMeta for a refactored approach ###
+### Please visit to https://github.com/u-jung/PyArchMeta for a refactored and more general approach. ###
 
 
 
