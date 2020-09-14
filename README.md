@@ -1,6 +1,10 @@
 [https://github.com/u-jung/atom-dm]
   
-### :red_circle: This should be still work in progress. But it has now become the final release as the project ended. Thanks (5.12.2019) ###
+### :red_circle: This should be still work in progress. But it has now become the final release as the project ended. Thanks (5.12.2019) 
+
+Please go to https://github.com/u-jung/PyArchMeta for a refactored approach ###
+
+
 
 # atom-dm #
 
